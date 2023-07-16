@@ -42,7 +42,7 @@ public class LoginController {
         if(loginUser.getType().equals("Admin"))
             session.setAttribute(SessionConst.LOGIN_ADMIN, loginUser);
         log.info("login success [{}]",loginForm.getLoginId() );
-        return "okkk";
+        return "okdk";
     }
 
     @PutMapping("/logout")
