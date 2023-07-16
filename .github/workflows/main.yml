@@ -47,4 +47,4 @@ jobs:
           password: ${{ secrets.WAS_PASSWORD }}
           port: ${{ secrets.WAS_SSH_PORT }}
           script: |
-            ./volume1/docker/fitnessmate/actionscript.sh
+            /volume1/docker/fitnessmate/actionscript.sh
