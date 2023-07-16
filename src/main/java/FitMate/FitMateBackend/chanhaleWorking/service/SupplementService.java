@@ -63,13 +63,13 @@ public class SupplementService {
                 if (!supplementForm.getImage().getOriginalFilename().equals(supplement.getImagePath())) {
                     String oldImage = supplement.getImagePath();
                     if (!oldImage.equals(ServiceConst.DEFAULT_IMAGE_PATH)) {
-                        File file = new File(ServiceConst.IMAGE_DIRECTORY_LCH + oldImage);
+                        File file = new File(ServiceConst.IMAGE_DIRECTORY + oldImage);
                         log.info(file.getAbsolutePath());
                         if (file.exists()) {
                             log.info(oldImage);
 
                             if (file.delete()) {
-                                log.info("{} 파일이 삭제되었습니다.", ServiceConst.IMAGE_DIRECTORY_LCH + oldImage);
+                                log.info("{} 파일이 삭제되었습니다.", ServiceConst.IMAGE_DIRECTORY + oldImage);
                             }
                         }
                     }

@@ -18,7 +18,7 @@ import java.util.UUID;
 public class FileStoreService {
 
     public static String getFullPath(String filename) {
-        return ServiceConst.IMAGE_DIRECTORY_LCH + filename;
+        return ServiceConst.IMAGE_DIRECTORY + filename;
     }
 
 
