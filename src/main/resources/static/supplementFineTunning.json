@@ -1,0 +1,2 @@
+{"prompt":"give me a list of supplements", "completion":"we have 2 Supplements\n==============\nName: 1\ntype: Protein\nprice: 522.5won\nprotein: 22.0g\nfat: 1.9g\ncarbohydrate: 1.0g\n==============\nName: 2\ntype: Protein\nprice: 522.5won\nprotein: 21.0g\nfat: 1.8g\ncarbohydrate: 1.0g"}
+{"prompt":"give me the Name of supplement which has highst protein", "completion":" 1"}
