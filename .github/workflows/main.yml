@@ -1,0 +1,36 @@
+name: Backend CD
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 저장소 Checkout
+        uses: actions/checkout@v3
+
+      - name: 스프링부트 애플리케이션 빌드 # (1)
+        run: ./gradlew build
+
+      - name: 도커 이미지 빌드 # (2)
+        run: docker build -t chanhalee/fitnessmateback:latest .
+
+      - name: Docker Hub 로그인 # (3)
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Docker Hub 퍼블리시 # (4)
+        run: docker push chanhalee/fitnessmateback:latest
+
+      - name: WAS 인스턴스 접속 및 애플리케이션 실행 # (5)
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.WAS_HOST }}
+          username: ${{ secrets.WAS_USERNAME }}
+          password: ${{ secrets.WAS_PASSWORD }}
+          port: ${{ secrets.WAS_SSH_PORT }}
+          script: |
+            ./volume1/docker/fitnessmate/actionscript.sh
