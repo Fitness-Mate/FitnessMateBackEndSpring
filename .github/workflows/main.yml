@@ -47,7 +47,4 @@ jobs:
           password: ${{ secrets.WAS_PASSWORD }}
           port: ${{ secrets.WAS_SSH_PORT }}
           script: |
-            docker stop fitnessmateback;
-            docker rm fitnessmateback;
-            docker pull chanhalee/fitnessmateback:latest;
-            docker run -d -p 8083:8080 -v /volume1/docker/fitnessmate:/fitnessmate --name fitnessmateback chanhalee/fitnessmateback:latest;
+            /volume1/docker/fitnessmate/actionscript.sh
