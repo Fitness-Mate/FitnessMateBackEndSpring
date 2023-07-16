@@ -11,7 +11,8 @@ jobs:
         uses: actions/checkout@v3
         
       - name: application.properties 생성
-        run: echo ${{ secrets.APPLICATION_PROPERTIES_CONTENTS }} >> ./src/main/resources/application.properties
+        run: cat <<EOF |>>./src/main/resources/application.properties
+          ${{ secrets.APPLICATION_PROPERTIES_CONTENTS }}
 
       - name: 스프링부트 애플리케이션 빌드 # (1)
         run: ./gradlew build
