@@ -12,3 +12,5 @@ public class FitMateBackendApplication {
 	}
 
 }
+
+//git connection test
