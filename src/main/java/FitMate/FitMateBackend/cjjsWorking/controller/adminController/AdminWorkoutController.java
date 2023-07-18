@@ -109,11 +109,11 @@ public class AdminWorkoutController {
     }
 
     @DeleteMapping("admin/workouts/{workoutId}") //운동 정보 삭제 (TEST 완료)
-    public Long deleteWorkout(@PathVariable("workoutId") Long workoutId,
+    public String deleteWorkout(@PathVariable("workoutId") Long workoutId,
                               @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin) {
         if(admin == null) return null;
 
         workoutService.removeWorkout(workoutId);
-        return workoutId;
+        return workoutId.toString();
     }
 }

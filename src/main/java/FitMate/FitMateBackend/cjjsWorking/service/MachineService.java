@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -36,8 +37,6 @@ public class MachineService {
 
         for (String name : bodyPartKoreanName) {
             BodyPart findBodyPart = bodyPartService.findByKoreanName(name);
-            if(findBodyPart == null) return bodyPartKoreanName + "을 찾을 수 없습니다.";
-
             findBodyPart.addMachine(findMachine);
             findMachine.getBodyParts().add(findBodyPart);
         }
@@ -58,6 +57,12 @@ public class MachineService {
         return machineRepository.findById(machineId);
     }
 
+    public boolean checkMachineNameDuplicate(String koreanName, String englishName) {
+        Machine m1 = machineRepository.findByKoreanName(koreanName).orElse(null);
+        Machine m2 = machineRepository.findByEnglishName(englishName).orElse(null);
+        return (m1 == null && m2 == null);
+    }
+
     public List<Machine> findWithBodyPart(List<String> bodyPartKoreanName) {
         return machineRepository.findWithBodyPart(bodyPartKoreanName);
     }
@@ -65,6 +70,9 @@ public class MachineService {
     @Transactional
     public Long removeMachine(Long machineId) {
         Machine findMachine = machineRepository.findById(machineId);
+        for (BodyPart bodyPart : findMachine.getBodyParts()) {
+            bodyPart.removeMachine(findMachine);
+        }
         machineRepository.remove(findMachine);
         return machineId;
     }

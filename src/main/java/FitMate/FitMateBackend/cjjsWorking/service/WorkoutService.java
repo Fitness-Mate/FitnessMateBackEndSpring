@@ -55,7 +55,7 @@ public class WorkoutService {
     public boolean checkWorkoutNameDuplicate(String koreanName, String englishName) {
         Workout w1 = workoutRepository.findByKoreanName(koreanName).orElse(null);
         Workout w2 = workoutRepository.findByEnglishName(englishName).orElse(null);
-        return (w1 == null || w2 == null);
+        return (w1 == null && w2 == null);
     }
 
     public List<Workout> findAll(int page) {
@@ -68,12 +68,13 @@ public class WorkoutService {
         for (BodyPart bodyPart : findWorkout.getBodyParts()) {
             bodyPart.removeWorkout(findWorkout);
         }
-        s3FileService.deleteImage(ServiceConst.S3_DIR_WORKOUT, findWorkout.getImgFileName());
+
+        if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_IMAGE_PATH))
+            s3FileService.deleteImage(ServiceConst.S3_DIR_WORKOUT, findWorkout.getImgFileName());
+
         workoutRepository.remove(findWorkout);
         return workoutId;
     }
-
-
 
     /////////////////////////////////////////////////////////////////
 

@@ -1,5 +1,8 @@
 package FitMate.FitMateBackend.cjjsWorking.controller.adminController;
 
+import FitMate.FitMateBackend.cjjsWorking.dto.Machine.GetMachineResponse;
+import FitMate.FitMateBackend.cjjsWorking.dto.Machine.MachineDto;
+import FitMate.FitMateBackend.cjjsWorking.dto.Machine.MachineRequest;
 import FitMate.FitMateBackend.cjjsWorking.repository.BodyPartRepository;
 import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
 import FitMate.FitMateBackend.cjjsWorking.service.MachineService;
@@ -26,16 +29,17 @@ public class AdminMachineController {
 
     @PostMapping("admin/machines") //생성 (TEST 완료)
     public String saveMachine(@SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin,
-                            @RequestBody MachineRequest request) {
+                              @RequestBody MachineRequest request) {
         if(admin == null) return null;
-        //machine duplicate 예외처리 필요
+        if(!machineService.checkMachineNameDuplicate(request.getKoreanName(), request.getEnglishName()))
+            return "이미 존재하는 운동기구입니다. 이름을 확인해주세요.";
 
         Machine machine = new Machine();
-        machine.update(request.englishName, request.koreanName);
+        machine.update(request.getEnglishName(), request.getKoreanName());
 
-        for (String koreanName : request.bodyPartKoreanName) {
+        for (String koreanName : request.getBodyPartKoreanName()) {
             BodyPart findBodyPart = bodyPartService.findByKoreanName(koreanName);
-            if(findBodyPart == null) return koreanName + "을 찾을 수 없습니다.";
+            if(findBodyPart == null) return koreanName + "운동 부위를 찾을 수 없습니다.";
 
             findBodyPart.addMachine(machine);
             machine.getBodyParts().add(findBodyPart);
@@ -45,18 +49,20 @@ public class AdminMachineController {
     }
 
     @PutMapping("admin/machines/{machineId}") //수정 (TEST 완료)
-    public Long updateMachine(@PathVariable("machineId") Long machineId,
+    public String updateMachine(@PathVariable("machineId") Long machineId,
                               @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin,
                               @RequestBody MachineRequest request) {
         if(admin == null) return null;
+        if(!machineService.checkMachineNameDuplicate(request.getKoreanName(), request.getEnglishName()))
+            return "이미 존재하는 운동기구입니다. 이름을 확인해주세요.";
 
-        machineService.updateMachine(machineId, request.englishName, request.koreanName, request.bodyPartKoreanName);
-        return machineId;
+        machineService.updateMachine(machineId, request.getEnglishName(), request.getKoreanName(), request.getBodyPartKoreanName());
+        return machineId.toString();
     }
 
     @GetMapping("admin/machines/{machineId}") //단건조회 (TEST 완료)
     public GetMachineResponse findMachine(@PathVariable("machineId") Long machineId,
-                               @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin) {
+                                          @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin) {
         if(admin == null) return null;
 
         Machine findMachine = machineService.findOne(machineId);
@@ -66,67 +72,22 @@ public class AdminMachineController {
 
     @GetMapping("admin/machines/list/{page}") //batch 단위 조회 (TEST 완료)
     public List<MachineDto> findMachines_page(@PathVariable("page") int page,
-                                           @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin) {
+                                              @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin) {
         if(admin == null) return null;
 
         List<Machine> findMachines = machineService.findAll(page);
 
         return findMachines.stream()
-                .map(m -> new MachineDto(m))
+                .map(MachineDto::new)
                 .collect(Collectors.toList());
     }
 
     @DeleteMapping("admin/machines/{machineId}") //삭제 (TEST 완료)
-    public Long deleteMachine(@PathVariable("machineId") Long machineId,
+    public String deleteMachine(@PathVariable("machineId") Long machineId,
                               @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin) {
         if(admin == null) return null;
 
-        Machine findMachine = machineService.findOne(machineId);
-        for (BodyPart bodyPart : findMachine.getBodyParts()) {
-            bodyPart.removeMachine(findMachine);
-        }
-
         machineService.removeMachine(machineId);
-        return machineId;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class MachineRequest {
-        private String englishName;
-        private String koreanName;
-        private List<String> bodyPartKoreanName;
-    }
-
-    @Data
-    static class GetMachineResponse {
-        private String englishName;
-        private String koreanName;
-        private List<String> bodyPartKoreanName = new ArrayList<>();
-
-        public GetMachineResponse(String englishName, String koreanName, List<BodyPart> bodyParts) {
-            this.englishName = englishName;
-            this.koreanName = koreanName;
-            for (BodyPart bodyPart : bodyParts) {
-                this.bodyPartKoreanName.add(bodyPart.getKoreanName());
-            }
-        }
-    }
-
-    @Getter
-    static class MachineDto {
-        private Long id;
-        private String englishName;
-        private String koreanName;
-        private List<String> bodyPartKoreanName = new ArrayList<>();
-
-        public MachineDto(Machine machine) {
-            this.id = machine.getId();
-            this.englishName = machine.getEnglishName();
-            this.koreanName = machine.getKoreanName();
-            for (BodyPart bodyPart : machine.getBodyParts()) {
-                this.bodyPartKoreanName.add(bodyPart.getKoreanName());
-            }
-        }
+        return machineId.toString();
     }
 }
