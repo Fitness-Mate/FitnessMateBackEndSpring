@@ -30,6 +30,12 @@ public class BodyPartRepository {
                 .getResultList()
                 .stream().findAny();
     }
+    public Optional<BodyPart> findByEnglishName(String englishName) {
+        return em.createQuery("select b from BodyPart b where b.englishName = :englishName", BodyPart.class)
+                .setParameter("englishName", englishName)
+                .getResultList()
+                .stream().findAny();
+    }
 
     //Overloading
     public List<BodyPart> findAll() {

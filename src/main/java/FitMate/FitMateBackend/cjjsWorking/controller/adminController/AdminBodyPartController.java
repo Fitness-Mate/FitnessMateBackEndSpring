@@ -1,6 +1,9 @@
 package FitMate.FitMateBackend.cjjsWorking.controller.adminController;
 
+import FitMate.FitMateBackend.cjjsWorking.dto.bodyPart.BodyPartDto;
+import FitMate.FitMateBackend.cjjsWorking.dto.bodyPart.BodyPartRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.bodyPart.BodyPartResponseDto;
+import FitMate.FitMateBackend.cjjsWorking.dto.bodyPart.GetAllBodyPartResponse;
 import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
 import FitMate.FitMateBackend.consts.SessionConst;
 import FitMate.FitMateBackend.domain.BodyPart;
@@ -24,25 +27,28 @@ public class AdminBodyPartController {
     private final BodyPartService bodyPartService;
 
     @PostMapping("admin/bodyParts") //운동 부위 정보 등록 (TEST 완료)
-    public Long saveBodyPart(@SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin,
+    public String saveBodyPart(@SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin,
                              @RequestBody BodyPartRequest request) {
         if(admin == null) return null;
+        if(!bodyPartService.checkBodyPartNameDuplicate(request.getKoreanName(), request.getEnglishName()))
+            return "이미 존재하는 운동 부위입니다. 이름을 확인해주세요.";
 
         BodyPart bodyPart = new BodyPart();
-        bodyPart.update(request.englishName, request.koreanName);
+        bodyPart.update(request.getEnglishName(), request.getKoreanName());
 
-        Long bodyPartId = bodyPartService.saveBodyPart(bodyPart);
-        return bodyPartId;
+        return bodyPartService.saveBodyPart(bodyPart).toString();
     }
 
     @PutMapping("admin/bodyParts/{bodyPartId}") //운동 부위 정보 수정 (TEST 완료)
-    public Long updateBodyPart(@PathVariable("bodyPartId") Long bodyPartId,
+    public String updateBodyPart(@PathVariable("bodyPartId") Long bodyPartId,
                                @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin,
                                @RequestBody BodyPartRequest request) {
         if(admin == null) return null;
+        if(!bodyPartService.checkBodyPartNameDuplicate(request.getKoreanName(), request.getEnglishName()))
+            return "이미 존재하는 운동 부위입니다. 이름을 확인해주세요.";
 
-        bodyPartService.updateBodyPart(bodyPartId, request.englishName, request.koreanName);
-        return bodyPartId;
+        bodyPartService.updateBodyPart(bodyPartId, request.getEnglishName(), request.getKoreanName());
+        return bodyPartId.toString();
     }
 
     @GetMapping("admin/bodyParts/list") //운동 부위 전체 검색 (TEST 완료)
@@ -55,7 +61,7 @@ public class AdminBodyPartController {
 
     @GetMapping("admin/bodyParts/list/{page}") //batch 단위 조회 (TEST 완료)
     public List<BodyPartDto> findBodyParts_page(@PathVariable(value = "page") int page,
-                                            @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin) {
+                                                @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin) {
         if(admin == null) return null;
 
         List<BodyPart> findBodyParts = bodyPartService.findAll(page);
@@ -78,54 +84,7 @@ public class AdminBodyPartController {
     public Long removeBodyPart(@PathVariable("bodyPartId") Long bodyPartId,
                                @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin) {
         if(admin == null) return null;
-
-        BodyPart findBodyPart = bodyPartService.findOne(bodyPartId);
-
-        //remove related machine
-        List<Machine> machines = findBodyPart.getMachines();
-        for (Machine machine : machines) {
-            machine.getBodyParts().remove(findBodyPart);
-        }
-
-        //remove related workout
-        List<Workout> workouts = findBodyPart.getWorkouts();
-        for (Workout workout : workouts) {
-            workout.getBodyParts().remove(findBodyPart);
-        }
-
         bodyPartService.removeBodyPart(bodyPartId);
         return bodyPartId;
     }
-
-    @Data
-    @AllArgsConstructor
-    static class BodyPartRequest {
-        private String englishName;
-        private String koreanName;
-    }
-
-    @Data
-    static class GetAllBodyPartResponse {
-        private List<String> bodyPartKoreanName = new ArrayList<>();
-
-        public GetAllBodyPartResponse(List<BodyPart> bodyParts) {
-            for (BodyPart bodyPart : bodyParts) {
-                bodyPartKoreanName.add(bodyPart.getKoreanName());
-            }
-        }
-    }
-
-    @Getter
-    static class BodyPartDto {
-        private Long id;
-        private String englishName;
-        private String koreanName;
-
-        public BodyPartDto(BodyPart bodyPart) {
-            this.id = bodyPart.getId();
-            this.englishName = bodyPart.getEnglishName();
-            this.koreanName = bodyPart.getKoreanName();
-        }
-    }
-
 }

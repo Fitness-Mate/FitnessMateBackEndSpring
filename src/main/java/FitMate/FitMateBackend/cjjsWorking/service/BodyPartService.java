@@ -2,6 +2,8 @@ package FitMate.FitMateBackend.cjjsWorking.service;
 
 import FitMate.FitMateBackend.cjjsWorking.repository.BodyPartRepository;
 import FitMate.FitMateBackend.domain.BodyPart;
+import FitMate.FitMateBackend.domain.Machine;
+import FitMate.FitMateBackend.domain.Workout;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,11 @@ public class BodyPartService {
     public BodyPart findOne(Long bodyPartId) {
         return bodyPartRepository.findById(bodyPartId);
     }
+    public boolean checkBodyPartNameDuplicate(String koreanName, String englishName) {
+        BodyPart bp1 = bodyPartRepository.findByKoreanName(koreanName).orElse(null);
+        BodyPart bp2 = bodyPartRepository.findByEnglishName(englishName).orElse(null);
+        return (bp1 == null && bp2 == null);
+    }
 
     public BodyPart findByKoreanName(String koreanName) {
         return bodyPartRepository.findByKoreanName(koreanName).orElse(null);
@@ -48,6 +55,18 @@ public class BodyPartService {
     @Transactional
     public Long removeBodyPart(Long bodyPartId) {
         BodyPart findBodyPart = bodyPartRepository.findById(bodyPartId);
+
+        //remove related machine
+        List<Machine> machines = findBodyPart.getMachines();
+        for (Machine machine : machines) {
+            machine.getBodyParts().remove(findBodyPart);
+        }
+
+        //remove related workout
+        List<Workout> workouts = findBodyPart.getWorkouts();
+        for (Workout workout : workouts) {
+            workout.getBodyParts().remove(findBodyPart);
+        }
         bodyPartRepository.remove(findBodyPart);
         return bodyPartId;
     }
