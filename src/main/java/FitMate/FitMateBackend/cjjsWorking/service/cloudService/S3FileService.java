@@ -1,0 +1,52 @@
+package FitMate.FitMateBackend.cjjsWorking.service.cloudService;
+
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Objects;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+@Slf4j
+public class S3FileService {
+
+    private final AmazonS3Client amazonS3Client;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    @Transactional
+    public String uploadImage(String classification, MultipartFile file) {
+        try {
+            String uuid = UUID.randomUUID().toString();
+            String ext = extracExt(Objects.requireNonNull(file.getOriginalFilename()));
+
+            String imageName = uuid + "." + ext;
+
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
+
+            amazonS3Client.putObject(bucket + "/images/" + classification, imageName, file.getInputStream(), metadata);
+
+            log.info("uploadImage: " + imageName);
+            return imageName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String extracExt(String originalFilename) {
+        int pos = originalFilename.lastIndexOf(".");
+        return originalFilename.substring(pos + 1);
+    }
+}

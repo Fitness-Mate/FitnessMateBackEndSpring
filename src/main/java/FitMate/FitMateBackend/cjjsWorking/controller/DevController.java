@@ -1,16 +1,16 @@
 package FitMate.FitMateBackend.cjjsWorking.controller;
 
+import FitMate.FitMateBackend.cjjsWorking.form.WorkoutForm;
 import FitMate.FitMateBackend.cjjsWorking.repository.BodyPartRepository;
 import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
 import FitMate.FitMateBackend.cjjsWorking.service.MachineService;
+import FitMate.FitMateBackend.cjjsWorking.service.cloudService.S3FileService;
+import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,6 +22,7 @@ public class DevController {
     private final BodyPartService bodyPartService;
     private final BodyPartRepository bodyPartRepository;
     private final MachineService machineService;
+    private final S3FileService s3FileService;
 
     @PostMapping("bodyParts/create")
     public void createBodyParts(@RequestBody DevBodyPartsRequest request) {
@@ -44,6 +45,17 @@ public class DevController {
             }
 
             machineService.saveMachine(machine);
+        }
+    }
+
+    @PostMapping("s3/upload")
+    public String s3UploadTest(@ModelAttribute WorkoutForm form) {
+        try {
+            String filename = s3FileService.uploadImage(ServiceConst.S3_IMG_WORKOUT, form.getImage());
+            System.out.println(filename);
+            return "success";
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
 

@@ -5,8 +5,6 @@ import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutDto;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutResponseDto;
 import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutSearch;
 import FitMate.FitMateBackend.cjjsWorking.service.WorkoutService;
-import FitMate.FitMateBackend.consts.SessionConst;
-import FitMate.FitMateBackend.domain.User;
 import FitMate.FitMateBackend.domain.Workout;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

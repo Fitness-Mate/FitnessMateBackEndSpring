@@ -10,7 +10,4 @@ public class FitMateBackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FitMateBackendApplication.class, args);
 	}
-
 }
-
-//git connection test6
