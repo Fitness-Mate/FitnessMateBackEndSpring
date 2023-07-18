@@ -12,4 +12,8 @@ public interface ServiceConst {
     // ex) 53번 보충제: RECOMMEND_PREFIX+53+RECOMMEND_SUFFIX
     public static final String RECOMMEND_PREFIX = "<<";
     public static final String RECOMMEND_SUFFIX = ">>";
+
+    //s3 directory constraint
+    public static final String S3_IMG_WORKOUT = "workout";
+    public static final String S3_IMG_SUPPLEMENT = "supplement";
 }
