@@ -1,6 +1,7 @@
 package FitMate.FitMateBackend.cjjsWorking.controller.adminController;
 
 import FitMate.FitMateBackend.cjjsWorking.repository.BodyPartRepository;
+import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
 import FitMate.FitMateBackend.cjjsWorking.service.MachineService;
 import FitMate.FitMateBackend.consts.SessionConst;
 import FitMate.FitMateBackend.domain.BodyPart;
@@ -21,24 +22,26 @@ import java.util.stream.Collectors;
 public class AdminMachineController {
 
     private final MachineService machineService;
-    private final BodyPartRepository bodyPartRepository;
+    private final BodyPartService bodyPartService;
 
     @PostMapping("admin/machines") //생성 (TEST 완료)
-    public Long saveMachine(@SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin,
+    public String saveMachine(@SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin,
                             @RequestBody MachineRequest request) {
         if(admin == null) return null;
+        //machine duplicate 예외처리 필요
 
         Machine machine = new Machine();
         machine.update(request.englishName, request.koreanName);
 
         for (String koreanName : request.bodyPartKoreanName) {
-            BodyPart findBodyPart = bodyPartRepository.findByKoreanName(koreanName);
+            BodyPart findBodyPart = bodyPartService.findByKoreanName(koreanName);
+            if(findBodyPart == null) return koreanName + "을 찾을 수 없습니다.";
+
             findBodyPart.addMachine(machine);
             machine.getBodyParts().add(findBodyPart);
         }
 
-        Long machineId = machineService.saveMachine(machine);
-        return machineId;
+        return machineService.saveMachine(machine).toString();
     }
 
     @PutMapping("admin/machines/{machineId}") //수정 (TEST 완료)

@@ -20,7 +20,6 @@ import java.util.List;
 public class DevController {
 
     private final BodyPartService bodyPartService;
-    private final BodyPartRepository bodyPartRepository;
     private final MachineService machineService;
     private final S3FileService s3FileService;
 
@@ -39,7 +38,7 @@ public class DevController {
             machine.update(m.englishName, m.koreanName);
 
             for (String name : m.bodyPartKoreanName) {
-                BodyPart findBP = bodyPartRepository.findByKoreanName(name);
+                BodyPart findBP = bodyPartService.findByKoreanName(name);
                 machine.getBodyParts().add(findBP);
                 findBP.getMachines().add(machine);
             }
@@ -51,7 +50,7 @@ public class DevController {
     @PostMapping("s3/upload")
     public String s3UploadTest(@ModelAttribute WorkoutForm form) {
         try {
-            String filename = s3FileService.uploadImage(ServiceConst.S3_IMG_WORKOUT, form.getImage());
+            String filename = s3FileService.uploadImage(ServiceConst.S3_DIR_WORKOUT, form.getImage());
             System.out.println(filename);
             return "success";
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.repository;
 
+import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.QWorkout;
 import FitMate.FitMateBackend.domain.Workout;
@@ -22,7 +23,7 @@ import static org.springframework.util.StringUtils.hasText;
 public class WorkoutRepository {
 
     private final EntityManager em;
-    private final BodyPartRepository bodyPartRepository;
+    private final BodyPartService bodyPartService;
 
     public void save(Workout workout) {
         em.persist(workout);
@@ -32,16 +33,17 @@ public class WorkoutRepository {
         return em.find(Workout.class, id);
     }
     public Optional<Workout> findByKoreanName(String koreanName) {
-        return Optional.ofNullable(em.createQuery("select w from Workout w where w.koreanName = :koreanName", Workout.class)
+        return em.createQuery("select w from Workout w where w.koreanName = :koreanName", Workout.class)
                 .setParameter("koreanName", koreanName)
-                .getSingleResult());
+                .getResultList()
+                .stream().findAny();
     }
     public Optional<Workout> findByEnglishName(String englishName) {
-        return Optional.ofNullable(em.createQuery("select w from Workout w where w.englishName = :englishName", Workout.class)
+        return em.createQuery("select w from Workout w where w.englishName = :englishName", Workout.class)
                 .setParameter("englishName", englishName)
-                .getSingleResult());
+                .getResultList()
+                .stream().findAny();
     }
-
 
     //Overloading
     public List<Workout> findAll(int page) {
@@ -76,7 +78,7 @@ public class WorkoutRepository {
         }
         if(search.getBodyPartKoreanName() != null) {
             for (String koreanName : search.getBodyPartKoreanName()) {
-                BodyPart bodyPart = bodyPartRepository.findByKoreanName(koreanName);
+                BodyPart bodyPart = bodyPartService.findByKoreanName(koreanName);
                 builder.and(QWorkout.workout.bodyParts.contains(bodyPart));
             }
         }

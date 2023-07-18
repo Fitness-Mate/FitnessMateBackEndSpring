@@ -16,7 +16,7 @@ import java.util.List;
 public class MachineService {
 
     private final MachineRepository machineRepository;
-    private final BodyPartRepository bodyPartRepository;
+    private final BodyPartService bodyPartService;
 
     @Transactional
     public Long saveMachine(Machine machine) {
@@ -25,7 +25,7 @@ public class MachineService {
     }
 
     @Transactional
-    public Long updateMachine(Long machineId, String englishName, String koreanName, List<String> bodyPartKoreanName) {
+    public String updateMachine(Long machineId, String englishName, String koreanName, List<String> bodyPartKoreanName) {
         Machine findMachine = machineRepository.findById(machineId);
         findMachine.update(englishName, koreanName);
 
@@ -35,12 +35,14 @@ public class MachineService {
         findMachine.getBodyParts().clear();
 
         for (String name : bodyPartKoreanName) {
-            BodyPart findBodyPart = bodyPartRepository.findByKoreanName(name);
+            BodyPart findBodyPart = bodyPartService.findByKoreanName(name);
+            if(findBodyPart == null) return bodyPartKoreanName + "을 찾을 수 없습니다.";
+
             findBodyPart.addMachine(findMachine);
             findMachine.getBodyParts().add(findBodyPart);
         }
 
-        return machineId;
+        return machineId.toString();
     }
 
     //Overloading

@@ -1,5 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.repository;
 
+import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
 import FitMate.FitMateBackend.domain.QMachine;
@@ -19,7 +20,7 @@ import java.util.List;
 public class MachineRepository {
 
     private final EntityManager em;
-    private final BodyPartRepository bodyPartRepository;
+    private final BodyPartService bodyPartService;
 
     public void save(Machine machine) {
         em.persist(machine);
@@ -73,7 +74,7 @@ public class MachineRepository {
 
         BooleanBuilder builder = new BooleanBuilder();
         for (String koreanName : bodyPartKoreanName) {
-            BodyPart bodyPart = bodyPartRepository.findByKoreanName(koreanName);
+            BodyPart bodyPart = bodyPartService.findByKoreanName(koreanName);
             builder.or(QMachine.machine.bodyParts.contains(bodyPart));
         }
 

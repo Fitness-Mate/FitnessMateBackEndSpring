@@ -28,6 +28,14 @@ public class BodyPartService {
         return bodyPartId;
     }
 
+    public BodyPart findOne(Long bodyPartId) {
+        return bodyPartRepository.findById(bodyPartId);
+    }
+
+    public BodyPart findByKoreanName(String koreanName) {
+        return bodyPartRepository.findByKoreanName(koreanName).orElse(null);
+    }
+
     //Overloading
     public List<BodyPart> findAll() {
         return bodyPartRepository.findAll();
@@ -36,10 +44,6 @@ public class BodyPartService {
         return bodyPartRepository.findAll(page);
     }
     //Overloading
-
-    public BodyPart findOne(Long bodyPartId) {
-        return bodyPartRepository.findById(bodyPartId);
-    }
 
     @Transactional
     public Long removeBodyPart(Long bodyPartId) {
