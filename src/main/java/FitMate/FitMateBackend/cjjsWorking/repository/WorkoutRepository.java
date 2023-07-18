@@ -8,10 +8,12 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.jdbc.Work;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.util.StringUtils.hasText;
 
@@ -29,6 +31,17 @@ public class WorkoutRepository {
     public Workout findById(Long id) {
         return em.find(Workout.class, id);
     }
+    public Optional<Workout> findByKoreanName(String koreanName) {
+        return Optional.ofNullable(em.createQuery("select w from Workout w where w.koreanName = :koreanName", Workout.class)
+                .setParameter("koreanName", koreanName)
+                .getSingleResult());
+    }
+    public Optional<Workout> findByEnglishName(String englishName) {
+        return Optional.ofNullable(em.createQuery("select w from Workout w where w.englishName = :englishName", Workout.class)
+                .setParameter("englishName", englishName)
+                .getSingleResult());
+    }
+
 
     //Overloading
     public List<Workout> findAll(int page) {

@@ -46,12 +46,18 @@ public class WorkoutService {
         return workoutId;
     }
 
-    public List<Workout> findAll(int page) {
-        return workoutRepository.findAll(page);
-    }
-
     public Workout findOne(Long workoutId) {
         return workoutRepository.findById(workoutId);
+    }
+    public Workout findByWorkoutKoreanName(String workoutName) {
+        return workoutRepository.findByKoreanName(workoutName).orElse(null);
+    }
+    public Workout findByWorkoutEnglishName(String englishName) {
+        return workoutRepository.findByEnglishName(englishName).orElse(null);
+    }
+
+    public List<Workout> findAll(int page) {
+        return workoutRepository.findAll(page);
     }
 
     @Transactional
@@ -64,8 +70,7 @@ public class WorkoutService {
     /////////////////////////////////////////////////////////////////
 
     public List<Workout> searchAll(int page, WorkoutSearch search) {
-        List<Workout> workouts = workoutRepository.searchAll(page, search);
-        return workouts;
+        return workoutRepository.searchAll(page, search);
     }
 
     public String getAllWorkoutToString() {
