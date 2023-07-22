@@ -26,14 +26,14 @@ public class Workout {
     private String koreanName;
     private String videoLink;
     private String description;
-    private String imagePath;
+    private String imgFileName;
 
     public void update(String englishName, String koreanName, String videoLink,
-                       String description, String imagePath) {
+                       String description, String imgFileName) {
         this.englishName = englishName;
         this.koreanName = koreanName;
         this.videoLink = videoLink;
         this.description = description;
-        this.imagePath = imagePath;
+        this.imgFileName = imgFileName;
     }
 }

@@ -24,6 +24,7 @@ public class UserWorkoutController {
 
     private final WorkoutService workoutService;
 
+    /* 사용 안함
     @GetMapping("workouts/image/{workoutId}") //이미지 조회 (TEST 완료)
     public ResponseEntity<Resource> findWorkoutImage(@PathVariable("workoutId") Long workoutId) throws MalformedURLException {
         //비회원도 운동 검색은 할 수 있기 때문에 user session 제약 없앰
@@ -32,6 +33,7 @@ public class UserWorkoutController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
                 .body(imgRrc);
     }
+    */
 
     @PostMapping("workouts/search/list/{page}") //batch 검색 (TEST 완료)
     public List<WorkoutDto> searchWorkouts_page(@PathVariable("page") int page,
@@ -49,7 +51,7 @@ public class UserWorkoutController {
     public WorkoutResponseDto findWorkout(@PathVariable("workoutId") Long workoutId) {
         //비회원도 운동 검색은 할 수 있기 때문에 user session 제약 없앰
         Workout findWorkout = workoutService.findOne(workoutId);
-        return new WorkoutResponseDto(findWorkout.getEnglishName(), findWorkout.getKoreanName(), findWorkout.getVideoLink(),
+        return new WorkoutResponseDto(findWorkout.getEnglishName(), findWorkout.getKoreanName(), findWorkout.getImgFileName(), findWorkout.getVideoLink(),
                 findWorkout.getDescription(), findWorkout.getBodyParts());
     }
 

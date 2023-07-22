@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -16,7 +17,7 @@ import java.util.List;
 public class MachineService {
 
     private final MachineRepository machineRepository;
-    private final BodyPartRepository bodyPartRepository;
+    private final BodyPartService bodyPartService;
 
     @Transactional
     public Long saveMachine(Machine machine) {
@@ -25,7 +26,7 @@ public class MachineService {
     }
 
     @Transactional
-    public Long updateMachine(Long machineId, String englishName, String koreanName, List<String> bodyPartKoreanName) {
+    public String updateMachine(Long machineId, String englishName, String koreanName, List<String> bodyPartKoreanName) {
         Machine findMachine = machineRepository.findById(machineId);
         findMachine.update(englishName, koreanName);
 
@@ -35,12 +36,12 @@ public class MachineService {
         findMachine.getBodyParts().clear();
 
         for (String name : bodyPartKoreanName) {
-            BodyPart findBodyPart = bodyPartRepository.findByKoreanName(name);
+            BodyPart findBodyPart = bodyPartService.findByKoreanName(name);
             findBodyPart.addMachine(findMachine);
             findMachine.getBodyParts().add(findBodyPart);
         }
 
-        return machineId;
+        return machineId.toString();
     }
 
     //Overloading
@@ -56,6 +57,12 @@ public class MachineService {
         return machineRepository.findById(machineId);
     }
 
+    public boolean checkMachineNameDuplicate(String koreanName, String englishName) {
+        Machine m1 = machineRepository.findByKoreanName(koreanName).orElse(null);
+        Machine m2 = machineRepository.findByEnglishName(englishName).orElse(null);
+        return (m1 == null && m2 == null);
+    }
+
     public List<Machine> findWithBodyPart(List<String> bodyPartKoreanName) {
         return machineRepository.findWithBodyPart(bodyPartKoreanName);
     }
@@ -63,6 +70,9 @@ public class MachineService {
     @Transactional
     public Long removeMachine(Long machineId) {
         Machine findMachine = machineRepository.findById(machineId);
+        for (BodyPart bodyPart : findMachine.getBodyParts()) {
+            bodyPart.removeMachine(findMachine);
+        }
         machineRepository.remove(findMachine);
         return machineId;
     }

@@ -23,7 +23,6 @@ public class S3FileService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    @Transactional
     public String uploadImage(String classification, MultipartFile file) {
         try {
             String uuid = UUID.randomUUID().toString();
@@ -43,6 +42,10 @@ public class S3FileService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void deleteImage(String classification, String fileName) {
+        amazonS3Client.deleteObject(bucket + "/images/" + classification, fileName);
     }
 
     public String extracExt(String originalFilename) {

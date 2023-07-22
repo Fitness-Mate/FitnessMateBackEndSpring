@@ -1,5 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.repository;
 
+import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
 import FitMate.FitMateBackend.domain.QMachine;
@@ -13,13 +14,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class MachineRepository {
 
     private final EntityManager em;
-    private final BodyPartRepository bodyPartRepository;
+    private final BodyPartService bodyPartService;
 
     public void save(Machine machine) {
         em.persist(machine);
@@ -29,10 +31,15 @@ public class MachineRepository {
         return em.find(Machine.class, id);
     }
 
-    public Machine findByKoreanName(String koreanName) {
+    public Optional<Machine> findByKoreanName(String koreanName) {
         return em.createQuery("select m from Machine m where m.koreanName = :koreanName", Machine.class)
                 .setParameter("koreanName", koreanName)
-                .getResultList().get(0);
+                .getResultList().stream().findAny();
+    }
+    public Optional<Machine> findByEnglishName(String englishName) {
+        return em.createQuery("select m from Machine m where m.englishName = :englishName", Machine.class)
+                .setParameter("englishName", englishName)
+                .getResultList().stream().findAny();
     }
 
     // Overloading
@@ -56,12 +63,13 @@ public class MachineRepository {
     }
 
     public List<Machine> findByMachineKoreanName(List<String> machineKoreanName) {
+        //workout recommendation 을 위해 사용
         if (machineKoreanName == null) {
             return null;
         }
         List<Machine> machines = new ArrayList<>();
         for (String koreanName : machineKoreanName) {
-            Machine machine = findByKoreanName(koreanName);
+            Machine machine = findByKoreanName(koreanName).get();
             machines.add(machine);
         }
         return machines;
@@ -73,7 +81,7 @@ public class MachineRepository {
 
         BooleanBuilder builder = new BooleanBuilder();
         for (String koreanName : bodyPartKoreanName) {
-            BodyPart bodyPart = bodyPartRepository.findByKoreanName(koreanName);
+            BodyPart bodyPart = bodyPartService.findByKoreanName(koreanName);
             builder.or(QMachine.machine.bodyParts.contains(bodyPart));
         }
 

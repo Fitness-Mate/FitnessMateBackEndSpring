@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,10 +24,17 @@ public class BodyPartRepository {
         return em.find(BodyPart.class, id);
     }
 
-    public BodyPart findByKoreanName(String koreanName) {
+    public Optional<BodyPart> findByKoreanName(String koreanName) {
         return em.createQuery("select b from BodyPart b where b.koreanName = :koreanName", BodyPart.class)
                 .setParameter("koreanName", koreanName)
-                .getResultList().get(0);
+                .getResultList()
+                .stream().findAny();
+    }
+    public Optional<BodyPart> findByEnglishName(String englishName) {
+        return em.createQuery("select b from BodyPart b where b.englishName = :englishName", BodyPart.class)
+                .setParameter("englishName", englishName)
+                .getResultList()
+                .stream().findAny();
     }
 
     //Overloading
@@ -50,9 +58,10 @@ public class BodyPartRepository {
     }
 
     public List<BodyPart> findByBodyPartKoreanName(List<String> bodyPartKoreanName) {
+        //workout recommendation 에서 사용됨.
         List<BodyPart> bodyParts = new ArrayList<>();
         for (String koreanName : bodyPartKoreanName) {
-            BodyPart bodyPart = findByKoreanName(koreanName);
+            BodyPart bodyPart = findByKoreanName(koreanName).get();
             bodyParts.add(bodyPart);
         }
         return bodyParts;
