@@ -1,5 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.repository;
 
+import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.QWorkout;
 import FitMate.FitMateBackend.domain.Workout;
 import FitMate.FitMateBackend.domain.recommendation.QWorkoutRecommendation;
@@ -38,8 +39,8 @@ public class WorkoutRecommendationRepository {
     }
 
     public List<WorkoutRecommendation> findAllWithWorkoutRecommendation(int page, Long userId) {
-        int offset = (page-1)*10;
-        int limit = 10;
+        int offset = (page-1)*ServiceConst.PAGE_BATCH_SIZE;
+        int limit = ServiceConst.PAGE_BATCH_SIZE;
 
         QWorkoutRecommendation workoutRecommendation = QWorkoutRecommendation.workoutRecommendation;
         JPAQueryFactory query = new JPAQueryFactory(em);
