@@ -1,5 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.repository;
 
+import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
 import jakarta.persistence.EntityManager;
@@ -43,8 +44,8 @@ public class BodyPartRepository {
                 .getResultList();
     }
     public List<BodyPart> findAll(int page) {
-        int offset = (page-1)*10;
-        int limit = 10;
+        int offset = (page-1) * ServiceConst.PAGE_BATCH_SIZE;
+        int limit = ServiceConst.PAGE_BATCH_SIZE;
 
         return em.createQuery("select b from BodyPart b", BodyPart.class)
                 .setFirstResult(offset)

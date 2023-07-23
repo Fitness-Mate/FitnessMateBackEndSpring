@@ -1,6 +1,7 @@
 package FitMate.FitMateBackend.cjjsWorking.repository;
 
 import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
+import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.QWorkout;
 import FitMate.FitMateBackend.domain.Workout;
@@ -47,8 +48,8 @@ public class WorkoutRepository {
 
     //Overloading
     public List<Workout> findAll(int page) {
-        int offset = (page-1)*10;
-        int limit = 10;
+        int offset = (page-1)*ServiceConst.PAGE_BATCH_SIZE;
+        int limit = ServiceConst.PAGE_BATCH_SIZE;
 
         return em.createQuery("select w from Workout w order by w.id desc", Workout.class)
                 .setFirstResult(offset)
@@ -68,8 +69,8 @@ public class WorkoutRepository {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     public List<Workout> searchAll(int page, WorkoutSearch search) {
-        int offset = (page-1)*10;
-        int limit = 10;
+        int offset = (page-1)*ServiceConst.PAGE_BATCH_SIZE;
+        int limit = ServiceConst.PAGE_BATCH_SIZE;
 
         BooleanBuilder builder = new BooleanBuilder();
         if(search.getSearchKeyword() != null) {

@@ -1,6 +1,7 @@
 package FitMate.FitMateBackend.cjjsWorking.repository;
 
 import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
+import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
 import FitMate.FitMateBackend.domain.QMachine;
@@ -48,8 +49,8 @@ public class MachineRepository {
                 .getResultList();
     }
     public List<Machine> findAll(int page) {
-        int offset = (page-1)*10;
-        int limit = 10;
+        int offset = (page-1)*ServiceConst.PAGE_BATCH_SIZE;
+        int limit = ServiceConst.PAGE_BATCH_SIZE;
 
         return em.createQuery("select m from Machine m order by m.id desc", Machine.class)
                 .setFirstResult(offset)
