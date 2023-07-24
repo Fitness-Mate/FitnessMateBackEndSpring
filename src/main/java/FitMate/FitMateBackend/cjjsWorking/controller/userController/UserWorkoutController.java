@@ -1,6 +1,7 @@
 package FitMate.FitMateBackend.cjjsWorking.controller.userController;
 
 import FitMate.FitMateBackend.chanhaleWorking.service.FileStoreService;
+import FitMate.FitMateBackend.cjjsWorking.dto.workout.UserWorkoutRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutDto;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutResponseDto;
 import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutSearch;
@@ -37,9 +38,9 @@ public class UserWorkoutController {
 
     @PostMapping("workouts/search/list/{page}") //batch 검색 (TEST 완료)
     public List<WorkoutDto> searchWorkouts_page(@PathVariable("page") int page,
-                                              @RequestBody userWorkoutRequest request) {
+                                                @RequestBody UserWorkoutRequest request) {
         //비회원도 운동 검색은 할 수 있기 때문에 user session 제약 없앰
-        WorkoutSearch search = new WorkoutSearch(request.searchKeyword, request.bodyPartKoreanName);
+        WorkoutSearch search = new WorkoutSearch(request.getSearchKeyword(), request.getBodyPartKoreanName());
         List<Workout> searchWorkouts = workoutService.searchAll(page, search);
 
         return searchWorkouts.stream()
@@ -53,16 +54,5 @@ public class UserWorkoutController {
         Workout findWorkout = workoutService.findOne(workoutId);
         return new WorkoutResponseDto(findWorkout.getEnglishName(), findWorkout.getKoreanName(), findWorkout.getImgFileName(), findWorkout.getVideoLink(),
                 findWorkout.getDescription(), findWorkout.getBodyParts());
-    }
-
-    @Data
-    static class userWorkoutRequest{
-        private String searchKeyword;
-        private List<String> bodyPartKoreanName;
-
-        userWorkoutRequest(String searchKeyword, List<String> bodyPartKoreanName) {
-            this.searchKeyword = searchKeyword;
-            this.bodyPartKoreanName = bodyPartKoreanName;
-        }
     }
 }
