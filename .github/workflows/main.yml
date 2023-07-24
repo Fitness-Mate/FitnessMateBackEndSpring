@@ -38,6 +38,7 @@ jobs:
 
 #       - name: Docker Hub 퍼블리시 # (4)
 #         run: docker push chanhalee/fitnessmateback:latest
+        
       - name: SSH Commands
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -47,15 +48,6 @@ jobs:
           port: 22
           script_stop: true
           script: |
-            wall "System will go down for 2 hours maintenance at 13:00 PM"
+            wall "Github Actions in action"
+            ~/actionscript.sh
 
-#       - name: Build and deploy
-#         run: |
-#           echo "$SSH_PEM_KEY" >> ./key.pem
-#           chmod 600 ./key.pem
-#           ssh -i ./key.pem -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_KNOWN_HOSTS} '~/script.sh'
-#           wall "System will go down for 2 hours maintenance at 13:00 PM"
-#         env:
-#           SSH_USER: ${{secrets.SSH_USER}}
-#           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
-#           SSH_PEM_KEY: ${{secrets.SSH_PEM_KEY}}
