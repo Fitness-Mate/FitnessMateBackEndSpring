@@ -39,12 +39,23 @@ jobs:
       - name: Docker Hub 퍼블리시 # (4)
         run: docker push chanhalee/fitnessmateback:latest
 
-      - name: WAS 인스턴스 접속 및 애플리케이션 실행 # (5)
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.WAS_HOST }}
-          username: ${{ secrets.WAS_USERNAME }}
-          password: ${{ secrets.WAS_PASSWORD }}
-          port: ${{ secrets.WAS_SSH_PORT }}
-          script: |
-            /volume1/docker/fitnessmate/actionscript.sh
+      - name: Build and deploy
+        run: |
+          echo "$SSH_PEM_KEY" >> $HOME/key.pem
+          chmod 400 $HOME/key.pem
+          ssh -i $HOME/key.pem -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_KNOWN_HOSTS} '~/script.sh'
+          wall "System will go down for 2 hours maintenance at 13:00 PM"
+        env:
+          SSH_USER: ${{secrets.SSH_USER}}
+          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
+          SSH_PEM_KEY: ${{secrets.SSH_PEM_KEY}}
+          
+      # - name: WAS 인스턴스 접속 및 애플리케이션 실행 # (5)
+      #   uses: appleboy/ssh-action@v0.1.6
+      #   with:
+      #     host: ${{ secrets.WAS_HOST }}
+      #     username: ${{ secrets.WAS_USERNAME }}
+      #     password: ${{ secrets.WAS_PASSWORD }}
+      #     port: ${{ secrets.WAS_SSH_PORT }}
+      #     script: |
+      #       /volume1/docker/fitnessmate/actionscript.sh
