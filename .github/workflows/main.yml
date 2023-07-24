@@ -41,9 +41,9 @@ jobs:
 
       - name: Build and deploy
         run: |
-          echo "$SSH_PEM_KEY" >> $HOME/key.pem
-          chmod 600 $HOME/key.pem
-          ssh -i $HOME/key.pem -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_KNOWN_HOSTS} '~/script.sh'
+          echo "$SSH_PEM_KEY" >> ./key.pem
+          chmod 600 ./key.pem
+          ssh -i ./key.pem -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_KNOWN_HOSTS} '~/script.sh'
           wall "System will go down for 2 hours maintenance at 13:00 PM"
         env:
           SSH_USER: ${{secrets.SSH_USER}}
