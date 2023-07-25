@@ -39,7 +39,7 @@ public class AdminWorkoutController {
                     form.getDescription(), fileName);
         } else {
             workout.update(form.getEnglishName(), form.getKoreanName(), form.getVideoLink(),
-                    form.getDescription(), ServiceConst.DEFAULT_IMAGE_PATH);
+                    form.getDescription(), ServiceConst.DEFAULT_IMAGE_NAME);
         }
 
         for (String koreanName : form.getBodyPartKoreanName()) {
@@ -60,7 +60,7 @@ public class AdminWorkoutController {
             return "이미 존재하는 운동입니다. 이름을 확인해주세요.";
 
         Workout findWorkout = workoutService.findOne(workoutId);
-        if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_IMAGE_PATH)) //기존 이미지 삭제
+        if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_IMAGE_NAME)) //기존 이미지 삭제
             s3FileService.deleteImage(ServiceConst.S3_DIR_WORKOUT,findWorkout.getImgFileName());
 
         if(!form.getImage().isEmpty()) {
@@ -69,7 +69,7 @@ public class AdminWorkoutController {
                     form.getDescription(), form.getBodyPartKoreanName(), fileName);
         } else {
             return workoutService.updateWorkout(workoutId, form.getEnglishName(), form.getKoreanName(), form.getVideoLink(),
-                    form.getDescription(), form.getBodyPartKoreanName(), ServiceConst.DEFAULT_IMAGE_PATH);
+                    form.getDescription(), form.getBodyPartKoreanName(), ServiceConst.DEFAULT_IMAGE_NAME);
         }
     }
 

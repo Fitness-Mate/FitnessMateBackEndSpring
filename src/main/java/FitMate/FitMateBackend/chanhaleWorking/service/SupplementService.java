@@ -3,6 +3,7 @@ package FitMate.FitMateBackend.chanhaleWorking.service;
 import FitMate.FitMateBackend.chanhaleWorking.form.supplement.SupplementForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.supplement.SupplementSearchForm;
 import FitMate.FitMateBackend.chanhaleWorking.repository.SupplementRepository;
+import FitMate.FitMateBackend.cjjsWorking.service.cloudService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.supplement.*;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 @Slf4j
 public class SupplementService {
     private final SupplementRepository supplementRepository;
+    private final S3FileService s3FileService;
 
     private String supplementString = "";
 
@@ -35,11 +37,12 @@ public class SupplementService {
         }
         // 이미지 등록 절차
         if (!supplementForm.getImage().isEmpty()) {// 이미지를 업로드 했다면,
-            String newImage = FileStoreService.storeFile(supplementForm.getImage()); //  업로드 한 이미지 저장
-            supplement.setImagePath(newImage); // 이미지 경로 등록
+//            String newImage = FileStoreService.storeFile(supplementForm.getImage()); //  업로드 한 이미지 저장
+            String newImage = s3FileService.uploadImage(ServiceConst.S3_DIR_SUPPLEMENT, supplementForm.getImage());
+            supplement.setImageName(newImage); // 이미지 이름 등록
         }
         else  // 이미지 업로드 안했다면 디폴트 이미지로 등록
-            supplement.setImagePath(ServiceConst.DEFAULT_IMAGE_PATH);
+            supplement.setImageName(ServiceConst.DEFAULT_IMAGE_NAME);
 
         supplementRepository.save(supplement);
         updateSupplementString();
@@ -59,23 +62,16 @@ public class SupplementService {
 
             if (supplement.getType() == supplementForm.getSupplementType()) { // 같은 타입의 경우 (entity 신규 생성 불필요)
 
-                // 기존 이미지와 다른 이미지일 경우 이미지 업데이트
-                if (!supplementForm.getImage().getOriginalFilename().equals(supplement.getImagePath())) {
-                    String oldImage = supplement.getImagePath();
-                    if (!oldImage.equals(ServiceConst.DEFAULT_IMAGE_PATH)) {
-                        File file = new File(ServiceConst.IMAGE_DIRECTORY + oldImage);
-                        log.info(file.getAbsolutePath());
-                        if (file.exists()) {
-                            log.info(oldImage);
-
-                            if (file.delete()) {
-                                log.info("{} 파일이 삭제되었습니다.", ServiceConst.IMAGE_DIRECTORY + oldImage);
-                            }
-                        }
-                    }
-                    String newImage = FileStoreService.storeFile(supplementForm.getImage());
-                    supplement.setImagePath(newImage);
+                String oldImage = supplement.getImageName();
+                if (!oldImage.equals(ServiceConst.DEFAULT_IMAGE_NAME)) {
+                    // 이전 이미지 삭제
+                    s3FileService.deleteImage(ServiceConst.S3_DIR_SUPPLEMENT, oldImage);
+                    log.info("deletedImage: " + oldImage);
                 }
+//                String newImage = FileStoreService.storeFile(supplementForm.getImage());
+                // 새 이미지 등록
+                String newImage = s3FileService.uploadImage(ServiceConst.S3_DIR_SUPPLEMENT, supplementForm.getImage());
+                supplement.setImageName(newImage); // 이미지 이름 등록
                 // 텍스트 정보 업데이트
                 if (supplement.getType() == SupplementType.BCAA) {
                     BCAA sp = (BCAA)supplement;
@@ -112,12 +108,12 @@ public class SupplementService {
 //        if (supplement == null)
 //            return;
 //        String oldImage = supplement.getImagePath();
-//        if (!oldImage.equals(ServiceConst.DEFAULT_IMAGE_PATH)) {
-//            File file = new File(ServiceConst.DEFAULT_IMAGE_PATH + oldImage);
+//        if (!oldImage.equals(ServiceConst.DEFAULT_IMAGE_NAME)) {
+//            File file = new File(ServiceConst.DEFAULT_IMAGE_NAME + oldImage);
 //            if (file.exists()) {
 //
 //                if (file.delete()) {
-//                    log.info("{} 파일이 삭제되었습니다.", ServiceConst.DEFAULT_IMAGE_PATH+oldImage);
+//                    log.info("{} 파일이 삭제되었습니다.", ServiceConst.DEFAULT_IMAGE_NAME+oldImage);
 //                }
 //            }
 //        }
@@ -130,14 +126,10 @@ public class SupplementService {
         Supplement supplement = supplementRepository.findById(id);
         if (supplement == null)
             return;
-        String supImg = supplement.getImagePath();
-        if (!supImg.equals(ServiceConst.DEFAULT_IMAGE_PATH)) {
-            File file = new File(ServiceConst.DEFAULT_IMAGE_PATH + supImg);
-            if (file.exists()) {
-                if (file.delete()) {
-                    log.info("{} 파일이 삭제되었습니다.", ServiceConst.DEFAULT_IMAGE_PATH+supImg);
-                }
-            }
+        String supImg = supplement.getImageName();
+        if (!supImg.equals(ServiceConst.DEFAULT_IMAGE_NAME)) {
+            s3FileService.deleteImage(ServiceConst.S3_DIR_SUPPLEMENT, supImg);
+            log.info("{} 파일이 삭제되었습니다.", supImg);
         }
         supplementRepository.deleteSupplement(id);
     }

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class RegisterForm {
     private String userName;
-    private String loginId;
+    private String loginEmail;
     private String password;
     private String sex;
     private LocalDate date = LocalDate.now();
@@ -26,14 +26,13 @@ public class RegisterForm {
     private Float lowerMuscleMass = 40.0f;
 
     public String validateFields(){
+        String regexPattern = "^(.+)@(\\S+)$";
         if (userName.length() > 10)
             return "너무 긴 유저명: 3자리 이상, 10자리 이하";
         if (userName.length() < 3)
             return "너무 짧은 유저명: 3자리 이상, 10자리 이하";
-        if (loginId.length() > 20)
-            return "너무 긴 로그인 아이디: 8자리 이상, 20자리 이하";
-        if (loginId.length() < 6)
-            return "너무 짧은 로그인 아이디: 6자리 이상, 20자리 이하";
+        if (!loginEmail.matches(regexPattern))
+            return "형식에 맞지 않는 이메일 주소";
         if (password.length() < 8)
             return "너무 짧은 password: 8자리 이상 필요";
         if (!sex.equals("남성") && !sex.equals("여성"))

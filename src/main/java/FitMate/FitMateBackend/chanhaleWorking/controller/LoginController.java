@@ -28,10 +28,10 @@ public class LoginController {
         if (bindingResult.hasErrors()){
             return "fail";//"입력 오류";
         }
-        log.info("login attempt [{}]",loginForm.getLoginId() );
+        log.info("login attempt [{}]",loginForm.getLoginEmail() );
 
 
-        User loginUser = loginService.login(loginForm.getLoginId(),loginForm.getPassword());
+        User loginUser = loginService.login(loginForm.getLoginEmail(),loginForm.getPassword());
         if(loginUser == null){
             return "fail";//"로그인 실패. 아이디와 패스워드를 확인해주세요.";
         }
@@ -41,7 +41,7 @@ public class LoginController {
         session.setAttribute(SessionConst.LOGIN_USER, loginUser);
         if(loginUser.getType().equals("Admin"))
             session.setAttribute(SessionConst.LOGIN_ADMIN, loginUser);
-        log.info("login success [{}]",loginForm.getLoginId() );
+        log.info("login success [{}]",loginForm.getLoginEmail() );
         return "okdk";
     }
 

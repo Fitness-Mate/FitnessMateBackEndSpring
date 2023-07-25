@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UserDto {
     private String userName;
-    private String loginId;
+    private String loginEmail;
     private String Sex;
 
     //    private Float height;
@@ -21,7 +21,7 @@ public class UserDto {
     public static UserDto createUserDto(User user) {
         UserDto userDto = new UserDto();
         userDto.userName = user.getUserName();
-        userDto.loginId = user.getLoginId();
+        userDto.loginEmail = user.getLoginEmail();
         userDto.Sex = user.getSex();
         return userDto;
     }

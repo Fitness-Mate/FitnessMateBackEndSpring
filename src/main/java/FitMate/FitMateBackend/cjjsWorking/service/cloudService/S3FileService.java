@@ -1,5 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.service.cloudService;
 
+import FitMate.FitMateBackend.consts.ServiceConst;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
@@ -51,5 +52,20 @@ public class S3FileService {
     public String extracExt(String originalFilename) {
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
+    }
+
+    /**
+     * 수정 필요
+     */
+    public static String getAccessURL(String classification, String fileName) {
+        if (classification == ServiceConst.S3_DIR_SUPPLEMENT) {
+            return ServiceConst.S3_URL + ServiceConst.S3_DIR_SUPPLEMENT+"/" + fileName;
+        }
+        else if (classification == ServiceConst.S3_DIR_WORKOUT) {
+            return ServiceConst.S3_URL + ServiceConst.S3_DIR_WORKOUT+"/" + fileName;
+
+        }
+        else
+            return ServiceConst.S3_URL + ServiceConst.S3_DIR_WORKOUT + "/" + ServiceConst.DEFAULT_IMAGE_NAME;
     }
 }

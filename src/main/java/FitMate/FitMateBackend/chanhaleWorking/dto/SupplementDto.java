@@ -1,6 +1,8 @@
 package FitMate.FitMateBackend.chanhaleWorking.dto;
 
 import FitMate.FitMateBackend.chanhaleWorking.service.FileStoreService;
+import FitMate.FitMateBackend.cjjsWorking.service.cloudService.S3FileService;
+import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.supplement.BCAA;
 import FitMate.FitMateBackend.domain.supplement.Gainer;
 import FitMate.FitMateBackend.domain.supplement.Protein;
@@ -27,7 +29,7 @@ public class SupplementDto {
     private String description;
     private String marketURL;
     private String supplementType;
-//    private UrlResource image;
+    private String imageURL;
     private String flavor;
     // protein, gainer
     private Float proteinPerServing;
@@ -46,6 +48,7 @@ public class SupplementDto {
         this.description = supplement.getDescription();
         this.marketURL = supplement.getMarketURL();
         this.flavor = supplement.getFlavor();
+        this.imageURL = S3FileService.getAccessURL(ServiceConst.S3_DIR_SUPPLEMENT, supplement.getImageName());
 //        this.image = new UrlResource("file:" + FileStoreService.getFullPath(supplement.getImagePath()));
         if (supplement instanceof Gainer) {
             this.supplementType = "Gainer";
