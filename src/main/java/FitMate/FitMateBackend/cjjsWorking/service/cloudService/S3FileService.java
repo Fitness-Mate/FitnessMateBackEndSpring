@@ -1,5 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.service.cloudService;
 
+import FitMate.FitMateBackend.consts.ServiceConst;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class S3FileService {
             metadata.setContentType(file.getContentType());
             metadata.setContentLength(file.getSize());
 
-            amazonS3Client.putObject(bucket + "/images/" + classification, imageName, file.getInputStream(), metadata);
+            amazonS3Client.putObject(bucket + ServiceConst.IMAGE_DIRECTORY + classification, imageName, file.getInputStream(), metadata);
 
             log.info("uploadImage: " + imageName);
             return imageName;
@@ -45,11 +46,18 @@ public class S3FileService {
     }
 
     public void deleteImage(String classification, String fileName) {
-        amazonS3Client.deleteObject(bucket + "/images/" + classification, fileName);
+        amazonS3Client.deleteObject(bucket + ServiceConst.IMAGE_DIRECTORY + classification, fileName);
     }
 
     public String extracExt(String originalFilename) {
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
+    }
+
+    /**
+     * 수정 필요
+     */
+    public String getAccessURL(String classification, String fileName) {
+        return ServiceConst.IMAGE_DIRECTORY + ServiceConst.S3_DIR_SUPPLEMENT + fileName;
     }
 }

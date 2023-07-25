@@ -28,7 +28,7 @@ public abstract class Supplement {
     private Float gramsPerServing;
 
     // 앞에 디렉터리 정보를 제외한 상대경로를 저장
-    private String imagePath;
+    private String imageName;
 
     public Supplement(SupplementForm supplementForm) {
         this.englishName = supplementForm.getEnglishName();
@@ -52,8 +52,8 @@ public abstract class Supplement {
         this.type = supplementForm.getSupplementType();
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 
     public abstract String createIntroduction();

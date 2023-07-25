@@ -23,15 +23,15 @@ public class UserRepository {
             em.merge(user);
         }
     }
-    public Optional<User> findByLoginId(String loginId) {
-        return em.createQuery("select u from User u where u.loginId = :loginId ", User.class)
-                .setParameter("loginId", loginId)
+    public Optional<User> findByLoginEmail(String loginEmail) {
+        return em.createQuery("select u from User u where u.loginEmail = :loginEmail ", User.class)
+                .setParameter("loginEmail", loginEmail)
                 .getResultList().stream().findFirst();
     }
 
-    public Boolean CheckDuplicatedLoginId(String loginId){
-        return em.createQuery("select u from User u where u.loginId = :loginId ", User.class)
-                .setParameter("loginId", loginId)
+    public Boolean CheckDuplicatedLoginEmail(String loginEmail){
+        return em.createQuery("select u from User u where u.loginEmail = :loginEmail ", User.class)
+                .setParameter("loginEmail", loginEmail)
                 .getResultList().size() > 0;
     }
 

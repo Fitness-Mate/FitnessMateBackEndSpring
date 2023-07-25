@@ -21,7 +21,7 @@ public class User {
     private Long id;
 
     private String userName;
-    private String loginId;
+    private String loginEmail;
     private String password;
     private String sex;
     private String type; // Admin 여부 표기용 "Admin", "Customer"
@@ -49,7 +49,7 @@ public class User {
     public static User createUser(RegisterForm form, String type) {
         User user = new User();
         user.userName = form.getUserName();
-        user.loginId = form.getLoginId();
+        user.loginEmail = form.getLoginEmail();
         user.password = form.getPassword();
         user.sex = form.getSex();
         user.type = type;

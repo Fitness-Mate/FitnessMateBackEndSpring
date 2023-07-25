@@ -69,7 +69,7 @@ public class WorkoutService {
             bodyPart.removeWorkout(findWorkout);
         }
 
-        if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_IMAGE_PATH))
+        if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_IMAGE_NAME))
             s3FileService.deleteImage(ServiceConst.S3_DIR_WORKOUT, findWorkout.getImgFileName());
 
         workoutRepository.remove(findWorkout);

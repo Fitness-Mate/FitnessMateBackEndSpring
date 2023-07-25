@@ -30,7 +30,7 @@ public class UserController {
         String errMsg = registerForm.validateFields();
         if (!errMsg.equals("ok"))
             return errMsg;
-        if (userService.checkDuplicatedLoginId(registerForm.getLoginId()))
+        if (userService.checkDuplicatedLoginEmail(registerForm.getLoginEmail()))
             return "아이디 중복";
         userService.register(registerForm);
         return "ok";
@@ -50,7 +50,7 @@ public class UserController {
         String errMsg = registerForm.validateFields();
         if (errMsg != "ok")
             return errMsg;
-        if (userService.checkDuplicatedLoginId(registerForm.getLoginId()))
+        if (userService.checkDuplicatedLoginEmail(registerForm.getLoginEmail()))
             return "아이디 중복";
         userService.registerAdmin(registerForm);
         return "ok";
@@ -58,7 +58,7 @@ public class UserController {
 
     @PutMapping
     public String updateUser(@Login User loginUser, @RequestBody UpdateUserForm form) {
-        log.info(loginUser.getLoginId());
+        log.info(loginUser.getLoginEmail());
         userService.updateUser(loginUser, form);
         return "ok";
     }
@@ -87,12 +87,13 @@ public class UserController {
         return "fail";
     }
 
-    @PostMapping("/verify/id/{userId}")
-    public String verifyUserId(@PathVariable("userId")String userId) {
-        if (userService.checkDuplicatedLoginId(userId)) {
+    @PostMapping("/verify/id/{userEmail}")
+    public String verifyUserId(@PathVariable("userEmail")String userEmail) {
+        String regexPattern = "^(.+)@(\\S+)$";
+        if (userService.checkDuplicatedLoginEmail(userEmail)) {
             return "아이디 중복";
-        } else if (userId.length() > 20 || userId.length() < 6) {
-            return "길이 기준 미달 6자리 이상, 20자리 미만";
+        } else if (!userEmail.matches(regexPattern)){
+            return "형식에 맞지 않는 이메일 주소";
         }
         return "ok";
     }

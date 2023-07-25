@@ -12,14 +12,14 @@ public class LoginService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public User login(String loginId, String password) {
-        return userRepository.findByLoginId(loginId)
+    public User login(String loginEmail, String password) {
+        return userRepository.findByLoginEmail(loginEmail)
                 .filter(u -> u.getPassword().equals(password))
                 .orElse(null);
     }
     @Transactional(readOnly = true)
-    public User adminLogin(String loginId, String password){
-        return userRepository.findByLoginId(loginId)
+    public User adminLogin(String loginEmail, String password){
+        return userRepository.findByLoginEmail(loginEmail)
                 .filter(u -> u.getPassword().equals(password))
                 .filter(u -> u.getType().equals("Admin"))
                 .orElse(null);

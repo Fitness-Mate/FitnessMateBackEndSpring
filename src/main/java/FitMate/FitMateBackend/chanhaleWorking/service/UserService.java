@@ -28,8 +28,8 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Boolean checkDuplicatedLoginId(String loginId){
-        return userRepository.CheckDuplicatedLoginId(loginId);
+    public Boolean checkDuplicatedLoginEmail(String loginEmail){
+        return userRepository.CheckDuplicatedLoginEmail(loginEmail);
     }
 
     @Transactional

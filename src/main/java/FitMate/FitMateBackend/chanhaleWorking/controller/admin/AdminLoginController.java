@@ -26,8 +26,8 @@ public class AdminLoginController {
     @PostMapping("/login")
     public String login(@RequestBody LoginForm loginForm, HttpServletRequest request){
 
-        log.info("ADMIN login attempt [{}]",loginForm.getLoginId() );
-        User loginAdmin = loginService.adminLogin(loginForm.getLoginId(), loginForm.getPassword());
+        log.info("ADMIN login attempt [{}]",loginForm.getLoginEmail() );
+        User loginAdmin = loginService.adminLogin(loginForm.getLoginEmail(), loginForm.getPassword());
         if(loginAdmin == null){
             return "fail";//"로그인 실패. 아이디와 패스워드를 확인해주세요.";
         }
@@ -37,7 +37,7 @@ public class AdminLoginController {
         session.setAttribute(SessionConst.LOGIN_ADMIN, loginAdmin);
         // admin은 user의 권한도 가지고 있음
         session.setAttribute(SessionConst.LOGIN_USER, loginAdmin);
-        log.info("ADMIN login success [{}]",loginForm.getLoginId() );
+        log.info("ADMIN login success [{}]",loginForm.getLoginEmail() );
 
         return "ok";
     }
