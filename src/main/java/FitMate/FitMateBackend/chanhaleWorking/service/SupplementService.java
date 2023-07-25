@@ -128,12 +128,8 @@ public class SupplementService {
             return;
         String supImg = supplement.getImageName();
         if (!supImg.equals(ServiceConst.DEFAULT_IMAGE_NAME)) {
-            File file = new File(ServiceConst.DEFAULT_IMAGE_NAME + supImg);
-            if (file.exists()) {
-                if (file.delete()) {
-                    log.info("{} 파일이 삭제되었습니다.", ServiceConst.DEFAULT_IMAGE_NAME+supImg);
-                }
-            }
+            s3FileService.deleteImage(ServiceConst.S3_DIR_SUPPLEMENT, supImg);
+            log.info("{} 파일이 삭제되었습니다.", supImg);
         }
         supplementRepository.deleteSupplement(id);
     }

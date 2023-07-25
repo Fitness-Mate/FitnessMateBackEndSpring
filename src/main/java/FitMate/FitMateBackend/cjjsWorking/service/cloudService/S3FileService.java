@@ -35,7 +35,7 @@ public class S3FileService {
             metadata.setContentType(file.getContentType());
             metadata.setContentLength(file.getSize());
 
-            amazonS3Client.putObject(bucket + ServiceConst.IMAGE_DIRECTORY + classification, imageName, file.getInputStream(), metadata);
+            amazonS3Client.putObject(bucket + "/images/" + classification, imageName, file.getInputStream(), metadata);
 
             log.info("uploadImage: " + imageName);
             return imageName;
@@ -46,7 +46,7 @@ public class S3FileService {
     }
 
     public void deleteImage(String classification, String fileName) {
-        amazonS3Client.deleteObject(bucket + ServiceConst.IMAGE_DIRECTORY + classification, fileName);
+        amazonS3Client.deleteObject(bucket + "/images/" + classification, fileName);
     }
 
     public String extracExt(String originalFilename) {
@@ -57,7 +57,15 @@ public class S3FileService {
     /**
      * 수정 필요
      */
-    public String getAccessURL(String classification, String fileName) {
-        return ServiceConst.IMAGE_DIRECTORY + ServiceConst.S3_DIR_SUPPLEMENT + fileName;
+    public static String getAccessURL(String classification, String fileName) {
+        if (classification == ServiceConst.S3_DIR_SUPPLEMENT) {
+            return ServiceConst.S3_URL + ServiceConst.S3_DIR_SUPPLEMENT+"/" + fileName;
+        }
+        else if (classification == ServiceConst.S3_DIR_WORKOUT) {
+            return ServiceConst.S3_URL + ServiceConst.S3_DIR_WORKOUT+"/" + fileName;
+
+        }
+        else
+            return ServiceConst.S3_URL + ServiceConst.S3_DIR_WORKOUT + "/" + ServiceConst.DEFAULT_IMAGE_NAME;
     }
 }
