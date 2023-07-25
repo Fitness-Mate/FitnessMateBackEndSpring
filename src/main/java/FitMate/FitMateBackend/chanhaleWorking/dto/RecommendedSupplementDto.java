@@ -1,5 +1,7 @@
 package FitMate.FitMateBackend.chanhaleWorking.dto;
 
+import FitMate.FitMateBackend.cjjsWorking.service.cloudService.S3FileService;
+import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.recommendation.RecommendedSupplement;
 import FitMate.FitMateBackend.domain.supplement.Supplement;
 import lombok.Data;
@@ -14,6 +16,7 @@ public class RecommendedSupplementDto {
     private Long id;
     private String englishName;
     private String koreanName;
+    private String imageURL;
     private Integer price;
     private Float servings;
     private String flavor;
@@ -24,6 +27,7 @@ public class RecommendedSupplementDto {
         Supplement supplement = rc.getSupplement();
         RecommendedSupplementDto recommendedSupplementDto = new RecommendedSupplementDto();
         recommendedSupplementDto.id = supplement.getId();
+        recommendedSupplementDto.imageURL = S3FileService.getAccessURL(ServiceConst.S3_DIR_SUPPLEMENT, supplement.getImageName());
         recommendedSupplementDto.englishName = supplement.getEnglishName();
         recommendedSupplementDto.koreanName = supplement.getKoreanName();
         recommendedSupplementDto.price = supplement.getPrice();
