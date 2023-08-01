@@ -21,7 +21,7 @@ public class WorkoutSearchTest {
     @Test
     public void searchTest() {
         //given
-        String searchKeyword = "풀 다운 랫,///..,ㅁㄴㅇㄹㅇ 데드,, 리프트";
+        String searchKeyword = "풀 다운 랫,///..,ㅁㄴㅇㄹㅇ 데드,, 리프트 pull down";
         List<String> bodyPartKoreanName = new ArrayList<>();
         bodyPartKoreanName.add("등");
 
