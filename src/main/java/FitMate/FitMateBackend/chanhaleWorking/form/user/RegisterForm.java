@@ -18,6 +18,7 @@ public class RegisterForm {
     private String password;
     private String sex;
     private LocalDate date = LocalDate.now();
+    private LocalDate birthDate;
     private Float height = 170.0f;
     private Float weight = 70.0f;
     private Float upperBodyFat = 17.0f;

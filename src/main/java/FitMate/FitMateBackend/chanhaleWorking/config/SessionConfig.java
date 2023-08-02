@@ -27,11 +27,11 @@ public class SessionConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginUserCheckInterceptor())
                 .order(3)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/admin/**", "/user",  "/user/admin/register", "/", "/login", "/css/**", "/*.ico", "/error", "/supplements/**", "/workouts/**", "/bodyParts/all", "/machines/list", "/recommendation/supplement/purposes");
+                .excludePathPatterns("/admin/**", "/user",  "/user/admin/register", "/", "/login", "/css/**", "/*.ico", "/error", "/supplements/**", "/workouts/**", "/bodyParts/all", "/machines/list", "/recommendation/supplement/purposes", "user/verify/**");
         // 관리자 로그인 인터셉터
         registry.addInterceptor(new LoginAdminCheckInterceptor())
                 .order(2)
                 .addPathPatterns("/admin/**")
-                .excludePathPatterns("/admin/login","/admin/logout", "/css/**", "/*.ico", "/error");
+                .excludePathPatterns("/admin/login","/admin/logout", "/css/**", "/admin/*.ico", "/admin/error");
     }
 }
