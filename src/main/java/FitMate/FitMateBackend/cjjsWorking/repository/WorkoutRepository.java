@@ -14,7 +14,8 @@ import org.hibernate.jdbc.Work;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.util.StringUtils.hasText;
 
@@ -68,22 +69,17 @@ public class WorkoutRepository {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     public List<Workout> searchAll(int page, WorkoutSearch search) {
+        //SearchKeyword에서 , 공백 / 등 특수문자 제거해야함
+        //예를 들어, 렛 풀 다운, 팩덱 플라이를 검색했을때.. 렛 풀 다운과 펙덱 플라이를 같이 검색해줘야 하는데
+        //workout에 forSearch 변수 만들고 이름 띄어쓰기 제거해서 저장..
+        //검색 할때는 replaceAll() 해서 split후에 검색 -> 리스트 저장 후 리턴
         int offset = (page-1)*ServiceConst.PAGE_BATCH_SIZE;
         int limit = ServiceConst.PAGE_BATCH_SIZE;
 
         BooleanBuilder builder = new BooleanBuilder();
-        Set<String> keywordSet = new HashSet<>();
         if(search.getSearchKeyword() != null) {
-            //search keyword tokenization
-            String match = "[^\uAC00-\uD7A30-9a-zA-Z]";
-            String[] keywords = search.getSearchKeyword().replaceAll(match, "*").split("\\*");
-            for (String keyword : keywords) { //remove blank and duplicate keywords
-                if(hasText(keyword)) keywordSet.add(keyword);
-            }
-            for (String keyword : keywordSet) { //builder setting
-                builder.or(QWorkout.workout.englishName.like("%" + keyword + "%"));
-                builder.or(QWorkout.workout.koreanName.like("%" + keyword + "%"));
-            }
+            builder.or(QWorkout.workout.englishName.like("%" + search.getSearchKeyword() + "%"));
+            builder.or(QWorkout.workout.koreanName.like("%" + search.getSearchKeyword() + "%"));
         }
         if(search.getBodyPartKoreanName() != null) {
             for (String koreanName : search.getBodyPartKoreanName()) {
@@ -94,7 +90,7 @@ public class WorkoutRepository {
 
         QWorkout workout = QWorkout.workout;
         JPAQueryFactory query = new JPAQueryFactory(em);
-        List<Workout> result = query
+        return query
                 .select(workout)
                 .from(workout)
                 .where(builder)
@@ -102,39 +98,5 @@ public class WorkoutRepository {
                 .offset(offset)
                 .limit(limit)
                 .fetch();
-
-        if(search.getSearchKeyword() != null) { //keyword weight sorting
-            List<WorkoutWeight> list = new ArrayList<>(result.stream().map(w -> {
-                int weight = 0;
-                for (String keyword : keywordSet) {
-                    if (w.getEnglishName().contains(keyword)) weight += 1;
-                    if (w.getKoreanName().contains(keyword)) weight += 1;
-                }
-                return new WorkoutWeight(w, weight);
-            }).toList());
-            list.sort((o1, o2) -> o2.getWeight() - o1.getWeight());
-
-            return list.stream().map(WorkoutWeight::getWorkout).toList();
-        } else {
-            return result;
-        }
-    }
-
-    static class WorkoutWeight {
-        private Workout workout;
-        private int weight;
-
-        public WorkoutWeight(Workout workout, int weight) {
-            this.workout = workout;
-            this.weight = weight;
-        }
-
-        public Workout getWorkout() {
-            return workout;
-        }
-
-        public int getWeight() {
-            return weight;
-        }
     }
 }
