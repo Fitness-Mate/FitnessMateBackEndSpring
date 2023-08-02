@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class User {
     private String password;
     private String sex;
     private String type; // Admin 여부 표기용 "Admin", "Customer"
+    private LocalDate birthDate;    // 생년월일 (추가: 2023.08.02)
+    private LocalDate joinDate = LocalDate.now();     // 가입년월일 (추가: 2023.08.02)
 //    private Float height; // 체성분으로 이동
 //    private Float weight; // 체성분으로 이동
 //
@@ -53,6 +56,7 @@ public class User {
         user.password = form.getPassword();
         user.sex = form.getSex();
         user.type = type;
+        user.birthDate = form.getBirthDate();
         return user;
     }
 

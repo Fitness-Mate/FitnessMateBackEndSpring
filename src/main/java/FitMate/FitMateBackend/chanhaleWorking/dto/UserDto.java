@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 /**
  * 유저 정보 요청에 대한 dto
  * 개인정보 수정에서 활용
@@ -14,7 +16,8 @@ import lombok.NoArgsConstructor;
 public class UserDto {
     private String userName;
     private String loginEmail;
-    private String Sex;
+    private String sex;
+    private LocalDate birthDate;
 
     //    private Float height;
 //    private Float weight;
@@ -22,7 +25,8 @@ public class UserDto {
         UserDto userDto = new UserDto();
         userDto.userName = user.getUserName();
         userDto.loginEmail = user.getLoginEmail();
-        userDto.Sex = user.getSex();
+        userDto.sex = user.getSex();
+        userDto.birthDate = user.getBirthDate();
         return userDto;
     }
 }

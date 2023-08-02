@@ -87,7 +87,7 @@ public class UserController {
         return "fail";
     }
 
-    @PostMapping("/verify/id/{userEmail}")
+    @PostMapping("/verify/email/{userEmail}")
     public String verifyUserId(@PathVariable("userEmail")String userEmail) {
         String regexPattern = "^(.+)@(\\S+)$";
         if (userService.checkDuplicatedLoginEmail(userEmail)) {
