@@ -17,6 +17,8 @@ jobs:
           echo spring.datasource.username=${{ secrets.DATASOURCE_USERNAME }} >>./src/main/resources/application.properties
           echo spring.datasource.password=${{ secrets.DATASOURCE_PASSWORD }} >>./src/main/resources/application.properties
           echo spring.datasource.driver-class-name=org.mariadb.jdbc.Driver >>./src/main/resources/application.properties
+          echo spring.data.redis.host=${{ secrets.REDIS_HOST }}
+          echo spring.data.redis.port=${{ secrets.REDIS_PORT }}
           echo cloud.aws.s3.bucket=${{ secrets.AWS_S3_BUCKET_NAME }} >>./src/main/resources/application.properties
           echo cloud.aws.stack.auto=false >>./src/main/resources/application.properties
           echo cloud.aws.s3.region.static=ap-northeast-2 >>./src/main/resources/application.properties
@@ -24,6 +26,9 @@ jobs:
           echo cloud.aws.s3.credentials.secretKey=${{ secrets.AWS_S3_SECRETSKEY }} >>./src/main/resources/application.properties
           echo api-key=${{ secrets.CHATGPT_API_KEY }} >>./src/main/resources/application.properties
           echo deepl-api-key=${{ secrets.DEEPL_API_KEY }} >>./src/main/resources/application.properties
+          echo jwt-secret-key=${{ secrets.JWT_SECRET_KEY }} >>./src/main/resources/application.properties
+          echo jwt-issuer=${{ secrets.JWT_ISSUER }} >>./src/main/resources/application.properties
+          echo jwt-expiration=${{ secrets.JWT_EXPIRATION }} >>./src/main/resources/application.properties
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
