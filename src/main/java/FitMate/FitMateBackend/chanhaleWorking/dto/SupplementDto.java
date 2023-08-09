@@ -1,7 +1,6 @@
 package FitMate.FitMateBackend.chanhaleWorking.dto;
 
-import FitMate.FitMateBackend.chanhaleWorking.service.FileStoreService;
-import FitMate.FitMateBackend.cjjsWorking.service.cloudService.S3FileService;
+import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.supplement.BCAA;
 import FitMate.FitMateBackend.domain.supplement.Gainer;
@@ -9,10 +8,6 @@ import FitMate.FitMateBackend.domain.supplement.Protein;
 import FitMate.FitMateBackend.domain.supplement.Supplement;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-
-import java.net.MalformedURLException;
 
 /**
  * 보조제 정보 조회 요청에 사용할 dto

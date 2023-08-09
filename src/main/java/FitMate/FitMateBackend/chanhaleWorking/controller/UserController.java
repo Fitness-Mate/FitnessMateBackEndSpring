@@ -7,9 +7,11 @@ import FitMate.FitMateBackend.chanhaleWorking.form.user.RegisterForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.UpdatePasswordForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.UpdateUserForm;
 import FitMate.FitMateBackend.chanhaleWorking.service.UserService;
+import FitMate.FitMateBackend.cjjsWorking.service.authService.AuthResponse;
 import FitMate.FitMateBackend.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -96,5 +98,30 @@ public class UserController {
             return "형식에 맞지 않는 이메일 주소";
         }
         return "ok";
+    }
+
+    //🔽🔽🔽 Jwt 🔽🔽🔽
+    /**
+     * add Jwt user and admin register (OK)
+     * - User Controller
+     * - UserService
+     *
+     * add jwt login, logout (OK)
+     * - LoginController
+     * - LoginService
+     * - UserRepository
+     *
+     * update user domain (OK)
+     * - User
+     * */
+
+    @PostMapping("/auth/jwt/user/register")
+    public ResponseEntity<AuthResponse> userRegisterWithJwt(@RequestBody RegisterForm registerForm) {
+        return ResponseEntity.ok(userService.registerWithJwt(registerForm, "Customer"));
+    }
+
+    @PostMapping("/auth/jwt/admin/register")
+    public ResponseEntity<AuthResponse> adminRegisterWithJwt(@RequestBody RegisterForm registerForm) {
+        return ResponseEntity.ok(userService.registerWithJwt(registerForm, "Admin"));
     }
 }

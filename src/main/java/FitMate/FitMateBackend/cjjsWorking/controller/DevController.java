@@ -1,10 +1,9 @@
 package FitMate.FitMateBackend.cjjsWorking.controller;
 
 import FitMate.FitMateBackend.cjjsWorking.form.WorkoutForm;
-import FitMate.FitMateBackend.cjjsWorking.repository.BodyPartRepository;
 import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
 import FitMate.FitMateBackend.cjjsWorking.service.MachineService;
-import FitMate.FitMateBackend.cjjsWorking.service.cloudService.S3FileService;
+import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;

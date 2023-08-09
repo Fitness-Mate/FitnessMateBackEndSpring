@@ -5,7 +5,7 @@ import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutResponseDto;
 import FitMate.FitMateBackend.cjjsWorking.form.WorkoutForm;
 import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
 import FitMate.FitMateBackend.cjjsWorking.service.WorkoutService;
-import FitMate.FitMateBackend.cjjsWorking.service.cloudService.S3FileService;
+import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.consts.SessionConst;
 import FitMate.FitMateBackend.domain.BodyPart;
