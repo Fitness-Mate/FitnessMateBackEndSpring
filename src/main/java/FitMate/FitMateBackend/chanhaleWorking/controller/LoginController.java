@@ -29,49 +29,60 @@ public class LoginController {
 
     private final LoginService loginService;
 
-    @PostMapping("/login")
-    @ResponseBody
-    public String login(@RequestBody LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request) {
-        if (bindingResult.hasErrors()){
-            return "fail";//"입력 오류";
-        }
-        log.info("login attempt [{}]",loginForm.getLoginEmail() );
-
-
-        User loginUser = loginService.login(loginForm.getLoginEmail(),loginForm.getPassword());
-        if(loginUser == null){
-            return "fail";//"로그인 실패. 아이디와 패스워드를 확인해주세요.";
-        }
-        HttpSession session = request.getSession();
-
-
-        session.setAttribute(SessionConst.LOGIN_USER, loginUser);
-        if(loginUser.getType().equals("Admin"))
-            session.setAttribute(SessionConst.LOGIN_ADMIN, loginUser);
-        log.info("login success [{}]",loginForm.getLoginEmail() );
-        return "ok";
-    }
-
-    @PutMapping("/logout")
-    @ResponseBody
-    public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-        return "ok";
-    }
+//    @PostMapping("/login")
+//    @ResponseBody
+//    public String login(@RequestBody LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request) {
+//        if (bindingResult.hasErrors()){
+//            return "fail";//"입력 오류";
+//        }
+//        log.info("login attempt [{}]",loginForm.getLoginEmail() );
+//
+//
+//        User loginUser = loginService.login(loginForm.getLoginEmail(),loginForm.getPassword());
+//        if(loginUser == null){
+//            return "fail";//"로그인 실패. 아이디와 패스워드를 확인해주세요.";
+//        }
+//        HttpSession session = request.getSession();
+//
+//
+//        session.setAttribute(SessionConst.LOGIN_USER, loginUser);
+//        if(loginUser.getType().equals("Admin"))
+//            session.setAttribute(SessionConst.LOGIN_ADMIN, loginUser);
+//        log.info("login success [{}]",loginForm.getLoginEmail() );
+//        return "ok";
+//    }
+//
+//    @PutMapping("/logout")
+//    @ResponseBody
+//    public String logout(HttpServletRequest request) {
+//        HttpSession session = request.getSession(false);
+//        if (session != null) {
+//            session.invalidate();
+//        }
+//        return "ok";
+//    }
 
 
     //🔽🔽🔽 Jwt 🔽🔽🔽
-    @PostMapping("/auth/jwt/login") //login
+    @PostMapping("/login") //login
     public ResponseEntity<AuthResponse> loginWithJwt(@RequestBody LoginForm loginForm) {
-        return ResponseEntity.ok(loginService.loginWithJwt(loginForm.getLoginEmail(), loginForm.getPassword()));
+        log.info("login attempt [{}]",loginForm.getLoginEmail() );
+        AuthResponse authResponse = loginService.loginWithJwt(loginForm.getLoginEmail(), loginForm.getPassword());
+        if (authResponse == null) {
+            return ResponseEntity.status(403).body(null);
+        }
+        return ResponseEntity.ok(authResponse);
     }
 
-    @GetMapping("/auth/jwt/logout") //logout
-    @PreAuthorize("hasAnyRole('Admin', 'Customer')")
+    @ResponseBody
+    @GetMapping("/logout") //logout
+    @PreAuthorize("hasAnyAuthority('Customer', 'Admin')")
     public void logoutWithJwt(@RequestHeader HttpHeaders header) {
-        loginService.logoutWithJwt(Objects.requireNonNull(header.getFirst("authorization")).substring("Bearer ".length()));
+        String token = Objects.requireNonNull(header.getFirst("authorization")).substring("Bearer ".length());
+        log.info("logout attempt! Token: [{}], User: [{}]",
+                token,
+                loginService.getUserWithToken(token));
+
+        loginService.logoutWithJwt(token);
     }
 }

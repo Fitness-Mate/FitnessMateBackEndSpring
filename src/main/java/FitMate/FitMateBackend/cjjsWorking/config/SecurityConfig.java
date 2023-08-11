@@ -26,7 +26,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.requestMatchers(publicEndpoints()).permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(publicEndpoints()).permitAll()
+//                        .requestMatchers(userAuthorityEndpoints()).hasAuthority("User")
+//                        .requestMatchers(adminAuthorityEndpoints()).hasAuthority("Admin")
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
@@ -36,9 +39,21 @@ public class SecurityConfig {
 
     private RequestMatcher publicEndpoints() {
         return new OrRequestMatcher(
-            new AntPathRequestMatcher("/admin/auth/**"), //admin login
-            new AntPathRequestMatcher("/user/auth/**"), //user login
-            new AntPathRequestMatcher("/auth/**") //admin, user register
+                new AntPathRequestMatcher("/admin/auth/**"), //admin login
+                new AntPathRequestMatcher("/user/auth/**"), //user login
+                new AntPathRequestMatcher("/auth/**") //admin, user register
+        );
+    }
+
+    private RequestMatcher userAuthorityEndpoints() {
+        return new OrRequestMatcher(
+//            new AntPathRequestMatcher("/user/**")
+        );
+    }
+
+    private RequestMatcher adminAuthorityEndpoints() {
+        return new OrRequestMatcher(
+//            new AntPathRequestMatcher("/admin/**")
         );
     }
 }

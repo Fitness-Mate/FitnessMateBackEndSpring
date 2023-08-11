@@ -26,17 +26,17 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping
-    public String register(@RequestBody RegisterForm registerForm) {
-        log.info("REGISTER [{}] [{}]", registerForm.getUserName(), registerForm.getSex());
-        String errMsg = registerForm.validateFields();
-        if (!errMsg.equals("ok"))
-            return errMsg;
-        if (userService.checkDuplicatedLoginEmail(registerForm.getLoginEmail()))
-            return "아이디 중복";
-        userService.register(registerForm);
-        return "ok";
-    }
+//    @PostMapping
+//    public String register(@RequestBody RegisterForm registerForm) {
+//        log.info("REGISTER [{}] [{}]", registerForm.getUserName(), registerForm.getSex());
+//        String errMsg = registerForm.validateFields();
+//        if (!errMsg.equals("ok"))
+//            return errMsg;
+//        if (userService.checkDuplicatedLoginEmail(registerForm.getLoginEmail()))
+//            return "아이디 중복";
+//        userService.register(registerForm);
+//        return "ok";
+//    }
 
     @GetMapping
     public UserDto getMUser(@Login User loginUser) {
@@ -115,13 +115,29 @@ public class UserController {
      * - User
      * */
 
-    @PostMapping("/auth/jwt/user/register")
+    @PostMapping
     public ResponseEntity<AuthResponse> userRegisterWithJwt(@RequestBody RegisterForm registerForm) {
+        log.info(registerForm.getLoginEmail());
+        log.info("REGISTER Customer [{}] [{}]", registerForm.getUserName(), registerForm.getSex());
+        String errMsg = registerForm.validateFields();
+        if (!errMsg.equals("ok"))
+            return ResponseEntity.status(400).body(null); // errMsg 참고
+        if (userService.checkDuplicatedLoginEmail(registerForm.getLoginEmail()))
+            return ResponseEntity.status(400).body(null); // 아이디 중복
         return ResponseEntity.ok(userService.registerWithJwt(registerForm, "Customer"));
     }
 
     @PostMapping("/auth/jwt/admin/register")
+    @ResponseBody
     public ResponseEntity<AuthResponse> adminRegisterWithJwt(@RequestBody RegisterForm registerForm) {
+        log.info(registerForm.getLoginEmail());
+        log.info("REGISTER Admin [{}] [{}]", registerForm.getUserName(), registerForm.getSex());
+        String errMsg = registerForm.validateFields();
+        if (!errMsg.equals("ok"))
+            return ResponseEntity.status(400).body(null); // errMsg 참고
+        log.info(errMsg);
+        if (userService.checkDuplicatedLoginEmail(registerForm.getLoginEmail()))
+            return ResponseEntity.status(400).body(null); // 아이디 중복
         return ResponseEntity.ok(userService.registerWithJwt(registerForm, "Admin"));
     }
 }
