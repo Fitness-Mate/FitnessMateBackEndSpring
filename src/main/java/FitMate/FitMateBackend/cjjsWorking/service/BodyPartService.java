@@ -27,7 +27,7 @@ public class BodyPartService {
     @Transactional
     public ResponseEntity<String> saveBodyPart(BodyPartRequest request) {
         if(!this.checkBodyPartNameDuplicate(request.getKoreanName(), request.getEnglishName()))
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.BODY_PART_ALREADY_EXIST_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.BODY_PART_ALREADY_EXIST_EXCEPTION);
 
         BodyPart bodyPart = new BodyPart();
         bodyPart.update(request.getEnglishName(), request.getKoreanName());
@@ -40,11 +40,11 @@ public class BodyPartService {
     @Transactional
     public ResponseEntity<String> updateBodyPart(Long bodyPartId, BodyPartRequest request) {
         if(!this.checkBodyPartNameDuplicate(request.getKoreanName(), request.getEnglishName()))
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.BODY_PART_ALREADY_EXIST_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.BODY_PART_ALREADY_EXIST_EXCEPTION);
 
         BodyPart findBodyPart = bodyPartRepository.findById(bodyPartId).orElse(null);
         if(findBodyPart == null)
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.BODY_PART_NOT_FOUND_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.BODY_PART_NOT_FOUND_EXCEPTION);
 
         findBodyPart.update(request.getEnglishName(), request.getKoreanName());
         return ResponseEntity.ok("[" + findBodyPart.getKoreanName() + ":" + findBodyPart.getEnglishName() + "] 수정 완료");
@@ -53,7 +53,7 @@ public class BodyPartService {
     public ResponseEntity<?> findOne(Long bodyPartId) {
         BodyPart findBodyPart = bodyPartRepository.findById(bodyPartId).orElse(null);
         if(findBodyPart == null)
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.BODY_PART_NOT_FOUND_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.BODY_PART_NOT_FOUND_EXCEPTION);
 
         return ResponseEntity.ok(new BodyPartResponseDto(findBodyPart));
     }
@@ -75,7 +75,7 @@ public class BodyPartService {
     public ResponseEntity<?> findAll(int page) {
         List<BodyPart> bodyParts = bodyPartRepository.findAll(page);
         if(bodyParts.isEmpty())
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.BODY_PART_NOT_FOUND_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.PAGE_NOT_FOUND_EXCEPTION);
 
         return ResponseEntity.ok(
                 bodyParts.stream()
@@ -88,7 +88,7 @@ public class BodyPartService {
     public ResponseEntity<String> removeBodyPart(Long bodyPartId) {
         BodyPart findBodyPart = bodyPartRepository.findById(bodyPartId).orElse(null);
         if(findBodyPart == null)
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.BODY_PART_NOT_FOUND_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.BODY_PART_NOT_FOUND_EXCEPTION);
 
         //remove related machine
         List<Machine> machines = findBodyPart.getMachines();

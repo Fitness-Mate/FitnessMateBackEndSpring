@@ -1,4 +1,4 @@
-package FitMate.FitMateBackend.cjjsWorking.config;
+package FitMate.FitMateBackend.cjjsWorking.config.securityFilter;
 
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
 import jakarta.servlet.FilterChain;
@@ -55,6 +55,10 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }
-        filterChain.doFilter(request, response);
+        try {
+            filterChain.doFilter(request, response);
+        } catch(Exception e) {
+
+        }
     }
 }

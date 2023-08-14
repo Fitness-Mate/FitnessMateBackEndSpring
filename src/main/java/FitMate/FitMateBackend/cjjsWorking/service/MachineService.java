@@ -29,7 +29,7 @@ public class MachineService {
     @Transactional
     public ResponseEntity<String> saveMachine(MachineRequest request) {
         if(!this.checkMachineNameDuplicate(request.getKoreanName(), request.getEnglishName()))
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.MACHINE_ALREADY_EXIST_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.MACHINE_ALREADY_EXIST_EXCEPTION);
 
         Machine machine = new Machine();
         machine.update(request.getEnglishName(), request.getKoreanName());
@@ -47,11 +47,11 @@ public class MachineService {
     @Transactional
     public ResponseEntity<String> updateMachine(Long machineId, MachineRequest request) {
         if(!this.checkMachineNameDuplicate(request.getKoreanName(), request.getEnglishName()))
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.MACHINE_ALREADY_EXIST_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.MACHINE_ALREADY_EXIST_EXCEPTION);
 
         Machine findMachine = machineRepository.findById(machineId).orElse(null);
         if(findMachine == null)
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION);
 
         findMachine.update(request.getEnglishName(), request.getKoreanName());
 
@@ -76,7 +76,7 @@ public class MachineService {
     public ResponseEntity<?> findAll(int page) {
         List<Machine> findMachines = machineRepository.findAll(page);
         if(findMachines.isEmpty())
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.PAGE_NOT_FOUND_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.PAGE_NOT_FOUND_EXCEPTION);
 
         return ResponseEntity.ok(
                 findMachines.stream()
@@ -108,7 +108,7 @@ public class MachineService {
     public ResponseEntity<String> removeMachine(Long machineId) {
         Machine findMachine = machineRepository.findById(machineId).orElse(null);
         if(findMachine == null)
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION);
 
         for (BodyPart bodyPart : findMachine.getBodyParts()) {
             bodyPart.removeMachine(findMachine);

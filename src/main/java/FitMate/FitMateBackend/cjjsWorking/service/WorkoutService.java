@@ -32,7 +32,7 @@ public class WorkoutService {
     @Transactional
     public ResponseEntity<String> saveWorkout(WorkoutForm form) {
         if(!this.checkWorkoutNameDuplicate(form.getKoreanName(), form.getEnglishName()))
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.WORKOUT_ALREADY_EXIST_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.WORKOUT_ALREADY_EXIST_EXCEPTION);
 
         Workout workout = new Workout();
 
@@ -56,11 +56,11 @@ public class WorkoutService {
     @Transactional
     public ResponseEntity<String> updateWorkout(Long workoutId, WorkoutForm form) {
         if(!this.checkWorkoutNameDuplicate(form.getKoreanName(), form.getEnglishName()))
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.WORKOUT_ALREADY_EXIST_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.WORKOUT_ALREADY_EXIST_EXCEPTION);
 
         Workout findWorkout = workoutRepository.findById(workoutId).orElse(null);
         if(findWorkout == null)
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION);
 
         if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_IMAGE_NAME)) //기존 이미지 삭제
             s3FileService.deleteImage(ServiceConst.S3_DIR_WORKOUT,findWorkout.getImgFileName());
@@ -99,7 +99,7 @@ public class WorkoutService {
     public ResponseEntity<?> findAll(int page) {
         List<Workout> findWorkouts = workoutRepository.findAll(page);
         if(findWorkouts.isEmpty())
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.PAGE_NOT_FOUND_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.PAGE_NOT_FOUND_EXCEPTION);
 
         return ResponseEntity.ok(
                 findWorkouts.stream()
@@ -111,7 +111,7 @@ public class WorkoutService {
     public ResponseEntity<String> removeWorkout(Long workoutId) {
         Workout findWorkout = workoutRepository.findById(workoutId).orElse(null);
         if(findWorkout == null)
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION);
 
         for (BodyPart bodyPart : findWorkout.getBodyParts()) {
             bodyPart.removeWorkout(findWorkout);

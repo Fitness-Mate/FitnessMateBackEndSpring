@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 public class AdminBodyPartController {
 
     private final BodyPartService bodyPartService;
-    private final JwtService jwtService;
 
     @PostMapping("/admin/bodyParts") //운동부위 등록 (TEST 완료 - jwt)
     @PreAuthorize("hasAuthority('Admin')")

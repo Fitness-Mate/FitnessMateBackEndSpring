@@ -13,5 +13,4 @@ public class CustomException extends RuntimeException {
         this.customErrorCode = customErrorCode;
         this.message = customErrorCode.getStatusMessage();
     }
-
 }

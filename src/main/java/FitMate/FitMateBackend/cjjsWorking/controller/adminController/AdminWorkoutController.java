@@ -27,7 +27,7 @@ public class AdminWorkoutController {
     public ResponseEntity<?> findWorkout(@PathVariable("workoutId") Long workoutId) {
         Workout findWorkout = workoutService.findOne(workoutId);
         if(findWorkout == null)
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION);
 
         return ResponseEntity.ok(new WorkoutResponseDto(findWorkout));
     }
