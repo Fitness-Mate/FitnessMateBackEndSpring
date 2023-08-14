@@ -30,21 +30,21 @@ public class DevController {
 //            bodyPartService.saveBodyPart(bp);
 //        }
 //    }
-    @PostMapping("machines/create")
-    public void createMachines(@RequestBody DevMachineRequest request) {
-        for (DevMachines m : request.machines) {
-            Machine machine = new Machine();
-            machine.update(m.englishName, m.koreanName);
-
-            for (String name : m.bodyPartKoreanName) {
-                BodyPart findBP = bodyPartService.findByKoreanName(name);
-                machine.getBodyParts().add(findBP);
-                findBP.getMachines().add(machine);
-            }
-
-            machineService.saveMachine(machine);
-        }
-    }
+//    @PostMapping("machines/create")
+//    public void createMachines(@RequestBody DevMachineRequest request) {
+//        for (DevMachines m : request.machines) {
+//            Machine machine = new Machine();
+//            machine.update(m.englishName, m.koreanName);
+//
+//            for (String name : m.bodyPartKoreanName) {
+//                BodyPart findBP = bodyPartService.findByKoreanName(name);
+//                machine.getBodyParts().add(findBP);
+//                findBP.getMachines().add(machine);
+//            }
+//
+//            machineService.saveMachine(machine);
+//        }
+//    }
 
     @PostMapping("s3/upload")
     public String s3UploadTest(@ModelAttribute WorkoutForm form) {

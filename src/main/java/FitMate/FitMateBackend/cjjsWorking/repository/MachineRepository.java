@@ -28,8 +28,8 @@ public class MachineRepository {
         em.persist(machine);
     }
 
-    public Machine findById(Long id) {
-        return em.find(Machine.class, id);
+    public Optional<Machine> findById(Long id) {
+        return Optional.ofNullable(em.find(Machine.class, id));
     }
 
     public Optional<Machine> findByKoreanName(String koreanName) {

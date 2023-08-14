@@ -20,12 +20,6 @@ public class AdminBodyPartController {
         return bodyPartService.saveBodyPart(request);
     }
 
-    @PutMapping("admin/bodyParts/{bodyPartId}") //운동 부위 수정
-    @PreAuthorize("hasAuthority('Admin')")
-    public ResponseEntity<String> updateBodyPart(@PathVariable("bodyPartId") Long bodyPartId, @RequestBody BodyPartRequest request) {
-        return bodyPartService.updateBodyPart(bodyPartId, request);
-    }
-
     @GetMapping("admin/bodyParts/{bodyPartId}") //운동 부위 단일 조회
     public ResponseEntity<?> findBodyPart(@PathVariable("bodyPartId") Long bodyPartId) {
         return bodyPartService.findOne(bodyPartId);
@@ -39,6 +33,12 @@ public class AdminBodyPartController {
     @GetMapping("admin/bodyParts/list/{page}") //운동 부위 페이지 조회
     public ResponseEntity<?> findBodyParts_page(@PathVariable(value = "page") int page) {
         return bodyPartService.findAll(page);
+    }
+
+    @PutMapping("admin/bodyParts/{bodyPartId}") //운동 부위 수정
+    @PreAuthorize("hasAuthority('Admin')")
+    public ResponseEntity<String> updateBodyPart(@PathVariable("bodyPartId") Long bodyPartId, @RequestBody BodyPartRequest request) {
+        return bodyPartService.updateBodyPart(bodyPartId, request);
     }
 
     @DeleteMapping("admin/bodyParts/{bodyPartId}") //운동 부위 삭제
