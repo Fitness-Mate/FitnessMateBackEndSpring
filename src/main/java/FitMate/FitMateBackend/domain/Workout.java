@@ -1,5 +1,6 @@
 package FitMate.FitMateBackend.domain;
 
+import FitMate.FitMateBackend.cjjsWorking.form.WorkoutForm;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,12 +29,11 @@ public class Workout {
     private String description;
     private String imgFileName;
 
-    public void update(String englishName, String koreanName, String videoLink,
-                       String description, String imgFileName) {
-        this.englishName = englishName;
-        this.koreanName = koreanName;
-        this.videoLink = videoLink;
-        this.description = description;
+    public void update(WorkoutForm form, String imgFileName) {
+        this.englishName = form.getEnglishName();
+        this.koreanName = form.getKoreanName();
+        this.videoLink = form.getVideoLink();
+        this.description = form.getDescription();
         this.imgFileName = imgFileName;
     }
 }

@@ -29,8 +29,8 @@ public class WorkoutRepository {
         em.persist(workout);
     }
 
-    public Workout findById(Long id) {
-        return em.find(Workout.class, id);
+    public Optional<Workout> findById(Long id) {
+        return Optional.ofNullable(em.find(Workout.class, id));
     }
     public Optional<Workout> findByKoreanName(String koreanName) {
         return em.createQuery("select w from Workout w where w.koreanName = :koreanName", Workout.class)

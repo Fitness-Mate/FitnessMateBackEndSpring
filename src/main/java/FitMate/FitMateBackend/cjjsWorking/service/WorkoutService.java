@@ -1,5 +1,10 @@
 package FitMate.FitMateBackend.cjjsWorking.service;
 
+import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutDto;
+import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutResponseDto;
+import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
+import FitMate.FitMateBackend.cjjsWorking.form.WorkoutForm;
 import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutRepository;
 import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutSearch;
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
@@ -7,10 +12,12 @@ import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Workout;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,33 +29,68 @@ public class WorkoutService {
     private final S3FileService s3FileService;
 
     @Transactional
-    public Long saveWorkout(Workout workout) {
+    public ResponseEntity<String> saveWorkout(WorkoutForm form) {
+        if(!this.checkWorkoutNameDuplicate(form.getKoreanName(), form.getEnglishName()))
+            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.WORKOUT_ALREADY_EXIST_EXCEPTION).getMessage());
+
+        Workout workout = new Workout();
+
+        if(!form.getImage().isEmpty()) {
+            String fileName = s3FileService.uploadImage(ServiceConst.S3_DIR_WORKOUT, form.getImage());
+            workout.update(form, fileName);
+        } else {
+            workout.update(form, ServiceConst.DEFAULT_IMAGE_NAME);
+        }
+
+        for (String koreanName : form.getBodyPartKoreanName()) {
+            BodyPart findBodyPart = bodyPartService.findByKoreanName(koreanName);
+            workout.getBodyParts().add(findBodyPart);
+            findBodyPart.addWorkout(workout);
+        }
+
         workoutRepository.save(workout);
-        return workout.getId();
+        return ResponseEntity.ok("[" + workout.getKoreanName() + ":" + workout.getEnglishName() + "] 등록 완료");
     }
 
     @Transactional
-    public String updateWorkout(Long workoutId, String englishName, String koreanName, String videoLink,
-                              String description, List<String> bodyPartKoreanName, String imagePath) {
-        Workout findWorkout = workoutRepository.findById(workoutId);
-        findWorkout.update(englishName, koreanName, videoLink, description, imagePath);
+    public ResponseEntity<String> updateWorkout(Long workoutId, WorkoutForm form) {
+        if(!this.checkWorkoutNameDuplicate(form.getKoreanName(), form.getEnglishName()))
+            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.WORKOUT_ALREADY_EXIST_EXCEPTION).getMessage());
+
+        Workout findWorkout = workoutRepository.findById(workoutId).orElse(null);
+        if(findWorkout == null)
+            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION).getMessage());
+
+        if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_IMAGE_NAME)) //기존 이미지 삭제
+            s3FileService.deleteImage(ServiceConst.S3_DIR_WORKOUT,findWorkout.getImgFileName());
+
+        if(!form.getImage().isEmpty()) {
+            String fileName = s3FileService.uploadImage(ServiceConst.S3_DIR_WORKOUT, form.getImage()); //s3에 이미지 추가
+            findWorkout.update(form, fileName);
+        } else {
+            findWorkout.update(form, ServiceConst.DEFAULT_IMAGE_NAME);
+        }
 
         for (BodyPart bodyPart : findWorkout.getBodyParts()) {
             bodyPart.removeWorkout(findWorkout);
         }
         findWorkout.getBodyParts().clear();
 
-        for (String name : bodyPartKoreanName) {
+        for (String name : form.getBodyPartKoreanName()) {
             BodyPart findBodyPart = bodyPartService.findByKoreanName(name);
             findBodyPart.addWorkout(findWorkout);
             findWorkout.getBodyParts().add(findBodyPart);
         }
 
-        return workoutId.toString();
+        return ResponseEntity.ok("[" + findWorkout.getKoreanName() + ":" + findWorkout.getEnglishName() + "] 수정 완료");
     }
 
-    public Workout findOne(Long workoutId) {
-        return workoutRepository.findById(workoutId);
+    public ResponseEntity<?> findOne(Long workoutId) {
+        Workout findWorkout = workoutRepository.findById(workoutId).orElse(null);
+        if(findWorkout == null)
+            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION).getMessage());
+
+        return ResponseEntity.ok(new WorkoutResponseDto(findWorkout));
     }
 
     public boolean checkWorkoutNameDuplicate(String koreanName, String englishName) {
@@ -57,13 +99,23 @@ public class WorkoutService {
         return (w1 == null && w2 == null);
     }
 
-    public List<Workout> findAll(int page) {
-        return workoutRepository.findAll(page);
+    public ResponseEntity<?> findAll(int page) {
+        List<Workout> findWorkouts = workoutRepository.findAll(page);
+        if(findWorkouts.isEmpty())
+            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.PAGE_NOT_FOUND_EXCEPTION).getMessage());
+
+        return ResponseEntity.ok(
+                findWorkouts.stream()
+                .map(WorkoutDto::new)
+                .collect(Collectors.toList()));
     }
 
     @Transactional
-    public Long removeWorkout(Long workoutId) {
-        Workout findWorkout = workoutRepository.findById(workoutId);
+    public ResponseEntity<String> removeWorkout(Long workoutId) {
+        Workout findWorkout = workoutRepository.findById(workoutId).orElse(null);
+        if(findWorkout == null)
+            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION).getMessage());
+
         for (BodyPart bodyPart : findWorkout.getBodyParts()) {
             bodyPart.removeWorkout(findWorkout);
         }
@@ -72,7 +124,7 @@ public class WorkoutService {
             s3FileService.deleteImage(ServiceConst.S3_DIR_WORKOUT, findWorkout.getImgFileName());
 
         workoutRepository.remove(findWorkout);
-        return workoutId;
+        return ResponseEntity.ok("[" + findWorkout.getKoreanName() + ":" + findWorkout.getEnglishName() + "] 삭제 완료");
     }
 
     /////////////////////////////////////////////////////////////////
