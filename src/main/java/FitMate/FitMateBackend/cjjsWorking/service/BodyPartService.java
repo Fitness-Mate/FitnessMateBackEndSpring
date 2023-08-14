@@ -3,7 +3,6 @@ package FitMate.FitMateBackend.cjjsWorking.service;
 import FitMate.FitMateBackend.cjjsWorking.dto.bodyPart.BodyPartDto;
 import FitMate.FitMateBackend.cjjsWorking.dto.bodyPart.BodyPartRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.bodyPart.BodyPartResponseDto;
-import FitMate.FitMateBackend.cjjsWorking.dto.bodyPart.GetAllBodyPartResponse;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.repository.BodyPartRepository;
@@ -70,8 +69,8 @@ public class BodyPartService {
     }
 
     //Overloading
-    public ResponseEntity<GetAllBodyPartResponse> findAll() {
-        return ResponseEntity.ok(new GetAllBodyPartResponse(bodyPartRepository.findAll()));
+    public List<BodyPart> findAll() {
+        return bodyPartRepository.findAll();
     }
     public ResponseEntity<?> findAll(int page) {
         List<BodyPart> bodyParts = bodyPartRepository.findAll(page);

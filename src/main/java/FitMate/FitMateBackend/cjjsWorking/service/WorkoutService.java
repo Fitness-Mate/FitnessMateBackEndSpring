@@ -1,5 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.service;
 
+import FitMate.FitMateBackend.cjjsWorking.dto.workout.UserWorkoutRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutDto;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutResponseDto;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
@@ -85,12 +86,8 @@ public class WorkoutService {
         return ResponseEntity.ok("[" + findWorkout.getKoreanName() + ":" + findWorkout.getEnglishName() + "] 수정 완료");
     }
 
-    public ResponseEntity<?> findOne(Long workoutId) {
-        Workout findWorkout = workoutRepository.findById(workoutId).orElse(null);
-        if(findWorkout == null)
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION).getMessage());
-
-        return ResponseEntity.ok(new WorkoutResponseDto(findWorkout));
+    public Workout findOne(Long workoutId) {
+        return workoutRepository.findById(workoutId).orElse(null);
     }
 
     public boolean checkWorkoutNameDuplicate(String koreanName, String englishName) {
@@ -129,7 +126,8 @@ public class WorkoutService {
 
     /////////////////////////////////////////////////////////////////
 
-    public List<Workout> searchAll(int page, WorkoutSearch search) {
+    public List<Workout> searchAll(int page, UserWorkoutRequest request) {
+        WorkoutSearch search = new WorkoutSearch(request.getSearchKeyword(), request.getBodyPartKoreanName());
         return workoutRepository.searchAll(page, search);
     }
 

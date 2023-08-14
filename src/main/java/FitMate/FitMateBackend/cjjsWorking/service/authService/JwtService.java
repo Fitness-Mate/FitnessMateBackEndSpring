@@ -7,6 +7,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 @Service
@@ -24,8 +26,11 @@ public class JwtService {
     @Value("${jwt-expiration}") private Long expiration;
     @Value("${jwt-issuer}") private String issuer;
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(UserDetails userDetails, ExtraClaims claims) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("userId", claims.getUserId());
+
+        return generateToken(extraClaims, userDetails);
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
@@ -38,8 +43,15 @@ public class JwtService {
                 .compact();
     }
 
+    public String getToken(HttpHeaders header) {
+        return Objects.requireNonNull(header.getFirst("authorization")).substring("Bearer ".length());
+    }
+
     public String getLoginEmail(String token) {
         return getClaim(token, Claims::getSubject);
+    }
+    public Long getUserId(String token) {
+        return getClaim(token, claims -> claims.get("userId", Long.class));
     }
 
     public <T> T getClaim(String token, Function<Claims, T> claimsResolver) {

@@ -4,6 +4,7 @@ import FitMate.FitMateBackend.chanhaleWorking.form.user.RegisterForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.UpdateUserForm;
 import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.AuthResponse;
+import FitMate.FitMateBackend.cjjsWorking.service.authService.ExtraClaims;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.RedisCacheService;
 import FitMate.FitMateBackend.domain.BodyData;
@@ -63,7 +64,7 @@ public class UserService {
     public AuthResponse registerWithJwt(RegisterForm registerForm, String type) {
         User newUser = User.createUserTest(registerForm, passwordEncoder.encode(registerForm.getPassword()), type);
 
-        String token = jwtService.generateToken(newUser);
+        String token = jwtService.generateToken(newUser, new ExtraClaims(newUser));
         redisCacheService.saveUser(token, newUser);
 
         newUser.addBodyDataHistory(BodyData.createBodyData(registerForm.getBodyDataForm()));

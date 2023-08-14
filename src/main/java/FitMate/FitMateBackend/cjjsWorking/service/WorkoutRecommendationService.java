@@ -1,6 +1,8 @@
 package FitMate.FitMateBackend.cjjsWorking.service;
 
 import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
+import FitMate.FitMateBackend.cjjsWorking.controller.userController.WorkoutRecommendationController;
+import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutRecommendationRequest;
 import FitMate.FitMateBackend.cjjsWorking.repository.*;
 import FitMate.FitMateBackend.cjjsWorking.service.apiService.DeepLTranslateService;
 import FitMate.FitMateBackend.domain.BodyPart;
@@ -31,12 +33,11 @@ public class WorkoutRecommendationService {
     private final DeepLTranslateService deepLTranslateService;
 
     @Transactional
-    public Long createWorkoutRecommendation(Long userId, List<String> bodyPartKoreanName,
-                                            List<String> machineKoreanName) {
+    public Long createWorkoutRecommendation(Long userId, WorkoutRecommendationRequest request) {
         User user = userRepository.findOne(userId);
 
-        List<BodyPart> bodyParts = bodyPartRepository.findByBodyPartKoreanName(bodyPartKoreanName);
-        List<Machine> machines = machineRepository.findByMachineKoreanName(machineKoreanName);
+        List<BodyPart> bodyParts = bodyPartRepository.findByBodyPartKoreanName(request.getBodyPartKoreanName());
+        List<Machine> machines = machineRepository.findByMachineKoreanName(request.getMachineKoreanName());
 
         WorkoutRecommendation workoutRecommendation =
                 WorkoutRecommendation.createWorkoutRecommendation
@@ -60,10 +61,11 @@ public class WorkoutRecommendationService {
             if(endIdx == -1) continue;
             System.out.println(sentence);
 
-            int workoutId = Integer.parseInt(sentence.substring(startIdx, endIdx));
+            long workoutId = Long.parseLong(sentence.substring(startIdx, endIdx));
 
             //find workout
-            Workout workout = workoutRepository.findById((long) workoutId);
+            Workout workout = workoutRepository.findById(workoutId).orElse(null);
+            if(workout == null) return;
 
             //eng, kor description 생성
             String engDescription = sentence.substring(endIdx+4);

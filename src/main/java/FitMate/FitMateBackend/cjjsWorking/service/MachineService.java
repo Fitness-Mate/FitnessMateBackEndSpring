@@ -100,6 +100,7 @@ public class MachineService {
     }
 
     public List<Machine> findWithBodyPart(List<String> bodyPartKoreanName) {
+        if(bodyPartKoreanName == null) return null;
         return machineRepository.findWithBodyPart(bodyPartKoreanName);
     }
 

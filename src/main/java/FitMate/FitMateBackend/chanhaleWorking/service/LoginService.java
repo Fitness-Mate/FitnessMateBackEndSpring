@@ -2,6 +2,7 @@ package FitMate.FitMateBackend.chanhaleWorking.service;
 
 import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.AuthResponse;
+import FitMate.FitMateBackend.cjjsWorking.service.authService.ExtraClaims;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.RedisCacheService;
 import FitMate.FitMateBackend.domain.User;
@@ -52,7 +53,7 @@ public class LoginService {
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             return null;
         }
-        String token = jwtService.generateToken(user);
+        String token = jwtService.generateToken(user, new ExtraClaims(user));
         redisCacheService.saveUser(token, user);
         log.info("login attempt! Token: [{}], User: [{}]",
                 token,
