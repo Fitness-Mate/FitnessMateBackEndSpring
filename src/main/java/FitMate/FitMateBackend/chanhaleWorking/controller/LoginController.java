@@ -70,7 +70,7 @@ public class LoginController {
     }
 
     @GetMapping("/auth/jwt/logout") //logout
-    @PreAuthorize("hasAnyRole('Admin', 'Customer')")
+    @PreAuthorize("hasAuthority('Customer')")
     public void logoutWithJwt(@RequestHeader HttpHeaders header) {
         loginService.logoutWithJwt(Objects.requireNonNull(header.getFirst("authorization")).substring("Bearer ".length()));
     }
