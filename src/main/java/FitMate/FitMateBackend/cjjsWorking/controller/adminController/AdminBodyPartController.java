@@ -10,10 +10,13 @@ import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
 import FitMate.FitMateBackend.domain.User;
 import FitMate.FitMateBackend.domain.Workout;
+import com.amazonaws.Response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,64 +29,41 @@ public class AdminBodyPartController {
 
     private final BodyPartService bodyPartService;
 
-    @PostMapping("admin/bodyParts") //운동 부위 정보 등록 (TEST 완료)
-    public String saveBodyPart(@SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin,
-                             @RequestBody BodyPartRequest request) {
-        if(admin == null) return null;
-        if(!bodyPartService.checkBodyPartNameDuplicate(request.getKoreanName(), request.getEnglishName()))
-            return "이미 존재하는 운동 부위입니다. 이름을 확인해주세요.";
-
-        BodyPart bodyPart = new BodyPart();
-        bodyPart.update(request.getEnglishName(), request.getKoreanName());
-
-        return bodyPartService.saveBodyPart(bodyPart).toString();
+    @PostMapping("admin/bodyParts") //운동 부위 정보 등록 (TEST 완료 - jwt)
+    @PreAuthorize("hasAuthority('Admin')")
+    public ResponseEntity<String> saveBodyPart(@RequestBody BodyPartRequest request) {
+        return bodyPartService.saveBodyPart(request);
     }
 
-    @PutMapping("admin/bodyParts/{bodyPartId}") //운동 부위 정보 수정 (TEST 완료)
-    public String updateBodyPart(@PathVariable("bodyPartId") Long bodyPartId,
-                               @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin,
-                               @RequestBody BodyPartRequest request) {
-        if(admin == null) return null;
-        if(!bodyPartService.checkBodyPartNameDuplicate(request.getKoreanName(), request.getEnglishName()))
-            return "이미 존재하는 운동 부위입니다. 이름을 확인해주세요.";
-
-        bodyPartService.updateBodyPart(bodyPartId, request.getEnglishName(), request.getKoreanName());
-        return bodyPartId.toString();
+    @PutMapping("admin/bodyParts/{bodyPartId}") //운동 부위 정보 수정
+    @PreAuthorize("hasAuthority('Admin')")
+    public ResponseEntity<String> updateBodyPart(@PathVariable("bodyPartId") Long bodyPartId, @RequestBody BodyPartRequest request) {
+        //만약 없는 운동 부위 id에 대한 삭제 요청이 들어왔을 시 Exception
+        return bodyPartService.updateBodyPart(bodyPartId, request);
     }
 
-    @GetMapping("admin/bodyParts/list") //운동 부위 전체 검색 (TEST 완료)
-    public GetAllBodyPartResponse findBodyPartAll(@SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin) {
-        if(admin == null) return null;
-
-        List<BodyPart> findBodyParts = bodyPartService.findAll();
-        return new GetAllBodyPartResponse(findBodyParts);
+    @GetMapping("admin/bodyParts/list") //운동 부위 전체 검색
+    public GetAllBodyPartResponse findBodyPartAll() {
+        return new GetAllBodyPartResponse(bodyPartService.findAll());
     }
 
-    @GetMapping("admin/bodyParts/list/{page}") //batch 단위 조회 (TEST 완료)
-    public List<BodyPartDto> findBodyParts_page(@PathVariable(value = "page") int page,
-                                                @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin) {
-        if(admin == null) return null;
-
-        List<BodyPart> findBodyParts = bodyPartService.findAll(page);
-
-        return findBodyParts.stream()
-                .map(b -> new BodyPartDto(b))
+    @GetMapping("admin/bodyParts/list/{page}") //batch 단위 조회
+    public List<BodyPartDto> findBodyParts_page(@PathVariable(value = "page") int page) {
+        return bodyPartService.findAll(page).stream()
+                .map(BodyPartDto::new)
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("admin/bodyParts/{bodyPartId}") //운동 부위 단일 조회 (TEST 완료)
-    public BodyPartResponseDto findBodyPart(@PathVariable("bodyPartId") Long bodyPartId,
-                                            @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin) {
-        if(admin == null) return null;
-
-        BodyPart findBodyPart = bodyPartService.findOne(bodyPartId);
-        return new BodyPartResponseDto(findBodyPart.getEnglishName(), findBodyPart.getKoreanName());
+    @GetMapping("admin/bodyParts/{bodyPartId}") //운동 부위 단일 조회
+    public BodyPartResponseDto findBodyPart(@PathVariable("bodyPartId") Long bodyPartId) {
+        //만약 없는 운동 부위 id에 대한 조회 요청이 들어왔을 시 Exception
+        return new BodyPartResponseDto(bodyPartService.findOne(bodyPartId));
     }
 
-    @DeleteMapping("admin/bodyParts/{bodyPartId}") //운동 부위 삭제 (TEST 완료)
-    public Long removeBodyPart(@PathVariable("bodyPartId") Long bodyPartId,
-                               @SessionAttribute(name = SessionConst.LOGIN_ADMIN) User admin) {
-        if(admin == null) return null;
+    @DeleteMapping("admin/bodyParts/{bodyPartId}") //운동 부위 삭제
+    @PreAuthorize("hasAuthority('Admin')")
+    public Long removeBodyPart(@PathVariable("bodyPartId") Long bodyPartId) {
+        //만약 없는 운동 부위 id에 대한 삭제 요청이 들어왔을 시 Exception
         bodyPartService.removeBodyPart(bodyPartId);
         return bodyPartId;
     }

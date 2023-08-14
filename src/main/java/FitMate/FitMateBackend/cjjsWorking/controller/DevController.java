@@ -22,14 +22,14 @@ public class DevController {
     private final MachineService machineService;
     private final S3FileService s3FileService;
 
-    @PostMapping("bodyParts/create")
-    public void createBodyParts(@RequestBody DevBodyPartsRequest request) {
-        for (DevBodyPartName bodyPart : request.bodyParts) {
-            BodyPart bp = new BodyPart();
-            bp.update(bodyPart.englishName, bodyPart.koreanName);
-            bodyPartService.saveBodyPart(bp);
-        }
-    }
+//    @PostMapping("bodyParts/create")
+//    public void createBodyParts(@RequestBody DevBodyPartsRequest request) {
+//        for (DevBodyPartName bodyPart : request.bodyParts) {
+//            BodyPart bp = new BodyPart();
+//            bp.update(bodyPart.englishName, bodyPart.koreanName);
+//            bodyPartService.saveBodyPart(bp);
+//        }
+//    }
     @PostMapping("machines/create")
     public void createMachines(@RequestBody DevMachineRequest request) {
         for (DevMachines m : request.machines) {

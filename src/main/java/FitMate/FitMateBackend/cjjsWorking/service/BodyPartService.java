@@ -1,10 +1,14 @@
 package FitMate.FitMateBackend.cjjsWorking.service;
 
+import FitMate.FitMateBackend.cjjsWorking.dto.bodyPart.BodyPartRequest;
+import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.repository.BodyPartRepository;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
 import FitMate.FitMateBackend.domain.Workout;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,16 +22,26 @@ public class BodyPartService {
     private final BodyPartRepository bodyPartRepository;
 
     @Transactional
-    public Long saveBodyPart(BodyPart bodyPart) {
+    public ResponseEntity<String> saveBodyPart(BodyPartRequest request) {
+        if(!this.checkBodyPartNameDuplicate(request.getKoreanName(), request.getEnglishName()))
+            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.BODY_PART_ALREADY_EXIST).getDetailMessage());
+
+        BodyPart bodyPart = new BodyPart();
+        bodyPart.update(request.getEnglishName(), request.getKoreanName());
+
         bodyPartRepository.save(bodyPart);
-        return bodyPart.getId();
+
+        return ResponseEntity.ok("[" + bodyPart.getKoreanName() + ":" + bodyPart.getEnglishName() + "] 등록 완료");
     }
 
     @Transactional
-    public Long updateBodyPart(Long bodyPartId, String englishName, String koreanName) {
+    public ResponseEntity<String> updateBodyPart(Long bodyPartId, BodyPartRequest request) {
+        if(!this.checkBodyPartNameDuplicate(request.getKoreanName(), request.getEnglishName()))
+            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.BODY_PART_ALREADY_EXIST).getDetailMessage());
+
         BodyPart findBodyPart = bodyPartRepository.findById(bodyPartId);
-        findBodyPart.update(englishName, koreanName);
-        return bodyPartId;
+        findBodyPart.update(request.getEnglishName(), request.getKoreanName());
+        return ResponseEntity.ok("[" + findBodyPart.getKoreanName() + ":" + findBodyPart.getEnglishName() + "] 수정 완료");
     }
 
     public BodyPart findOne(Long bodyPartId) {
