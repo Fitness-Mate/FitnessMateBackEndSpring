@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,8 +22,8 @@ public class BodyPartRepository {
         em.persist(bodyPart);
     }
 
-    public BodyPart findById(Long id) {
-        return em.find(BodyPart.class, id);
+    public Optional<BodyPart> findById(Long id) {
+        return Optional.ofNullable(em.find(BodyPart.class, id));
     }
 
     public Optional<BodyPart> findByKoreanName(String koreanName) {

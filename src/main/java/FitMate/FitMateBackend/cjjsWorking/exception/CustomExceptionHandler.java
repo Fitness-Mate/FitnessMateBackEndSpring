@@ -8,6 +8,6 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     public CustomErrorResponse handleException(CustomException e) {
-        return new CustomErrorResponse(e.getCustomErrorCode(), e.getDetailMessage());
+        return new CustomErrorResponse(e.getCustomErrorCode(), e.getMessage());
     }
 }
