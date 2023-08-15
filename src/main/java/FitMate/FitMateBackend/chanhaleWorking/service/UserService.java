@@ -1,5 +1,6 @@
 package FitMate.FitMateBackend.chanhaleWorking.service;
 
+import FitMate.FitMateBackend.chanhaleWorking.dto.UserArgResolverDto;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.RegisterForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.UpdateUserForm;
 import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
@@ -39,19 +40,24 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(User user, UpdateUserForm updateUserForm) {
+    public void updateUser(Long userId, UpdateUserForm updateUserForm) {
+        User user = userRepository.findOne(userId);
         user.updateUser(updateUserForm);
 
     }
 
     @Transactional
-    public void updateUserPassword(User user, String newPassword) {
-        userRepository.findOne(user.getId()).updatePassword(newPassword);
+    public void updateUserPassword(Long userId, String newPassword) {
+        userRepository.findOne(userId).updatePassword(newPassword);
     }
 
     @Transactional
-    public void deleteUser(User user) {
-        userRepository.deleteUser(user.getId());
+    public void deleteUser(Long userId) {
+        userRepository.deleteUser(userId);
+    }
+
+    public User getUserWithId(Long userId) {
+        return userRepository.findOne(userId);
     }
 
 

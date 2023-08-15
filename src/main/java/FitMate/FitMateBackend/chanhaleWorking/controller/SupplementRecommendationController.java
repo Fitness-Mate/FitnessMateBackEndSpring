@@ -4,6 +4,7 @@ package FitMate.FitMateBackend.chanhaleWorking.controller;
 import FitMate.FitMateBackend.chanhaleWorking.config.argumentresolver.Login;
 import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementRecommendationDto;
 import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementRecommendationListDto;
+import FitMate.FitMateBackend.chanhaleWorking.dto.UserArgResolverDto;
 import FitMate.FitMateBackend.chanhaleWorking.form.recommendation.SupplementRecommendationForm;
 import FitMate.FitMateBackend.chanhaleWorking.service.ChatGptService;
 import FitMate.FitMateBackend.chanhaleWorking.service.SupplementRecommendationService;
@@ -33,35 +34,35 @@ public class SupplementRecommendationController {
     private final DeepLTranslateService deepLTranslateService;
 
     @PostMapping
-    public Long getRecommendedText(@Login User user, @RequestBody SupplementRecommendationForm form) throws Exception {
-        Long recommendationId = supplementRecommendationService.createSupplementRecommendation(user.getId(), form);
+    public Long getRecommendedText(@Login UserArgResolverDto userArgDto, @RequestBody SupplementRecommendationForm form) throws Exception {
+        Long recommendationId = supplementRecommendationService.createSupplementRecommendation(userArgDto.getUserId(), form);
         log.info("purpose:[{}][{}]", form.getMonthlyBudget(), form.getPurpose().get(0));
         String question = "I have these supplements.".concat(supplementService.getSupplementString());
-        SupplementRecommendation supplementRecommendation = supplementRecommendationService.findById(user.getId(), recommendationId);
+        SupplementRecommendation supplementRecommendation = supplementRecommendationService.findById(userArgDto.getUserId(), recommendationId);
         question = question.concat(supplementRecommendation.getQueryText());
         log.info(question);
-        chatGptService.sendRequest(user.getId(), supplementRecommendation.getId(), question);
+        chatGptService.sendRequest(userArgDto.getUserId(), supplementRecommendation.getId(), question);
         return recommendationId;
     }
 
     @GetMapping("/history/{supplementRecommendationId}")
-    public SupplementRecommendationDto getRecommendation(@Login User user, @PathVariable("supplementRecommendationId") Long supplementRecommendationId) throws Exception {
-        SupplementRecommendation sr = supplementRecommendationService.getSupplementRecommendation(user.getId(), supplementRecommendationId);
+    public SupplementRecommendationDto getRecommendation(@Login UserArgResolverDto userArgDto, @PathVariable("supplementRecommendationId") Long supplementRecommendationId) throws Exception {
+        SupplementRecommendation sr = supplementRecommendationService.getSupplementRecommendation(userArgDto.getUserId(), supplementRecommendationId);
         if (sr == null) {
             return new SupplementRecommendationDto();
         }
         // 로그인 유저가 해당 supplementRecommendation 의 소유자가 아님.
-        if (!Objects.equals(sr.getBodyData().getUser().getId(), user.getId())) {
+        if (!Objects.equals(sr.getBodyData().getUser().getId(), userArgDto.getUserId())) {
             return new SupplementRecommendationDto();
         }
         return SupplementRecommendationDto.createSupplementRecommendationDto(sr);
     }
 
     @GetMapping("/history/list/{pageNum}")
-    public List<SupplementRecommendationListDto> getRecommendationBatch(@Login User user, @PathVariable("pageNum") Long pageNum) throws Exception {
+    public List<SupplementRecommendationListDto> getRecommendationBatch(@Login UserArgResolverDto userArgDto, @PathVariable("pageNum") Long pageNum) throws Exception {
         // User 소유의 supplementRecommendation 인지 확인하는 기능 필요
         List<SupplementRecommendationListDto> result = new ArrayList<>();
-        List<SupplementRecommendation> sList = supplementRecommendationService.getSupplementRecommendationBatch(user.getId(), pageNum);
+        List<SupplementRecommendation> sList = supplementRecommendationService.getSupplementRecommendationBatch(userArgDto.getUserId(), pageNum);
         for (SupplementRecommendation supplementRecommendation : sList) {
             result.add(SupplementRecommendationListDto.createSupplementRecommendationDto(supplementRecommendation));
         }

@@ -2,6 +2,7 @@ package FitMate.FitMateBackend.chanhaleWorking.controller;
 
 import FitMate.FitMateBackend.chanhaleWorking.config.argumentresolver.Login;
 import FitMate.FitMateBackend.chanhaleWorking.dto.BodyDataDto;
+import FitMate.FitMateBackend.chanhaleWorking.dto.UserArgResolverDto;
 import FitMate.FitMateBackend.chanhaleWorking.form.bodyData.BodyDataForm;
 import FitMate.FitMateBackend.chanhaleWorking.service.BodyDataService;
 import FitMate.FitMateBackend.chanhaleWorking.service.UserService;
@@ -25,33 +26,33 @@ public class BodyDataController {
     private final BodyDataService bodyDataService;
 
     @PostMapping
-    public String createBodyData(@Login User loginUser, @RequestBody BodyDataForm form) {
-        if (form == null || loginUser == null) {
+    public String createBodyData(@Login UserArgResolverDto userArgDto, @RequestBody BodyDataForm form) {
+        if (form == null || userArgDto == null) {
             return "잘못된 입력";
         }
         String errMsg = form.validateFields();
         if (!errMsg.equals("ok")) {
             return errMsg;
         }
-        return bodyDataService.createBodyData(loginUser.getId(), form);
+        return bodyDataService.createBodyData(userArgDto.getUserId(), form);
     }
 
     @GetMapping("/{bodyDataId}")
-    public BodyDataDto getBodyData(@Login User user,@PathVariable("bodyDataId") Long bodyDataId) {
+    public BodyDataDto getBodyData(@Login UserArgResolverDto userArgDto,@PathVariable("bodyDataId") Long bodyDataId) {
         BodyData bodyData = bodyDataService.getBodyData(bodyDataId);
-        if (bodyData == null ||!Objects.equals(bodyData.getUser().getId(), user.getId())) {
+        if (bodyData == null ||!Objects.equals(bodyData.getUser().getId(), userArgDto.getUserId())) {
             return new BodyDataDto();
         }
         return BodyDataDto.createBodyDataDto(bodyData);
     }
 
     @GetMapping("/list/{pageNum}")
-    public List<BodyDataDto> getBodyDataBatch(@Login User user, @PathVariable("pageNum") Long pageNum) {
+    public List<BodyDataDto> getBodyDataBatch(@Login UserArgResolverDto userArgDto, @PathVariable("pageNum") Long pageNum) {
         List<BodyDataDto> result = new ArrayList<>();
-        if (user == null || pageNum < 0) {
+        if (userArgDto == null || pageNum < 0) {
             return result;
         }
-        List<BodyData> bodyDataList = bodyDataService.getBodyDataBatch(user.getId(), pageNum);
+        List<BodyData> bodyDataList = bodyDataService.getBodyDataBatch(userArgDto.getUserId(), pageNum);
         for (BodyData bodyData : bodyDataList) {
             result.add(BodyDataDto.createBodyDataDto(bodyData));
         }
@@ -59,15 +60,15 @@ public class BodyDataController {
     }
 
     @GetMapping("/recent")
-    public BodyDataDto getRecentData(@Login User user) {
+    public BodyDataDto getRecentData(@Login UserArgResolverDto userArgDto) {
 
-        return BodyDataDto.createBodyDataDto(bodyDataService.getRecentBodyData(user.getId()));
+        return BodyDataDto.createBodyDataDto(bodyDataService.getRecentBodyData(userArgDto.getUserId()));
     }
 
     @PostMapping("/delete/{bodyDataId}")
-    public String deleteBodyData(@Login User user,@PathVariable("bodyDataId") Long bodyDataId) {
+    public String deleteBodyData(@Login UserArgResolverDto userArgDto,@PathVariable("bodyDataId") Long bodyDataId) {
         BodyData bodyData = bodyDataService.getBodyData(bodyDataId);
-        if (bodyData == null ||!Objects.equals(bodyData.getUser().getId(), user.getId())) {
+        if (bodyData == null ||!Objects.equals(bodyData.getUser().getId(), userArgDto.getUserId())) {
             return "fail";
         }
         bodyDataService.deleteBodyData(bodyDataId);
