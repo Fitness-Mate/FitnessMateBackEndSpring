@@ -50,10 +50,10 @@
 #         uses: appleboy/ssh-action@v0.1.6
 #         with:
 #           host: ${{ secrets.SSH_KNOWN_HOSTS }}
-          username: ubuntu
-          key: ${{ secrets.AWS_SSH_PEM_KEY }}
-          port: 22
-          script_stop: true
-          script: |
-            wall "Github Actions in action"
-            ~/actionscript.sh
+#           username: ubuntu
+#           key: ${{ secrets.AWS_SSH_PEM_KEY }}
+#           port: 22
+#           script_stop: true
+#           script: |
+#             wall "Github Actions in action"
+#             ~/actionscript.sh
