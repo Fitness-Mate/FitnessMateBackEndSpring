@@ -55,9 +55,9 @@ jobs:
       # - name: SSH Commands
       #   uses: appleboy/ssh-action@v0.1.6
       #   with:
-      #     host: ${{ secrets.SSH_KNOWN_HOSTS }}
+      #     host: ${{ secrets.KUBE_CLUSTER_HOST }}
       #     username: ubuntu
-      #     key: ${{ secrets.AWS_SSH_PEM_KEY }}
+      #     key: ${{ secrets.KUBE_CLUSTER_SSH_KEY }}
       #     port: 22
       #     script_stop: true
       #     script: |
