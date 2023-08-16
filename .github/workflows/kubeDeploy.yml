@@ -45,21 +45,21 @@ jobs:
       - name: Docker Hub 퍼블리시 # (4)
         run: docker push chanhalee/fitnessmateback:0.${{ github.run_number }}.${{ github.run_attempt }}
 
-      - name: Kubernetes cluster rolling update
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-        with:
-          args: set image deployment fitmate-deployment fitmate-backend=chanhalee/fitnessmateback:0.${{ github.run_number }}.${{ github.run_attempt }}
-          
-      # - name: SSH Commands
-      #   uses: appleboy/ssh-action@v0.1.6
+      # - name: Kubernetes cluster rolling update
+      #   uses: actions-hub/kubectl@master
+      #   env:
+      #     KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
       #   with:
-      #     host: ${{ secrets.KUBE_CLUSTER_HOST }}
-      #     username: ubuntu
-      #     key: ${{ secrets.KUBE_CLUSTER_SSH_KEY }}
-      #     port: 22
-      #     script_stop: true
-      #     script: |
-      #       wall "Github Actions in action"
-      #       ~/actionscript.sh
+      #     args: set image deployment fitmate-deployment fitmate-backend=chanhalee/fitnessmateback:0.${{ github.run_number }}.${{ github.run_attempt }}
+          
+      - name: SSH Commands
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.KUBE_CLUSTER_HOST }}
+          username: ubuntu
+          key: ${{ secrets.KUBE_CLUSTER_SSH_KEY }}
+          port: 22
+          script_stop: true
+          script: |
+            wall "Github Actions in action"
+            sudo kubectl set image deployment fitmate-deployment fitmate-backend=chanhalee/fitnessmateback:0.${{ github.run_number }}.${{ github.run_attempt }}
