@@ -1,15 +1,22 @@
 package FitMate.FitMateBackend.cjjsWorking.service;
 
+import FitMate.FitMateBackend.cjjsWorking.dto.Machine.GetMachineResponse;
+import FitMate.FitMateBackend.cjjsWorking.dto.Machine.MachineDto;
+import FitMate.FitMateBackend.cjjsWorking.dto.Machine.MachineRequest;
+import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.repository.BodyPartRepository;
 import FitMate.FitMateBackend.cjjsWorking.repository.MachineRepository;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -20,41 +27,70 @@ public class MachineService {
     private final BodyPartService bodyPartService;
 
     @Transactional
-    public Long saveMachine(Machine machine) {
+    public ResponseEntity<String> saveMachine(MachineRequest request) {
+        if(!this.checkMachineNameDuplicate(request.getKoreanName(), request.getEnglishName()))
+            throw new CustomException(CustomErrorCode.MACHINE_ALREADY_EXIST_EXCEPTION);
+
+        Machine machine = new Machine();
+        machine.update(request.getEnglishName(), request.getKoreanName());
+
+        for (String koreanName : request.getBodyPartKoreanName()) {
+            BodyPart findBodyPart = bodyPartService.findByKoreanName(koreanName);
+            findBodyPart.addMachine(machine);
+            machine.getBodyParts().add(findBodyPart);
+        }
+
         machineRepository.save(machine);
-        return machine.getId();
+        return ResponseEntity.ok("[" + machine.getKoreanName() + ":" + machine.getEnglishName() + "] 등록 완료");
     }
 
     @Transactional
-    public String updateMachine(Long machineId, String englishName, String koreanName, List<String> bodyPartKoreanName) {
-        Machine findMachine = machineRepository.findById(machineId);
-        findMachine.update(englishName, koreanName);
+    public ResponseEntity<String> updateMachine(Long machineId, MachineRequest request) {
+        if(!this.checkMachineNameDuplicate(request.getKoreanName(), request.getEnglishName()))
+            throw new CustomException(CustomErrorCode.MACHINE_ALREADY_EXIST_EXCEPTION);
+
+        Machine findMachine = machineRepository.findById(machineId).orElse(null);
+        if(findMachine == null)
+            throw new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION);
+
+        findMachine.update(request.getEnglishName(), request.getKoreanName());
 
         for (BodyPart bodyPart : findMachine.getBodyParts()) {
             bodyPart.removeMachine(findMachine);
         }
         findMachine.getBodyParts().clear();
 
-        for (String name : bodyPartKoreanName) {
+        for (String name : request.getBodyPartKoreanName()) {
             BodyPart findBodyPart = bodyPartService.findByKoreanName(name);
             findBodyPart.addMachine(findMachine);
             findMachine.getBodyParts().add(findBodyPart);
         }
 
-        return machineId.toString();
+        return ResponseEntity.ok("[" + findMachine.getKoreanName() + ":" + findMachine.getEnglishName() + "] 수정 완료");
     }
 
     //Overloading
     public List<Machine> findAll() {
         return machineRepository.findAll();
     }
-    public List<Machine> findAll(int page) {
-        return machineRepository.findAll(page);
+    public ResponseEntity<?> findAll(int page) {
+        List<Machine> findMachines = machineRepository.findAll(page);
+        if(findMachines.isEmpty())
+            throw new CustomException(CustomErrorCode.PAGE_NOT_FOUND_EXCEPTION);
+
+        return ResponseEntity.ok(
+                findMachines.stream()
+                .map(MachineDto::new)
+                .collect(Collectors.toList()));
     }
     //Overloading
 
-    public Machine findOne(Long machineId) {
-        return machineRepository.findById(machineId);
+    public ResponseEntity<?> findOne(Long machineId) {
+        Machine findMachine = machineRepository.findById(machineId).orElse(null);
+        if(findMachine == null)
+            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION).getMessage());
+
+        return ResponseEntity.ok(new GetMachineResponse(findMachine));
     }
 
     public boolean checkMachineNameDuplicate(String koreanName, String englishName) {
@@ -64,16 +100,21 @@ public class MachineService {
     }
 
     public List<Machine> findWithBodyPart(List<String> bodyPartKoreanName) {
+        if(bodyPartKoreanName == null) return null;
         return machineRepository.findWithBodyPart(bodyPartKoreanName);
     }
 
     @Transactional
-    public Long removeMachine(Long machineId) {
-        Machine findMachine = machineRepository.findById(machineId);
+    public ResponseEntity<String> removeMachine(Long machineId) {
+        Machine findMachine = machineRepository.findById(machineId).orElse(null);
+        if(findMachine == null)
+            throw new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION);
+
         for (BodyPart bodyPart : findMachine.getBodyParts()) {
             bodyPart.removeMachine(findMachine);
         }
+
         machineRepository.remove(findMachine);
-        return machineId;
+        return ResponseEntity.ok("[" + findMachine.getKoreanName() + ":" + findMachine.getEnglishName() + "] 삭제 완료");
     }
 }

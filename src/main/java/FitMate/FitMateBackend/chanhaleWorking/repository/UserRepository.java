@@ -1,12 +1,15 @@
 package FitMate.FitMateBackend.chanhaleWorking.repository;
 
+import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
 import FitMate.FitMateBackend.domain.User;
 import FitMate.FitMateBackend.domain.supplement.Supplement;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Repository;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -44,5 +47,14 @@ public class UserRepository {
 
     public User findOne(Long id) {
         return em.find(User.class, id);
+    }
+
+    //🔽🔽🔽 Jwt 🔽🔽🔽
+
+    private final JwtService jwtService;
+
+    public Optional<User> findUserByToken(HttpHeaders headers) {
+        String token = Objects.requireNonNull(headers.getFirst("authorization")).substring("Bearer ".length());
+        return findByLoginEmail(jwtService.getLoginEmail(token));
     }
 }

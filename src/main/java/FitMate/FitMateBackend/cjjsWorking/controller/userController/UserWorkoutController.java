@@ -1,21 +1,16 @@
 package FitMate.FitMateBackend.cjjsWorking.controller.userController;
 
-import FitMate.FitMateBackend.chanhaleWorking.service.FileStoreService;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.UserWorkoutRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutDto;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutResponseDto;
-import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutSearch;
+import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.service.WorkoutService;
 import FitMate.FitMateBackend.domain.Workout;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,34 +20,20 @@ public class UserWorkoutController {
 
     private final WorkoutService workoutService;
 
-    /* 사용 안함
-    @GetMapping("workouts/image/{workoutId}") //이미지 조회 (TEST 완료)
-    public ResponseEntity<Resource> findWorkoutImage(@PathVariable("workoutId") Long workoutId) throws MalformedURLException {
-        //비회원도 운동 검색은 할 수 있기 때문에 user session 제약 없앰
-        Workout findWorkout = workoutService.findOne(workoutId);
-        UrlResource imgRrc = new UrlResource("file:" + FileStoreService.getFullPath(findWorkout.getImagePath()));
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-                .body(imgRrc);
-    }
-    */
-
-    @PostMapping("workouts/search/list/{page}") //batch 검색 (TEST 완료)
-    public List<WorkoutDto> searchWorkouts_page(@PathVariable("page") int page,
-                                                @RequestBody UserWorkoutRequest request) {
-        //비회원도 운동 검색은 할 수 있기 때문에 user session 제약 없앰
-        WorkoutSearch search = new WorkoutSearch(request.getSearchKeyword(), request.getBodyPartKoreanName());
-        List<Workout> searchWorkouts = workoutService.searchAll(page, search);
-
-        return searchWorkouts.stream()
+    @PostMapping("workouts/search/list/{page}") //운동 페이지검색 (TEST 완료)
+    public ResponseEntity<List<WorkoutDto>> searchWorkouts_page(@PathVariable("page") int page, @RequestBody UserWorkoutRequest request) {
+        return ResponseEntity.ok(
+                workoutService.searchAll(page, request).stream()
                 .map(WorkoutDto::new)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
-    @GetMapping("workouts/{workoutId}") //단일조회 (TEST 완료)
-    public WorkoutResponseDto findWorkout(@PathVariable("workoutId") Long workoutId) {
-        //비회원도 운동 검색은 할 수 있기 때문에 user session 제약 없앰
+    @GetMapping("workouts/{workoutId}") //운동 단일조회 (TEST 완료)
+    public ResponseEntity<?> findWorkout(@PathVariable("workoutId") Long workoutId) {
         Workout findWorkout = workoutService.findOne(workoutId);
-        return new WorkoutResponseDto(findWorkout.getEnglishName(), findWorkout.getKoreanName(), findWorkout.getImgFileName(), findWorkout.getVideoLink(),
-                findWorkout.getDescription(), findWorkout.getBodyParts());
+        if(findWorkout == null)
+            throw new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION);
+
+        return ResponseEntity.ok(new WorkoutResponseDto(findWorkout));
     }
 }

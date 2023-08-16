@@ -3,15 +3,17 @@ package FitMate.FitMateBackend.cjjsWorking.dto.bodyPart;
 import FitMate.FitMateBackend.domain.BodyPart;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class AllBodyPartResponseDto {
+@NoArgsConstructor
+public class BodyPartsResponse {
     private List<BodyPartName> bodyPartKoreanName = new ArrayList<>();
 
-    public AllBodyPartResponseDto(List<BodyPart> bodyParts) {
+    public BodyPartsResponse(List<BodyPart> bodyParts) {
         for (BodyPart bodyPart : bodyParts) {
             bodyPartKoreanName.add(new BodyPartName(bodyPart.getEnglishName(), bodyPart.getKoreanName()));
         }

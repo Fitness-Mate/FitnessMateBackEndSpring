@@ -1,14 +1,10 @@
 package FitMate.FitMateBackend.chanhaleWorking.dto;
 
-import FitMate.FitMateBackend.chanhaleWorking.service.FileStoreService;
-import FitMate.FitMateBackend.cjjsWorking.service.cloudService.S3FileService;
+import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.supplement.Supplement;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.core.io.UrlResource;
-
-import java.net.MalformedURLException;
 
 @Data
 @NoArgsConstructor

@@ -1,6 +1,7 @@
 package FitMate.FitMateBackend.cjjsWorking.dto.Machine;
 
 import FitMate.FitMateBackend.domain.BodyPart;
+import FitMate.FitMateBackend.domain.Machine;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,10 +15,10 @@ public class GetMachineResponse {
     private String koreanName;
     private List<String> bodyPartKoreanName = new ArrayList<>();
 
-    public GetMachineResponse(String englishName, String koreanName, List<BodyPart> bodyParts) {
-        this.englishName = englishName;
-        this.koreanName = koreanName;
-        for (BodyPart bodyPart : bodyParts) {
+    public GetMachineResponse(Machine findMachine) {
+        this.englishName = findMachine.getEnglishName();
+        this.koreanName = findMachine.getKoreanName();
+        for (BodyPart bodyPart : findMachine.getBodyParts()) {
             this.bodyPartKoreanName.add(bodyPart.getKoreanName());
         }
     }

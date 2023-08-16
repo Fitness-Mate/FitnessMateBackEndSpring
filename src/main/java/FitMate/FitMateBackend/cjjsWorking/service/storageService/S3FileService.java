@@ -1,4 +1,4 @@
-package FitMate.FitMateBackend.cjjsWorking.service.cloudService;
+package FitMate.FitMateBackend.cjjsWorking.service.storageService;
 
 import FitMate.FitMateBackend.consts.ServiceConst;
 import com.amazonaws.services.s3.AmazonS3Client;

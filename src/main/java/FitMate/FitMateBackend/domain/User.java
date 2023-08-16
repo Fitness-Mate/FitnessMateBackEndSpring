@@ -6,16 +6,20 @@ import FitMate.FitMateBackend.domain.recommendation.Recommendation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
 @Getter
 @NoArgsConstructor
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue
     @Column(name = "user_id")
@@ -59,6 +63,16 @@ public class User {
         user.birthDate = form.getBirthDate();
         return user;
     }
+    public static User createUserTest(RegisterForm form, String password, String type) {
+        User user = new User();
+        user.userName = form.getUserName();
+        user.loginEmail = form.getLoginEmail();
+        user.password = password;
+        user.sex = form.getSex();
+        user.type = type;
+        user.birthDate = form.getBirthDate();
+        return user;
+    }
 
     public void updateUser(UpdateUserForm updateUserForm) {
         this.userName = updateUserForm.getUserName();
@@ -69,5 +83,45 @@ public class User {
     }
     public void setSortBodyData(List<BodyData> sortedBodyData) {
         this.bodyDataHistory = sortedBodyData;
+    }
+
+    public String getUserName() {
+        return this.userName;
+    }
+
+    //🔽🔽🔽 For Spring Security 🔽🔽🔽
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(type));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return loginEmail;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
