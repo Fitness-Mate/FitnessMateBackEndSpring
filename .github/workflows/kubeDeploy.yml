@@ -1,4 +1,4 @@
-name: Backend CD
+name: Kubernetes Deploy
 on:
   push:
     branches: [ main ]
@@ -34,7 +34,7 @@ jobs:
         run: ./gradlew build
 
       - name: 도커 이미지 빌드 # (2)
-        run: docker build -t chanhalee/fitnessmateback:latest .
+        run: docker build -t chanhalee/fitnessmateback:0.${{ github.run_number }}.${{ github.run_attempt }} .
 
       - name: Docker Hub 로그인 # (3)
         uses: docker/login-action@v2
