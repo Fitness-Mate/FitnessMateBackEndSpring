@@ -7,9 +7,11 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -21,12 +23,28 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
+@Component
+@Slf4j
 public class JwtService {
 
-    @Value("${jwt-secret-key}") private String secretKey;
-    @Value("${jwt-expiration}") private Long expiration;
-    @Value("${jwt-issuer}") private String issuer;
 
+    private static String secretKey;
+    private static Long expiration;
+    private static String issuer;
+
+    @Value("${jwt-expiration}")
+    public void setExpiration(Long ep) {
+        this.expiration = ep;
+    }
+    @Value("${jwt-secret-key}")
+    public void setSecretKey(String sk){
+        this.secretKey = sk;
+    }
+
+    @Value("${jwt-issuer}")
+    public void setIssuer(String iss) {
+        this.issuer = iss;
+    }
     public String generateToken(UserDetails userDetails, ExtraClaims claims) {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("userId", claims.getUserId());
@@ -48,19 +66,19 @@ public class JwtService {
         return Objects.requireNonNull(header.getFirst("authorization")).substring("Bearer ".length());
     }
 
-    public String getLoginEmail(String token) {
+    public static String getLoginEmail(String token) {
         return getClaim(token, Claims::getSubject);
     }
-    public Long getUserId(String token) {
+    public static Long getUserId(String token) {
         return getClaim(token, claims -> claims.get("userId", Long.class));
     }
 
-    public <T> T getClaim(String token, Function<Claims, T> claimsResolver) {
+    public static <T> T getClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    private Claims getAllClaims(String token) {
+    private static Claims getAllClaims(String token) {
         try {
             return Jwts
                     .parserBuilder()
@@ -81,7 +99,7 @@ public class JwtService {
         }
     }
 
-    private Key getSignInKey() {
+    private static Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }

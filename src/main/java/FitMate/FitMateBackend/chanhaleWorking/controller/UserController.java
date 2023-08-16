@@ -1,6 +1,7 @@
 package FitMate.FitMateBackend.chanhaleWorking.controller;
 
 import FitMate.FitMateBackend.chanhaleWorking.config.argumentresolver.Login;
+import FitMate.FitMateBackend.chanhaleWorking.dto.UserArgResolverDto;
 import FitMate.FitMateBackend.chanhaleWorking.dto.UserDto;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.DeleteUserForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.RegisterForm;
@@ -39,11 +40,11 @@ public class UserController {
 //    }
 
     @GetMapping
-    public UserDto getMUser(@Login User loginUser) {
+    public UserDto getMUser(@Login UserArgResolverDto loginUser) {
         if (loginUser == null) {
             return new UserDto();
         } else
-            return UserDto.createUserDto(loginUser);
+            return UserDto.createUserDto(userService.getUserWithId(loginUser.getUserId()));
     }
 
     @PostMapping("/admin/register")
@@ -59,17 +60,18 @@ public class UserController {
     }
 
     @PutMapping
-    public String updateUser(@Login User loginUser, @RequestBody UpdateUserForm form) {
+    public String updateUser(@Login UserArgResolverDto loginUser, @RequestBody UpdateUserForm form) {
         log.info(loginUser.getLoginEmail());
-        userService.updateUser(loginUser, form);
+        userService.updateUser(loginUser.getUserId(), form);
         return "ok";
     }
 
     @PostMapping("/password")
-    public String updateUserPassword(@Login User loginUser, @RequestBody UpdatePasswordForm form) {
+    public String updateUserPassword(@Login UserArgResolverDto loginUser, @RequestBody UpdatePasswordForm form) {
         log.info("old={}, new={}", form.getOldPassword(), form.getNewPassword());
-        if (loginUser.getPassword().equals(form.getOldPassword())) {
-            userService.updateUserPassword(loginUser, form.getNewPassword());
+        User user = userService.getUserWithId(loginUser.getUserId());
+        if (user.getPassword().equals(form.getOldPassword())) {
+            userService.updateUserPassword(loginUser.getUserId(), form.getNewPassword());
             return "ok";
         }
         return "fail";
@@ -78,11 +80,12 @@ public class UserController {
 
 
     @PostMapping("/delete")
-    public String deleteUser(@Login User loginUser, @RequestBody DeleteUserForm form) {
+    public String deleteUser(@Login UserArgResolverDto loginUser, @RequestBody DeleteUserForm form) {
         log.info(form.getPassword());
         if (loginUser != null) {
-            if (loginUser.getPassword().equals(form.getPassword())) {
-                userService.deleteUser(loginUser);
+            User user = userService.getUserWithId(loginUser.getUserId());
+            if (user.getPassword().equals(form.getPassword())) {
+                userService.deleteUser(loginUser.getUserId());
                 return "ok";
             }
         }
