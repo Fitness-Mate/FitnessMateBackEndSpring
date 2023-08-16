@@ -103,7 +103,7 @@ public class BodyPartService {
         }
 
         bodyPartRepository.remove(findBodyPart);
-        return ResponseEntity.ok("[" + findBodyPart.getKoreanName() + ":" + findBodyPart.getEnglishName() + "삭제 완료");
+        return ResponseEntity.ok("[" + findBodyPart.getKoreanName() + ":" + findBodyPart.getEnglishName() + "] 삭제 완료");
     }
 
 }

@@ -18,7 +18,7 @@ public class UserMachineController {
 
     private final MachineService machineService;
 
-    @PostMapping("machines/list") //부위별 조회
+    @PostMapping("machines/list") //부위별 조회 (TEST 완료)
     public ResponseEntity<List<UserMachineResponse>> findMachines(@RequestBody UserMachineRequest request) {
         return ResponseEntity.ok(
                 machineService.findWithBodyPart(request.getBodyPartKoreanName()).stream()

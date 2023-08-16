@@ -20,7 +20,7 @@ public class UserWorkoutController {
 
     private final WorkoutService workoutService;
 
-    @PostMapping("workouts/search/list/{page}") //운동 페이지검색
+    @PostMapping("workouts/search/list/{page}") //운동 페이지검색 (TEST 완료)
     public ResponseEntity<List<WorkoutDto>> searchWorkouts_page(@PathVariable("page") int page, @RequestBody UserWorkoutRequest request) {
         return ResponseEntity.ok(
                 workoutService.searchAll(page, request).stream()
@@ -28,7 +28,7 @@ public class UserWorkoutController {
                 .collect(Collectors.toList()));
     }
 
-    @GetMapping("workouts/{workoutId}") //운동 단일조회
+    @GetMapping("workouts/{workoutId}") //운동 단일조회 (TEST 완료)
     public ResponseEntity<?> findWorkout(@PathVariable("workoutId") Long workoutId) {
         Workout findWorkout = workoutService.findOne(workoutId);
         if(findWorkout == null)

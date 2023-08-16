@@ -22,7 +22,7 @@ public class RedisCacheService {
     public void saveUser(String token, User user) {
         ValueOperations<String, User> valueOperations = userRedisTemplate.opsForValue();
         valueOperations.set("user:" + token, user);
-        userRedisTemplate.expire(token, expiration, TimeUnit.MINUTES);
+        userRedisTemplate.expire("user:" + token, expiration, TimeUnit.MINUTES);
     }
 
     public User findUser(String token) {

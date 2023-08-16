@@ -17,13 +17,13 @@ public class AdminWorkoutController {
 
     private final WorkoutService workoutService;
 
-    @PostMapping("admin/workouts")//운동 등록
+    @PostMapping("admin/workouts")//운동 등록 (TEST 완료)
     @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<String> saveWorkout(@ModelAttribute WorkoutForm form) {
         return workoutService.saveWorkout(form);
     }
 
-    @GetMapping("admin/workouts/{workoutId}") //운동 단일조회
+    @GetMapping("admin/workouts/{workoutId}") //운동 단일조회 (TEST 완료)
     public ResponseEntity<?> findWorkout(@PathVariable("workoutId") Long workoutId) {
         Workout findWorkout = workoutService.findOne(workoutId);
         if(findWorkout == null)
@@ -32,18 +32,18 @@ public class AdminWorkoutController {
         return ResponseEntity.ok(new WorkoutResponseDto(findWorkout));
     }
 
-    @GetMapping("admin/workouts/list/{page}") //운동 페이지조회
+    @GetMapping("admin/workouts/list/{page}") //운동 페이지조회 (TEST 완료)
     public ResponseEntity<?> findWorkouts_page(@PathVariable("page") int page) {
         return workoutService.findAll(page);
     }
 
-    @PutMapping("admin/workouts/{workoutId}") //운동 수정
+    @PutMapping("admin/workouts/{workoutId}") //운동 수정 (TEST 완료)
     @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<String> updateWorkout(@PathVariable("workoutId") Long workoutId, @ModelAttribute WorkoutForm form) {
         return workoutService.updateWorkout(workoutId, form);
     }
 
-    @DeleteMapping("admin/workouts/{workoutId}") //운동 삭제
+    @DeleteMapping("admin/workouts/{workoutId}") //운동 삭제 (TEST 완료)
     @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<String> deleteWorkout(@PathVariable("workoutId") Long workoutId) {
         return workoutService.removeWorkout(workoutId);

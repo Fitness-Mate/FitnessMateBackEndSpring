@@ -40,7 +40,7 @@ public class WorkoutService {
             String fileName = s3FileService.uploadImage(ServiceConst.S3_DIR_WORKOUT, form.getImage());
             workout.update(form, fileName);
         } else {
-            workout.update(form, ServiceConst.DEFAULT_IMAGE_NAME);
+            workout.update(form, ServiceConst.DEFAULT_WORKOUT_IMAGE_NAME);
         }
 
         for (String koreanName : form.getBodyPartKoreanName()) {
@@ -62,14 +62,14 @@ public class WorkoutService {
         if(findWorkout == null)
             throw new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION);
 
-        if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_IMAGE_NAME)) //기존 이미지 삭제
+        if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_WORKOUT_IMAGE_NAME)) //기존 이미지 삭제
             s3FileService.deleteImage(ServiceConst.S3_DIR_WORKOUT,findWorkout.getImgFileName());
 
         if(!form.getImage().isEmpty()) {
             String fileName = s3FileService.uploadImage(ServiceConst.S3_DIR_WORKOUT, form.getImage()); //s3에 이미지 추가
             findWorkout.update(form, fileName);
         } else {
-            findWorkout.update(form, ServiceConst.DEFAULT_IMAGE_NAME);
+            findWorkout.update(form, ServiceConst.DEFAULT_WORKOUT_IMAGE_NAME);
         }
 
         for (BodyPart bodyPart : findWorkout.getBodyParts()) {
@@ -117,7 +117,7 @@ public class WorkoutService {
             bodyPart.removeWorkout(findWorkout);
         }
 
-        if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_IMAGE_NAME))
+        if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_WORKOUT_IMAGE_NAME))
             s3FileService.deleteImage(ServiceConst.S3_DIR_WORKOUT, findWorkout.getImgFileName());
 
         workoutRepository.remove(findWorkout);

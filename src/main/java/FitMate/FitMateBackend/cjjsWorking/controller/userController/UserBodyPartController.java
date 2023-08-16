@@ -13,7 +13,7 @@ public class UserBodyPartController {
 
     private final BodyPartService bodyPartService;
 
-    @GetMapping("bodyParts/all") // 전체조회
+    @GetMapping("bodyParts/all") // 전체조회 (TEST 완료)
     public ResponseEntity<BodyPartsResponse> findBodyParts() {
         return ResponseEntity.ok(new BodyPartsResponse(bodyPartService.findAll()));
     }
