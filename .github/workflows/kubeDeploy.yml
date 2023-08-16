@@ -22,6 +22,12 @@ jobs:
           echo cloud.aws.s3.region.static=ap-northeast-2 >>./src/main/resources/application.properties
           echo cloud.aws.s3.credentials.accessKey=${{ secrets.AWS_S3_ACCESSKEY }} >>./src/main/resources/application.properties
           echo cloud.aws.s3.credentials.secretKey=${{ secrets.AWS_S3_SECRETSKEY }} >>./src/main/resources/application.properties
+          echo spring.data.redis.host=${{ secrets.REDIS_HOST }} >>./src/main/resources/application.properties
+          echo spring.data.redis.password=${{ secrets.REDIS_PASSWORD }} >>./src/main/resources/application.properties
+          echo spring.data.redis.port=${{ secrets.REDIS_PORT }} >>./src/main/resources/application.properties
+          echo jwt-secret-key=${{ secrets.JWT_SECRET_KEY }} >>./src/main/resources/application.properties
+          echo jwt-issuer=${{ secrets.JWT_ISSUER }} >>./src/main/resources/application.properties
+          echo jwt-issuer=${{ secrets.JWT_EXPIRATION }} >>./src/main/resources/application.properties
           echo api-key=${{ secrets.CHATGPT_API_KEY }} >>./src/main/resources/application.properties
           echo deepl-api-key=${{ secrets.DEEPL_API_KEY }} >>./src/main/resources/application.properties
       - name: Set up JDK 17
