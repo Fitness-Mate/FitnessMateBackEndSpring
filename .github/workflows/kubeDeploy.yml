@@ -62,4 +62,4 @@ jobs:
           script_stop: true
           script: |
             wall "Github Actions in action"
-            sudo kubectl set image deployment fitmate-deployment fitmate-backend=chanhalee/fitnessmateback:0.${{ github.run_number }}.${{ github.run_attempt }}
+            kubectl set image deployment fitmate-deployment fitmate-backend=chanhalee/fitnessmateback:0.${{ github.run_number }}.${{ github.run_attempt }}
