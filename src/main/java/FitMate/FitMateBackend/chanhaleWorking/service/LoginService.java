@@ -53,16 +53,15 @@ public class LoginService {
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
             return null;
         }
-        String token = jwtService.generateToken(user, new ExtraClaims(user));
-        redisCacheService.saveUser(token, user);
-        log.info("login attempt! Token: [{}], User: [{}]",
-                token,
-                getUserWithToken(token).getUserName());
-        return new AuthResponse(token);
-    }
+        String accessToken = jwtService.generateAccessToken(user, new ExtraClaims(user));
+        String refreshToken =jwtService.generateRefreshToken(user);
+        redisCacheService.saveToken(refreshToken);
 
-    public User getUserWithToken(String token) {
-        return redisCacheService.findUser(token);
+        log.info("login attempt! AccessToken: [{}], RefreshToken: [{}], User: [{}]",
+                accessToken,
+                refreshToken,
+                JwtService.getLoginEmail(accessToken));
+        return new AuthResponse(accessToken, refreshToken);
     }
 
     public void logoutWithJwt(String token) { //user logout

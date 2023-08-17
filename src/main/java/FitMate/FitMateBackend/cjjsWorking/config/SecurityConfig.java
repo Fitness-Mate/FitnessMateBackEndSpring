@@ -42,6 +42,7 @@ public class SecurityConfig {
     private RequestMatcher publicEndpoints() {
         return new OrRequestMatcher(
                 new AntPathRequestMatcher("/auth/login"), //admin, user login
+                new AntPathRequestMatcher("/auth/refresh"), //refresh token 발급
                 new AntPathRequestMatcher("/user/auth/**") //admin, user register
         );
     }

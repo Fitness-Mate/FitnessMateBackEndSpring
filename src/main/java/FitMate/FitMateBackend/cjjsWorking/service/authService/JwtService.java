@@ -1,7 +1,11 @@
 package FitMate.FitMateBackend.cjjsWorking.service.authService;
 
+import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
+import FitMate.FitMateBackend.cjjsWorking.exception.JwtFilterException;
+import FitMate.FitMateBackend.cjjsWorking.service.storageService.RedisCacheService;
+import FitMate.FitMateBackend.domain.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -15,10 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -26,38 +27,67 @@ import java.util.function.Function;
 @Component
 @Slf4j
 public class JwtService {
-
-
     private static String secretKey;
-    private static Long expiration;
+    private static Long accessExp;
+    private static Long refreshExp;
     private static String issuer;
 
-    @Value("${jwt-expiration}")
-    public void setExpiration(Long ep) {
-        this.expiration = ep;
+    private final RedisCacheService redisCacheService;
+    private final UserRepository userRepository;
+
+    @Value("${jwt-access-expiration}")
+    public void setAccessExp(Long ep) {
+        this.accessExp = ep;
+    }
+    @Value("${jwt-refresh-expiration}")
+    public void setRefreshExp(Long ep) {
+        this.refreshExp = ep;
     }
     @Value("${jwt-secret-key}")
     public void setSecretKey(String sk){
         this.secretKey = sk;
     }
-
     @Value("${jwt-issuer}")
     public void setIssuer(String iss) {
         this.issuer = iss;
     }
-    public String generateToken(UserDetails userDetails, ExtraClaims claims) {
+
+    public String generateAccessToken(UserDetails userDetails, ExtraClaims claims) {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("userId", claims.getUserId());
 
-        return generateToken(extraClaims, userDetails);
+        return generateAccessToken(extraClaims, userDetails);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    public String generateAccessToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts.builder().setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuer(issuer)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * expiration))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * accessExp))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String generateAccessTokenWithRefreshToken(String refreshToken) {
+        if(!redisCacheService.isExist(refreshToken)) {
+            throw new CustomException(CustomErrorCode.JWT_NOT_FOUND_EXCEPTION);
+        }
+
+        User user = userRepository.findByLoginEmail(getLoginEmail(refreshToken)).orElse(null);
+        if(user == null) {
+            throw new CustomException(CustomErrorCode.USER_NOT_FOUND_EXCEPTION);
+        }
+
+        return generateAccessToken(user, new ExtraClaims(user));
+    }
+
+    public String generateRefreshToken(UserDetails userDetails) {
+        return Jwts.builder()
+                .setSubject(userDetails.getUsername())
+                .setIssuer(issuer)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * refreshExp))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -69,6 +99,7 @@ public class JwtService {
     public static String getLoginEmail(String token) {
         return getClaim(token, Claims::getSubject);
     }
+
     public static Long getUserId(String token) {
         return getClaim(token, claims -> claims.get("userId", Long.class));
     }
@@ -87,15 +118,15 @@ public class JwtService {
                     .parseClaimsJws(token)
                     .getBody();
         } catch(ExpiredJwtException e) {
-            throw new CustomException(CustomErrorCode.EXPIRED_JWT_EXCEPTION);
+            throw new JwtFilterException(CustomErrorCode.EXPIRED_ACCESS_TOKEN_EXCEPTION);
         } catch(UnsupportedJwtException e) {
-            throw new CustomException(CustomErrorCode.UNSUPPORTED_JWT_EXCEPTION);
+            throw new JwtFilterException(CustomErrorCode.UNSUPPORTED_JWT_EXCEPTION);
         } catch(MalformedJwtException e) {
-            throw new CustomException(CustomErrorCode.MALFORMED_JWT_EXCEPTION);
+            throw new JwtFilterException(CustomErrorCode.MALFORMED_JWT_EXCEPTION);
         } catch(SignatureException e) {
-            throw new CustomException(CustomErrorCode.SIGNATURE_EXCEPTION);
+            throw new JwtFilterException(CustomErrorCode.SIGNATURE_EXCEPTION);
         } catch(IllegalArgumentException e) {
-            throw new CustomException(CustomErrorCode.ILLEGAL_ARGUMENT_EXCEPTION);
+            throw new JwtFilterException(CustomErrorCode.ILLEGAL_ARGUMENT_EXCEPTION);
         }
     }
 

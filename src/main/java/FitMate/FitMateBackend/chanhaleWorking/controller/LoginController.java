@@ -3,6 +3,8 @@ package FitMate.FitMateBackend.chanhaleWorking.controller;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.AuthResponse;
 import FitMate.FitMateBackend.chanhaleWorking.form.login.LoginForm;
 import FitMate.FitMateBackend.chanhaleWorking.service.LoginService;
+import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
+import FitMate.FitMateBackend.cjjsWorking.service.storageService.RedisCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +23,7 @@ import java.util.Objects;
 public class LoginController {
 
     private final LoginService loginService;
+    private final JwtService jwtService;
 
 //    @PostMapping("/login")
 //    @ResponseBody
@@ -70,11 +73,18 @@ public class LoginController {
     @GetMapping("/auth/logout") //logout
     @PreAuthorize("hasAnyAuthority('Customer', 'Admin')")
     public void logoutWithJwt(@RequestHeader HttpHeaders header) {
-        String token = Objects.requireNonNull(header.getFirst("authorization")).substring("Bearer ".length());
-        log.info("logout attempt! Token: [{}], User: [{}]",
-                token,
-                loginService.getUserWithToken(token));
+        String accessToken = Objects.requireNonNull(header.getFirst("authorization")).substring("Bearer ".length());
+//        log.info("logout attempt! Token: [{}], User: [{}]",
+//                token,
+//                loginService.getUserWithToken(token));
 
-        loginService.logoutWithJwt(token);
+        loginService.logoutWithJwt(accessToken);
+    }
+
+    @PostMapping("/auth/refresh") //access token 재발급
+    public ResponseEntity<AuthResponse> refresh(@RequestHeader HttpHeaders header) {
+        String refreshToken = jwtService.getToken(header);
+        String accessToken = jwtService.generateAccessTokenWithRefreshToken(refreshToken);
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
     }
 }

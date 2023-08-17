@@ -11,9 +11,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<CustomErrorResponse> handleException(CustomException e, HttpServletRequest request) {
+    public ResponseEntity<CustomErrorResponse> handleCustomException(CustomException e, HttpServletRequest request) {
         log.error("ERROR: {}, URL: {}, MESSAGE: {}", e.getCustomErrorCode(),
                 request.getRequestURI(), e.getMessage());
-        return ResponseEntity.status(400).body(new CustomErrorResponse(e.getCustomErrorCode(), e.getMessage()));
+        return ResponseEntity.status(403).body(new CustomErrorResponse(e.getCustomErrorCode(), e.getMessage()));
     }
+
+    @ExceptionHandler(JwtFilterException.class) //JwtFilterException은 Handler에서 동작하지 않음. JwtExceptionFilter에서 동작
+    public ResponseEntity<CustomErrorResponse> handleJwtFilterException(JwtFilterException e, HttpServletRequest request) {
+//        log.error("ERROR: {}, URL: {}, MESSAGE: {}", e.getCustomErrorCode(),
+//                request.getRequestURI(), e.getMessage());
+        return ResponseEntity.status(403).body(new CustomErrorResponse(e.getCustomErrorCode(), e.getMessage()));
+    }
+
+
 }
