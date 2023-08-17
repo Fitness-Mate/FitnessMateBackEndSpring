@@ -25,16 +25,11 @@ public class RedisCacheService {
         userRedisTemplate.expire(refreshToken, refreshExp, TimeUnit.MINUTES);
     }
 
-    public String findToken(String refreshToken) {
-        ValueOperations<String, String> valueOperations = userRedisTemplate.opsForValue();
-        return valueOperations.get(refreshToken);
-    }
-
     public Boolean isExist(String refreshToken) {
         return userRedisTemplate.hasKey(refreshToken);
     }
 
-    public void removeUser(String token) {
-        userRedisTemplate.delete("user:" + token);
+    public void removeToken(String refreshToken) {
+        userRedisTemplate.delete(refreshToken);
     }
 }

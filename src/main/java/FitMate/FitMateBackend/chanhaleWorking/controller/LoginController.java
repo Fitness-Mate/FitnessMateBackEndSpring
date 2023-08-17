@@ -73,15 +73,16 @@ public class LoginController {
     @GetMapping("/auth/logout") //logout
     @PreAuthorize("hasAnyAuthority('Customer', 'Admin')")
     public void logoutWithJwt(@RequestHeader HttpHeaders header) {
-        String accessToken = Objects.requireNonNull(header.getFirst("authorization")).substring("Bearer ".length());
-//        log.info("logout attempt! Token: [{}], User: [{}]",
-//                token,
-//                loginService.getUserWithToken(token));
+        String refreshToken = jwtService.getToken(header);
 
-        loginService.logoutWithJwt(accessToken);
+        log.info("logout attempt! Token: [{}], User: [{}]",
+                refreshToken,
+                JwtService.getLoginEmail(refreshToken));
+
+        loginService.logoutWithJwt(refreshToken);
     }
 
-    @PostMapping("/auth/refresh") //access token 재발급
+    @PostMapping("/auth/refresh") //refresh token 재발급
     public ResponseEntity<AuthResponse> refresh(@RequestHeader HttpHeaders header) {
         String refreshToken = jwtService.getToken(header);
         String accessToken = jwtService.generateAccessTokenWithRefreshToken(refreshToken);

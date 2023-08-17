@@ -1,6 +1,8 @@
 package FitMate.FitMateBackend.chanhaleWorking.service;
 
 import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
+import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.AuthResponse;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.ExtraClaims;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
@@ -64,7 +66,10 @@ public class LoginService {
         return new AuthResponse(accessToken, refreshToken);
     }
 
-    public void logoutWithJwt(String token) { //user logout
-        redisCacheService.removeUser(token);
+    public void logoutWithJwt(String refreshToken) {
+        if(!redisCacheService.isExist(refreshToken)) {
+            throw new CustomException(CustomErrorCode.ALREADY_LOGOUT_EXCEPTION);
+        }
+        redisCacheService.removeToken(refreshToken);
     }
 }
