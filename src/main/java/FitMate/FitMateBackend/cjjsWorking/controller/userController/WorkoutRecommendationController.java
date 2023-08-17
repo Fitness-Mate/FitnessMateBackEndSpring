@@ -33,7 +33,7 @@ public class WorkoutRecommendationController {
 
     @PostMapping("recommendation/workout") //운동 추천 요청
     public Long getWorkoutRecommendation(@RequestHeader HttpHeaders header, @RequestBody WorkoutRecommendationRequest request) throws Exception {
-        Long userId = jwtService.getUserId(jwtService.getToken(header));
+        Long userId = JwtService.getUserId(jwtService.getToken(header));
         Long recommendationId = workoutRecommendationService.
                 createWorkoutRecommendation(userId, request);
 

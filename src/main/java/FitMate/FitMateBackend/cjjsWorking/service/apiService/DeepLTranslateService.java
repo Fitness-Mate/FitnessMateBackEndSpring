@@ -1,5 +1,7 @@
 package FitMate.FitMateBackend.cjjsWorking.service.apiService;
 
+import com.deepl.api.TextResult;
+import com.deepl.api.Translator;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,20 +23,14 @@ public class DeepLTranslateService {
     @Value("${deepl-api-key}")
     private String key;
 
+    /**
+     * DeepL Public GitHub Documentation
+     * https://github.com/DeepLcom/deepl-java
+     * */
     public String sendRequest(String source) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://deepl-translator.p.rapidapi.com/translate"))
-                .header("content-type", "application/json")
-                .header("X-RapidAPI-Key", key)
-                .header("X-RapidAPI-Host", "deepl-translator.p.rapidapi.com")
-                .method("POST", HttpRequest.BodyPublishers.ofString
-                        ("{\"text\": \"" + source + "\",\"source\": \"EN\",\"target\": \"KO\"}"))
-                .build();
-        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        JSONParser jsonParser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(response.body());
+        Translator translator = new Translator(key);
+        String target = translator.translateText(source, "EN", "KO").getText();
 
-        String target = jsonObject.get("text").toString();
         log.info("[ 번역 완료 ]");
         log.info("source: " + source);
         log.info("target: " + target);
