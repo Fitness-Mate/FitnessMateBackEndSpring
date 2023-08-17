@@ -1,4 +1,4 @@
-package FitMate.FitMateBackend.RedisConnectionTest;
+package FitMate.FitMateBackend.jjsTest.RedisConnectionTest;
 
 import FitMate.FitMateBackend.domain.User;
 import org.junit.jupiter.api.Test;
