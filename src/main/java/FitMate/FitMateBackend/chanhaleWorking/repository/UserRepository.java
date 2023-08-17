@@ -48,13 +48,4 @@ public class UserRepository {
     public User findOne(Long id) {
         return em.find(User.class, id);
     }
-
-    //🔽🔽🔽 Jwt 🔽🔽🔽
-
-    private final JwtService jwtService;
-
-    public Optional<User> findUserByToken(HttpHeaders headers) {
-        String token = Objects.requireNonNull(headers.getFirst("authorization")).substring("Bearer ".length());
-        return findByLoginEmail(jwtService.getLoginEmail(token));
-    }
 }

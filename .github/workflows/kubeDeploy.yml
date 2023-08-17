@@ -27,7 +27,8 @@ jobs:
           echo spring.data.redis.port=${{ secrets.REDIS_PORT }} >>./src/main/resources/application.properties
           echo jwt-secret-key=${{ secrets.JWT_SECRET_KEY }} >>./src/main/resources/application.properties
           echo jwt-issuer=${{ secrets.JWT_ISSUER }} >>./src/main/resources/application.properties
-          echo jwt-expiration=${{ secrets.JWT_EXPIRATION }} >>./src/main/resources/application.properties
+          echo jwt-access-expiration=${{ secrets.JWT_ACCESS_EXPIRATION }} >>./src/main/resources/application.properties
+          echo jwt-refresh-expiration=${{ secrets.JWT_REFRESH_EXPIRATION }} >>./src/main/resources/application.properties
           echo api-key=${{ secrets.CHATGPT_API_KEY }} >>./src/main/resources/application.properties
           echo deepl-api-key=${{ secrets.DEEPL_API_KEY }} >>./src/main/resources/application.properties
       - name: Set up JDK 17
