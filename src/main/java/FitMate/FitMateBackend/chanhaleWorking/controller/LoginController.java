@@ -63,7 +63,8 @@ public class LoginController {
     @PostMapping("/auth/login") //login
     public ResponseEntity<AuthResponse> loginWithJwt(@RequestBody LoginForm loginForm) {
         log.info("login attempt [{}]",loginForm.getLoginEmail() );
-        AuthResponse authResponse = loginService.loginWithJwt(loginForm.getLoginEmail(), loginForm.getPassword());
+        AuthResponse authResponse = loginService.loginWithJwt(loginForm);
+
         if (authResponse == null) {
             return ResponseEntity.status(403).body(null);
         }
@@ -82,10 +83,10 @@ public class LoginController {
         loginService.logoutWithJwt(refreshToken);
     }
 
-    @PostMapping("/auth/refresh") //refresh token 재발급
+    @PostMapping("/auth/refresh") //access token 재발급
     public ResponseEntity<AuthResponse> refresh(@RequestHeader HttpHeaders header) {
         String refreshToken = jwtService.getToken(header);
         String accessToken = jwtService.generateAccessTokenWithRefreshToken(refreshToken);
-        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, true));
     }
 }
