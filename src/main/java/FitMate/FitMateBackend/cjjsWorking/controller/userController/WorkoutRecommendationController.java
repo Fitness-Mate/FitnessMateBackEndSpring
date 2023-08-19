@@ -51,7 +51,7 @@ public class WorkoutRecommendationController {
     @GetMapping("recommendation/workout/history/list/{page}") //운동 추천 history batch 요청
     public List<WorkoutRecommendPageDto> findRecommendedWorkouts_page(@RequestHeader HttpHeaders header,
                                                                       @PathVariable("page") int page) {
-        Long userId = jwtService.getUserId(jwtService.getToken(header));
+        Long userId = JwtService.getUserId(jwtService.getToken(header));
         List<WorkoutRecommendation> findWR = workoutRecommendationService.findAllWithWorkoutRecommendation(page, userId);
 
         return findWR

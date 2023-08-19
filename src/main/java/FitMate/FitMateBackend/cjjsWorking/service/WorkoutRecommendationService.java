@@ -5,6 +5,8 @@ import FitMate.FitMateBackend.cjjsWorking.controller.userController.WorkoutRecom
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutRecommendationRequest;
 import FitMate.FitMateBackend.cjjsWorking.repository.*;
 import FitMate.FitMateBackend.cjjsWorking.service.apiService.DeepLTranslateService;
+import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
+import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
 import FitMate.FitMateBackend.domain.User;
@@ -70,9 +72,10 @@ public class WorkoutRecommendationService {
             //eng, kor description 생성
             String engDescription = sentence.substring(endIdx+4);
             String korDescription = deepLTranslateService.sendRequest(engDescription);
+            String accessURL = S3FileService.getAccessURL(ServiceConst.S3_DIR_WORKOUT, workout.getImgFileName());
 
             recommendedWorkout.update(workoutRecommendation, workout.getEnglishName(), workout.getKoreanName(),
-                    workout.getVideoLink(), workout.getDescription(), engDescription, korDescription);
+                    workout.getVideoLink(), accessURL, workout.getDescription(), engDescription, korDescription);
             workoutRecommendation.getRws().add(recommendedWorkout);
             recommendedWorkoutRepository.save(recommendedWorkout);
         }
