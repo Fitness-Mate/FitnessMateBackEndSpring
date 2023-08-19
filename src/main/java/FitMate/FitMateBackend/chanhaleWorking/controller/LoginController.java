@@ -4,15 +4,12 @@ import FitMate.FitMateBackend.cjjsWorking.service.authService.AuthResponse;
 import FitMate.FitMateBackend.chanhaleWorking.form.login.LoginForm;
 import FitMate.FitMateBackend.chanhaleWorking.service.LoginService;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
-import FitMate.FitMateBackend.cjjsWorking.service.storageService.RedisCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Objects;
 
 /**
  * 서비스의 Login 에 관련된 URL 처리하는 컨트롤러
@@ -63,12 +60,7 @@ public class LoginController {
     @PostMapping("/auth/login") //login
     public ResponseEntity<AuthResponse> loginWithJwt(@RequestBody LoginForm loginForm) {
         log.info("login attempt [{}]",loginForm.getLoginEmail() );
-        AuthResponse authResponse = loginService.loginWithJwt(loginForm);
-
-        if (authResponse == null) {
-            return ResponseEntity.status(403).body(null);
-        }
-        return ResponseEntity.ok(authResponse);
+        return ResponseEntity.ok(loginService.loginWithJwt(loginForm));
     }
 
     @GetMapping("/auth/logout") //logout

@@ -2,9 +2,8 @@ package FitMate.FitMateBackend.cjjsWorking.service;
 
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.UserWorkoutRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutDto;
-import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutResponseDto;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.form.WorkoutForm;
 import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutRepository;
 import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutSearch;

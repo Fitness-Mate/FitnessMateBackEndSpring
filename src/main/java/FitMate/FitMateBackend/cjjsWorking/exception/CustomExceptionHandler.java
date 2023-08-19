@@ -1,5 +1,8 @@
 package FitMate.FitMateBackend.cjjsWorking.exception;
 
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.AuthException;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.JwtFilterException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,13 @@ public class CustomExceptionHandler {
     public ResponseEntity<CustomErrorResponse> handleJwtFilterException(JwtFilterException e, HttpServletRequest request) {
 //        log.error("ERROR: {}, URL: {}, MESSAGE: {}", e.getCustomErrorCode(),
 //                request.getRequestURI(), e.getMessage());
+        return ResponseEntity.status(403).body(new CustomErrorResponse(e.getCustomErrorCode(), e.getMessage()));
+    }
+
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<CustomErrorResponse> handleAuthException(AuthException e, HttpServletRequest request) {
+        log.error("ERROR: {}, URL: {}, MESSAGE: {}", e.getCustomErrorCode(),
+                request.getRequestURI(), e.getMessage());
         return ResponseEntity.status(403).body(new CustomErrorResponse(e.getCustomErrorCode(), e.getMessage()));
     }
 

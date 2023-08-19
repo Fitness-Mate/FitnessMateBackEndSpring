@@ -2,8 +2,8 @@ package FitMate.FitMateBackend.cjjsWorking.service.authService;
 
 import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
-import FitMate.FitMateBackend.cjjsWorking.exception.JwtFilterException;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.JwtFilterException;
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.RedisCacheService;
 import FitMate.FitMateBackend.domain.User;
 import io.jsonwebtoken.*;
