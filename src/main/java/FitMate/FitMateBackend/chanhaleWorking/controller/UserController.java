@@ -8,6 +8,7 @@ import FitMate.FitMateBackend.chanhaleWorking.form.user.RegisterForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.UpdatePasswordForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.UpdateUserForm;
 import FitMate.FitMateBackend.chanhaleWorking.service.UserService;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.AuthException;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.AuthResponse;
 import FitMate.FitMateBackend.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -92,7 +93,7 @@ public class UserController {
         return "fail";
     }
 
-    @PostMapping("/verify/email/{userEmail}")
+    @PostMapping("/auth/verify/email/{userEmail}")
     public String verifyUserId(@PathVariable("userEmail")String userEmail) {
         String regexPattern = "^(.+)@(\\S+)$";
         if (userService.checkDuplicatedLoginEmail(userEmail)) {
@@ -119,14 +120,14 @@ public class UserController {
      * */
 
     @PostMapping("/auth")
-    public ResponseEntity<AuthResponse> userRegisterWithJwt(@RequestBody RegisterForm registerForm) {
+    public ResponseEntity<?> userRegisterWithJwt(@RequestBody RegisterForm registerForm) {
         log.info(registerForm.getLoginEmail());
         log.info("REGISTER Customer [{}] [{}]", registerForm.getUserName(), registerForm.getSex());
         String errMsg = registerForm.validateFields();
         if (!errMsg.equals("ok"))
-            return ResponseEntity.status(400).body(null); // errMsg 참고
+            return ResponseEntity.status(400).body(errMsg); // errMsg 참고
         if (userService.checkDuplicatedLoginEmail(registerForm.getLoginEmail()))
-            return ResponseEntity.status(400).body(null); // 아이디 중복
+            return ResponseEntity.status(400).body("아이디 중복"); // 아이디 중복
         return ResponseEntity.ok(userService.registerWithJwt(registerForm, "Customer"));
     }
 

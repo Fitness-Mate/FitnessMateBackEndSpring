@@ -86,7 +86,7 @@ public class MachineService {
     public ResponseEntity<?> findOne(Long machineId) {
         Machine findMachine = machineRepository.findById(machineId).orElse(null);
         if(findMachine == null)
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION);
 
         return ResponseEntity.ok(new GetMachineResponse(findMachine));
     }

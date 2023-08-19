@@ -75,7 +75,7 @@ public class LoginController {
         loginService.logoutWithJwt(refreshToken);
     }
 
-    @PostMapping("/auth/refresh") //access token 재발급
+    @GetMapping("/auth/refresh") //access token 재발급
     public ResponseEntity<AuthResponse> refresh(@RequestHeader HttpHeaders header) {
         String refreshToken = jwtService.getToken(header);
         String accessToken = jwtService.generateAccessTokenWithRefreshToken(refreshToken);

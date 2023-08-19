@@ -42,7 +42,8 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
         if(authHeader == null) {
-            if(uri.equals("/auth/login") || uri.equals("user/auth") || uri.equals("user/auth/jwt/admin/register")) {
+            if(uri.equals("/auth/login") || uri.equals("/user/auth") ||
+                    uri.equals("/user/auth/jwt/admin/register") || uri.startsWith("/user/auth/verify/email/")) {
                 filterChain.doFilter(request, response);
                 return;
             }

@@ -86,7 +86,10 @@ public class WorkoutService {
     }
 
     public Workout findOne(Long workoutId) {
-        return workoutRepository.findById(workoutId).orElse(null);
+        Workout findWorkout = workoutRepository.findById(workoutId).orElse(null);
+        if(findWorkout == null)
+            throw new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION);
+        return findWorkout;
     }
 
     public boolean checkWorkoutNameDuplicate(String koreanName, String englishName) {
