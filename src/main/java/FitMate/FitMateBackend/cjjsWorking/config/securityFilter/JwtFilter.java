@@ -19,6 +19,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -42,8 +44,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
         if(authHeader == null) {
-            if(uri.equals("/auth/login") || uri.equals("/user/auth") ||
-                    uri.equals("/user/auth/jwt/admin/register") || uri.startsWith("/user/auth/verify/email/")) {
+            if(isPublic(uri)) {
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -59,6 +60,7 @@ public class JwtFilter extends OncePerRequestFilter {
         loginId = JwtService.getLoginEmail(accessToken); //JwtFilterException 발생 부분
 
         log.info("loginId: [{}]", loginId);
+        //권한 관련 예외처리 -> 권한이 없습니다! 이런식으로
         if(loginId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(loginId);
 
@@ -73,5 +75,21 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isPublic(String uri) {
+        //회원가입, 로그인 관련 요청
+        if(uri.equals("/auth/login") || uri.equals("/user/auth") ||
+                uri.equals("/user/auth/jwt/admin/register") || uri.startsWith("/user/auth/verify/email/")) {
+            return true;
+        }
+
+        //비회원 접근 가능 workout 관련 요청
+        if(uri.startsWith("/workouts")) return true;
+
+        //비회원 접근 가능 supplements 관련 요청
+        if(uri.startsWith("/supplements")) return true;
+
+        return false;
     }
 }
