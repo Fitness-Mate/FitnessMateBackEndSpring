@@ -16,25 +16,22 @@ import java.util.concurrent.TimeUnit;
 public class RedisCacheService {
 
     private final RedisTemplate<String, String> userRedisTemplate;
+    @Value("${jwt-access-expiration}") private Long accessExp;
     @Value("${jwt-refresh-expiration}") private Long refreshExp;
 
     @Transactional
-    public void saveToken(String refreshToken) {
+    public void saveToken(String refreshToken, boolean rememberMe) {
+        long exp = rememberMe ? refreshExp : accessExp;
         ValueOperations<String, String> valueOperations = userRedisTemplate.opsForValue();
         valueOperations.set(refreshToken, refreshToken); //value 값 필요 X
-        userRedisTemplate.expire(refreshToken, refreshExp, TimeUnit.MINUTES);
-    }
-
-    public String findToken(String refreshToken) {
-        ValueOperations<String, String> valueOperations = userRedisTemplate.opsForValue();
-        return valueOperations.get(refreshToken);
+        userRedisTemplate.expire(refreshToken, exp, TimeUnit.MINUTES);
     }
 
     public Boolean isExist(String refreshToken) {
         return userRedisTemplate.hasKey(refreshToken);
     }
 
-    public void removeUser(String token) {
-        userRedisTemplate.delete("user:" + token);
+    public void removeToken(String refreshToken) {
+        userRedisTemplate.delete(refreshToken);
     }
 }

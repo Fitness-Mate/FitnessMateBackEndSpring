@@ -82,12 +82,13 @@ public class JwtService {
         return generateAccessToken(user, new ExtraClaims(user));
     }
 
-    public String generateRefreshToken(UserDetails userDetails) {
+    public String generateRefreshToken(UserDetails userDetails, boolean rememberMe) {
+        long exp = rememberMe ? refreshExp : accessExp;
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuer(issuer)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * refreshExp))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * exp))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

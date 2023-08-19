@@ -71,12 +71,12 @@ public class UserService {
         User newUser = User.createUserTest(registerForm, passwordEncoder.encode(registerForm.getPassword()), type);
 
         String accessToken = jwtService.generateAccessToken(newUser, new ExtraClaims(newUser));
-        String refreshToken = jwtService.generateRefreshToken(newUser);
-        redisCacheService.saveToken(refreshToken);
+        String refreshToken = jwtService.generateRefreshToken(newUser, false);
+        redisCacheService.saveToken(refreshToken, false);
 
         newUser.addBodyDataHistory(BodyData.createBodyData(registerForm.getBodyDataForm()));
         userRepository.save(newUser);
 
-        return new AuthResponse(accessToken, refreshToken);
+        return new AuthResponse(accessToken, refreshToken, false);
     }
 }

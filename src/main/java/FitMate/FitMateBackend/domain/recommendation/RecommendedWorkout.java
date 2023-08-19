@@ -25,6 +25,7 @@ public class RecommendedWorkout {
     private String englishName;
     private String koreanName;
     private String videoLink;
+    private String imgPath;
 
     @Column(length = 2000)
     private String workoutDescription;
@@ -35,12 +36,13 @@ public class RecommendedWorkout {
     @Column(length = 2000)
     private String engDescription;
 
-    public void update(WorkoutRecommendation workoutRecommendation, String englishName, String koreanName, String videoLink,
+    public void update(WorkoutRecommendation workoutRecommendation, String englishName, String koreanName, String videoLink, String imgPath,
                        String workoutDescription, String engDescription, String korDescription) {
         this.workoutRecommendation = workoutRecommendation;
         this.englishName = englishName;
         this.koreanName = koreanName;
         this.videoLink = videoLink;
+        this.imgPath = imgPath;
         this.workoutDescription = workoutDescription;
         this.korDescription = korDescription;
         this.engDescription = engDescription;

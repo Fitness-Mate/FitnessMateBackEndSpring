@@ -1,6 +1,9 @@
 package FitMate.FitMateBackend.chanhaleWorking.service;
 
+import FitMate.FitMateBackend.chanhaleWorking.form.login.LoginForm;
 import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
+import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.AuthResponse;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.ExtraClaims;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
@@ -42,29 +45,32 @@ public class LoginService {
     private final PasswordEncoder passwordEncoder;
     private final RedisCacheService redisCacheService;
 
-    public AuthResponse loginWithJwt(String loginEmail, String password) { //user login
+    public AuthResponse loginWithJwt(LoginForm form) { //user login
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                    loginEmail, password
+                    form.getLoginEmail(), form.getPassword()
                 )
         );
-        User user = userRepository.findByLoginEmail(loginEmail).orElse(null);
+        User user = userRepository.findByLoginEmail(form.getLoginEmail()).orElse(null);
         // 아이디 존재여부 체크, 비밀번호 대조 추가
-        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+        if (user == null || !passwordEncoder.matches(form.getPassword(), user.getPassword())) {
             return null;
         }
         String accessToken = jwtService.generateAccessToken(user, new ExtraClaims(user));
-        String refreshToken =jwtService.generateRefreshToken(user);
-        redisCacheService.saveToken(refreshToken);
+        String refreshToken =jwtService.generateRefreshToken(user, form.isRememberMe());
+        redisCacheService.saveToken(refreshToken, form.isRememberMe());
 
         log.info("login attempt! AccessToken: [{}], RefreshToken: [{}], User: [{}]",
                 accessToken,
                 refreshToken,
                 JwtService.getLoginEmail(accessToken));
-        return new AuthResponse(accessToken, refreshToken);
+        return new AuthResponse(accessToken, refreshToken, form.isRememberMe());
     }
 
-    public void logoutWithJwt(String token) { //user logout
-        redisCacheService.removeUser(token);
+    public void logoutWithJwt(String refreshToken) {
+        if(!redisCacheService.isExist(refreshToken)) {
+            throw new CustomException(CustomErrorCode.ALREADY_LOGOUT_EXCEPTION);
+        }
+        redisCacheService.removeToken(refreshToken);
     }
 }
