@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(publicEndpoints()).permitAll()
                         .requestMatchers(adminEndpoints()).hasAuthority("Admin")
+                        .requestMatchers(customerEndpoints()).hasAuthority("Customer")
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
@@ -44,13 +45,25 @@ public class SecurityConfig {
         return new OrRequestMatcher(
                 new AntPathRequestMatcher("/auth/login"), //admin, user login
                 new AntPathRequestMatcher("/auth/refresh"), //refresh token 발급
-                new AntPathRequestMatcher("/user/auth/**") //admin, user register
+                new AntPathRequestMatcher("/user/auth/**"), //admin, user register
+                new AntPathRequestMatcher("/workouts/**"), //workout 검색 조회 - 비회원 접근 가능 기능
+                new AntPathRequestMatcher("/supplements/**"), //supplement 검색 조회 - 비회원 접근 가능 기능
+                new AntPathRequestMatcher("/bodyParts/**") //bodyPart 전체 조회 요청 - 비회원 접근 가능 기능
         );
     }
 
     private RequestMatcher adminEndpoints() {
         return new OrRequestMatcher(
                 new AntPathRequestMatcher("/admin/**")
+        );
+    }
+
+    private RequestMatcher customerEndpoints() {
+        return new OrRequestMatcher(
+                new AntPathRequestMatcher("/user/private/**"),
+                new AntPathRequestMatcher("/bodyData/**"),
+                new AntPathRequestMatcher("/machines/**"),
+                new AntPathRequestMatcher("/recommendation/**")
         );
     }
 }

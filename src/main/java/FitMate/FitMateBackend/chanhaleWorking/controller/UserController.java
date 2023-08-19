@@ -40,7 +40,7 @@ public class UserController {
 //        return "ok";
 //    }
 
-    @GetMapping
+    @GetMapping("/private")
     public UserDto getMUser(@Login UserArgResolverDto loginUser) {
         if (loginUser == null) {
             return new UserDto();
@@ -60,14 +60,14 @@ public class UserController {
         return "ok";
     }
 
-    @PutMapping
+    @PutMapping("/private")
     public String updateUser(@Login UserArgResolverDto loginUser, @RequestBody UpdateUserForm form) {
         log.info(loginUser.getLoginEmail());
         userService.updateUser(loginUser.getUserId(), form);
         return "ok";
     }
 
-    @PostMapping("/password")
+    @PostMapping("/private/password")
     public String updateUserPassword(@Login UserArgResolverDto loginUser, @RequestBody UpdatePasswordForm form) {
         log.info("old={}, new={}", form.getOldPassword(), form.getNewPassword());
         User user = userService.getUserWithId(loginUser.getUserId());
@@ -80,7 +80,7 @@ public class UserController {
 
 
 
-    @PostMapping("/delete")
+    @PostMapping("/private/delete")
     public String deleteUser(@Login UserArgResolverDto loginUser, @RequestBody DeleteUserForm form) {
         log.info(form.getPassword());
         if (loginUser != null) {

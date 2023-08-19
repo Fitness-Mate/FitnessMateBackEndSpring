@@ -41,17 +41,16 @@ public class SupplementController {
         return new SupplementDto(supplement);
     }
 
-    @GetMapping("/image/{supplementId}")
-    public ResponseEntity<Resource> DownloadImage(@PathVariable("supplementId") Long supplementId, HttpServletResponse response) throws MalformedURLException {
-        Supplement supplement = supplementService.findSupplementById(supplementId);
-        // 경로의 파일에 접근해서 파일을 스트림으로 반환한다.
-        //TODO
-        // 파일 접근 경로 만드는 메서드로 변경하기
-        UrlResource resource = new UrlResource("file:" + FileStoreService.getFullPath(supplement.getImageName()));
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-                .body(resource);
-    }
-
+//    @GetMapping("/image/{supplementId}")
+//    public ResponseEntity<Resource> DownloadImage(@PathVariable("supplementId") Long supplementId, HttpServletResponse response) throws MalformedURLException {
+//        Supplement supplement = supplementService.findSupplementById(supplementId);
+//        // 경로의 파일에 접근해서 파일을 스트림으로 반환한다.
+//        //TODO
+//        // 파일 접근 경로 만드는 메서드로 변경하기
+//        UrlResource resource = new UrlResource("file:" + FileStoreService.getFullPath(supplement.getImageName()));
+//        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+//                .body(resource);
+//    }
 
     @GetMapping("/list/{pageNum}")
     public List<SupplementListDto> getSupplementList(@PathVariable("pageNum") Long pageNum){
