@@ -4,8 +4,7 @@ import FitMate.FitMateBackend.cjjsWorking.dto.Machine.GetMachineResponse;
 import FitMate.FitMateBackend.cjjsWorking.dto.Machine.MachineDto;
 import FitMate.FitMateBackend.cjjsWorking.dto.Machine.MachineRequest;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
-import FitMate.FitMateBackend.cjjsWorking.repository.BodyPartRepository;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.repository.MachineRepository;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -88,7 +86,7 @@ public class MachineService {
     public ResponseEntity<?> findOne(Long machineId) {
         Machine findMachine = machineRepository.findById(machineId).orElse(null);
         if(findMachine == null)
-            return ResponseEntity.status(400).body(new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION).getMessage());
+            throw new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION);
 
         return ResponseEntity.ok(new GetMachineResponse(findMachine));
     }

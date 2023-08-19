@@ -31,6 +31,7 @@ public class SecurityConfig {
         httpSecurity.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(publicEndpoints()).permitAll()
+                        .requestMatchers(adminEndpoints()).hasAuthority("Admin")
                         .anyRequest().authenticated())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
@@ -44,6 +45,12 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/auth/login"), //admin, user login
                 new AntPathRequestMatcher("/auth/refresh"), //refresh token 발급
                 new AntPathRequestMatcher("/user/auth/**") //admin, user register
+        );
+    }
+
+    private RequestMatcher adminEndpoints() {
+        return new OrRequestMatcher(
+                new AntPathRequestMatcher("/admin/**")
         );
     }
 }

@@ -4,7 +4,7 @@ import FitMate.FitMateBackend.cjjsWorking.dto.bodyPart.BodyPartDto;
 import FitMate.FitMateBackend.cjjsWorking.dto.bodyPart.BodyPartRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.bodyPart.BodyPartResponseDto;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.repository.BodyPartRepository;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;

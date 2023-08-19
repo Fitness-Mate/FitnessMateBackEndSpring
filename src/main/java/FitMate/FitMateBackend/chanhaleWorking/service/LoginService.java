@@ -3,7 +3,8 @@ package FitMate.FitMateBackend.chanhaleWorking.service;
 import FitMate.FitMateBackend.chanhaleWorking.form.login.LoginForm;
 import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.AuthException;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.AuthResponse;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.ExtraClaims;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
@@ -12,12 +13,11 @@ import FitMate.FitMateBackend.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -46,16 +46,20 @@ public class LoginService {
     private final RedisCacheService redisCacheService;
 
     public AuthResponse loginWithJwt(LoginForm form) { //user login
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    form.getLoginEmail(), form.getPassword()
-                )
-        );
-        User user = userRepository.findByLoginEmail(form.getLoginEmail()).orElse(null);
-        // 아이디 존재여부 체크, 비밀번호 대조 추가
-        if (user == null || !passwordEncoder.matches(form.getPassword(), user.getPassword())) {
-            return null;
+        try { //ID, PW 검증
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            form.getLoginEmail(), form.getPassword()
+                    )
+            );
+        } catch(BadCredentialsException e) {
+            throw new AuthException(CustomErrorCode.AUTHENTICATION_EXCEPTION);
         }
+
+        User user = userRepository.findByLoginEmail(form.getLoginEmail()).orElse(null);
+        if(user == null)
+            throw new AuthException(CustomErrorCode.AUTHENTICATION_EXCEPTION);
+
         String accessToken = jwtService.generateAccessToken(user, new ExtraClaims(user));
         String refreshToken =jwtService.generateRefreshToken(user, form.isRememberMe());
         redisCacheService.saveToken(refreshToken, form.isRememberMe());

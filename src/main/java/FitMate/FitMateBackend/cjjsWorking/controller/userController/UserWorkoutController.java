@@ -4,7 +4,7 @@ import FitMate.FitMateBackend.cjjsWorking.dto.workout.UserWorkoutRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutDto;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutResponseDto;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.service.WorkoutService;
 import FitMate.FitMateBackend.domain.Workout;
 import lombok.RequiredArgsConstructor;

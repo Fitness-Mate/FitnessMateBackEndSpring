@@ -2,7 +2,7 @@ package FitMate.FitMateBackend.cjjsWorking.controller.adminController;
 
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutResponseDto;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.form.WorkoutForm;
 import FitMate.FitMateBackend.cjjsWorking.service.WorkoutService;
 import FitMate.FitMateBackend.domain.Workout;
@@ -25,11 +25,7 @@ public class AdminWorkoutController {
 
     @GetMapping("admin/workouts/{workoutId}") //운동 단일조회 (TEST 완료)
     public ResponseEntity<?> findWorkout(@PathVariable("workoutId") Long workoutId) {
-        Workout findWorkout = workoutService.findOne(workoutId);
-        if(findWorkout == null)
-            throw new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION);
-
-        return ResponseEntity.ok(new WorkoutResponseDto(findWorkout));
+        return ResponseEntity.ok(new WorkoutResponseDto(workoutService.findOne(workoutId)));
     }
 
     @GetMapping("admin/workouts/list/{page}") //운동 페이지조회 (TEST 완료)

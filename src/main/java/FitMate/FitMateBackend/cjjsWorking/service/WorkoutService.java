@@ -2,9 +2,8 @@ package FitMate.FitMateBackend.cjjsWorking.service;
 
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.UserWorkoutRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutDto;
-import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutResponseDto;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.CustomException;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.form.WorkoutForm;
 import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutRepository;
 import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutSearch;
@@ -87,7 +86,10 @@ public class WorkoutService {
     }
 
     public Workout findOne(Long workoutId) {
-        return workoutRepository.findById(workoutId).orElse(null);
+        Workout findWorkout = workoutRepository.findById(workoutId).orElse(null);
+        if(findWorkout == null)
+            throw new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION);
+        return findWorkout;
     }
 
     public boolean checkWorkoutNameDuplicate(String koreanName, String englishName) {
