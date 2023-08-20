@@ -70,12 +70,18 @@ public class UserService {
     public AuthResponse registerWithJwt(RegisterForm registerForm, String type) {
         User newUser = User.createUserTest(registerForm, passwordEncoder.encode(registerForm.getPassword()), type);
 
+        newUser.addBodyDataHistory(BodyData.createBodyData(registerForm.getBodyDataForm()));
+        userRepository.save(newUser);
+
+        /**     2023.08.20 chanhale 수정
+         *      newUser.addBodyDataHistory(BodyData.createBodyData(registerForm.getBodyDataForm()));
+         *      userRepository.save(newUser);
+         *      부분을 토큰 발행보다 먼저 수행하도록 수정 (토큰 발행시 persist되지 않은 인스턴스에서 getId 시도시 null 반환하여 오류 발생하는 것에 대한 대처)
+         */
         String accessToken = jwtService.generateAccessToken(newUser, new ExtraClaims(newUser));
         String refreshToken = jwtService.generateRefreshToken(newUser, false);
         redisCacheService.saveToken(refreshToken, false);
 
-        newUser.addBodyDataHistory(BodyData.createBodyData(registerForm.getBodyDataForm()));
-        userRepository.save(newUser);
 
         return new AuthResponse(accessToken, refreshToken, false);
     }
