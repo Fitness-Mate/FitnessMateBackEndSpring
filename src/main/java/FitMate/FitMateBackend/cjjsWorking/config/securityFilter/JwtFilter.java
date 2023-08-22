@@ -48,7 +48,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-            //register, login 요청 이외의 요청에 대해 토큰이 없을 경우
+            //inPublic 요청 이외에는 토큰이 없으면 예외처리
             throw new JwtFilterException(CustomErrorCode.JWT_NOT_FOUND_EXCEPTION);
         }
         if(!authHeader.startsWith("Bearer ")) {
