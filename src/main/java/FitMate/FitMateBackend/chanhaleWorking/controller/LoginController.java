@@ -63,8 +63,7 @@ public class LoginController {
         return ResponseEntity.ok(loginService.loginWithJwt(loginForm));
     }
 
-    @GetMapping("/auth/logout") //logout
-    @PreAuthorize("hasAnyAuthority('Customer', 'Admin')")
+    @PutMapping("/auth/logout") //logout
     public void logoutWithJwt(@RequestHeader HttpHeaders header) {
         String refreshToken = jwtService.getToken(header);
 
