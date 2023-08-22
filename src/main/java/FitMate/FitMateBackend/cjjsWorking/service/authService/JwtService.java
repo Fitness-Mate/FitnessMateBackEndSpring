@@ -71,7 +71,7 @@ public class JwtService {
 
     public String generateAccessTokenWithRefreshToken(String refreshToken) {
         if(!redisCacheService.isExist(refreshToken)) {
-            throw new CustomException(CustomErrorCode.EXPIRED_ACCESS_TOKEN_EXCEPTION);
+            throw new CustomException(CustomErrorCode.EXPIRED_REFRESH_TOKEN_EXCEPTION);
         }
 
         User user = userRepository.findByLoginEmail(getLoginEmail(refreshToken)).orElse(null);
