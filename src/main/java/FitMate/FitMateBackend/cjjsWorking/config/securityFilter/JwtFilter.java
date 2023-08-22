@@ -39,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
         final String loginId;
         final String uri = request.getRequestURI();;
 
-        if(uri.equals("/auth/refresh")) { //토큰 재발급을 위한 요청인 경우
+        if(uri.equals("/auth/refresh")) { //토큰 재발급을 위한 요청인 경우 //
             filterChain.doFilter(request, response);
             return;
         }
