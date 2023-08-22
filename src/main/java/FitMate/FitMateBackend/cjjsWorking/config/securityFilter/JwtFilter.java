@@ -83,6 +83,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 uri.equals("/user/auth/jwt/admin/register") || uri.startsWith("/user/auth/verify/email/")) {
             return true;
         }
+        if(uri.startsWith("/register/verify")) return true;
+//        if(uri.startsWith("/")) return true;
 
         //비회원 접근 가능 workout 관련 요청
         if(uri.startsWith("/workouts")) return true;

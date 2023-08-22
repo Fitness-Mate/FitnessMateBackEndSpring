@@ -45,6 +45,8 @@ public class SecurityConfig {
         return new OrRequestMatcher(
                 new AntPathRequestMatcher("/auth/login"), //admin, user login
                 new AntPathRequestMatcher("/auth/refresh"), //refresh token 발급
+                new AntPathRequestMatcher("/register/verify/**"), //mail server 요청 관련 기능 (ChanHa added)
+//                new AntPathRequestMatcher("/**"), //mail server 요청 관련 기능 (ChanHa added)
                 new AntPathRequestMatcher("/user/auth/**"), //admin, user register
                 new AntPathRequestMatcher("/workouts/**"), //workout 검색 조회 - 비회원 접근 가능 기능
                 new AntPathRequestMatcher("/supplements/**"), //supplement 검색 조회 - 비회원 접근 가능 기능
