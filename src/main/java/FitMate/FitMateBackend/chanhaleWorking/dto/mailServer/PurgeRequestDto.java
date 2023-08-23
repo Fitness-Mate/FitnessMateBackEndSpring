@@ -9,9 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UuidDto {
-    private String status;
-    private String mailAddress;
-    private String uuid;
-
+public class PurgeRequestDto {
+    private String purge = "purge";
 }
