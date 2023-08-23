@@ -3,6 +3,7 @@ package FitMate.FitMateBackend.chanhaleWorking.controller;
 import FitMate.FitMateBackend.chanhaleWorking.config.argumentresolver.Login;
 import FitMate.FitMateBackend.chanhaleWorking.dto.UserArgResolverDto;
 import FitMate.FitMateBackend.chanhaleWorking.dto.UserDto;
+import FitMate.FitMateBackend.chanhaleWorking.dto.mailServer.UuidVerifyingRequestDto;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.DeleteUserForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.RegisterForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.UpdatePasswordForm;
@@ -10,12 +11,14 @@ import FitMate.FitMateBackend.chanhaleWorking.form.user.UpdateUserForm;
 import FitMate.FitMateBackend.chanhaleWorking.service.UserService;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.AuthException;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.AuthResponse;
+import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * User 생성, 수정 삭제에 관한 컨트롤러
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 @ResponseBody
 public class UserController {
     private final UserService userService;
+    private static final RestTemplate restTemplate = new RestTemplate();
 
 //    @PostMapping
 //    public String register(@RequestBody RegisterForm registerForm) {
@@ -128,6 +132,29 @@ public class UserController {
             return ResponseEntity.status(400).body(errMsg); // errMsg 참고
         if (userService.checkDuplicatedLoginEmail(registerForm.getLoginEmail()))
             return ResponseEntity.status(400).body("아이디 중복"); // 아이디 중복
+        return ResponseEntity.ok(userService.registerWithJwt(registerForm, "Customer"));
+    }
+    @PostMapping("/auth/withuuid")
+    public ResponseEntity<?> userRegisterWithJwtAndUuid(@RequestBody RegisterForm registerForm) {
+        log.info(registerForm.getLoginEmail());
+        log.info("REGISTER Customer [{}] [{}]", registerForm.getUserName(), registerForm.getSex());
+        String errMsg = registerForm.validateFields();
+        if (!errMsg.equals("ok"))
+            return ResponseEntity.status(400).body(errMsg); // errMsg 참고
+        if (userService.checkDuplicatedLoginEmail(registerForm.getLoginEmail()))
+            return ResponseEntity.status(400).body("아이디 중복"); // 아이디 중복
+
+        // 메일 인증 uuid 체크 관련 기능
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(ServiceConst.MAIL_SERVER_MEDIA_TYPE));
+        HttpEntity<UuidVerifyingRequestDto> httpEntity = new HttpEntity<>(new UuidVerifyingRequestDto(registerForm.getLoginEmail(), registerForm.getUuid()), headers);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(ServiceConst.MAIL_SERVER_ADDRESS.concat("/verify/uuid"), httpEntity, String.class);
+        if (responseEntity.getStatusCode() != HttpStatusCode.valueOf(200)) {
+            log.info("error status code responded for /verify/uuid request [{}]",responseEntity.getStatusCode());
+            return ResponseEntity.status(400).body(responseEntity.getBody());
+        }
+        //
+
         return ResponseEntity.ok(userService.registerWithJwt(registerForm, "Customer"));
     }
 
