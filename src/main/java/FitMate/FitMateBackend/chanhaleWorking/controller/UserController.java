@@ -145,11 +145,15 @@ public class UserController {
             return ResponseEntity.status(400).body("아이디 중복"); // 아이디 중복
 
         // 메일 인증 uuid 체크 관련 기능
+        if (registerForm.getUuid() == null) {
+            log.info("uuid 비어있음");
+            return ResponseEntity.status(400).body("blank uuid");
+        }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(ServiceConst.MAIL_SERVER_MEDIA_TYPE));
         HttpEntity<UuidVerifyingRequestDto> httpEntity = new HttpEntity<>(new UuidVerifyingRequestDto(registerForm.getLoginEmail(), registerForm.getUuid()), headers);
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(ServiceConst.MAIL_SERVER_ADDRESS.concat("/verify/uuid"), httpEntity, String.class);
-        if (responseEntity.getStatusCode() != HttpStatusCode.valueOf(200) || responseEntity.getBody().equals("ok")) {
+        if (responseEntity.getStatusCode() != HttpStatusCode.valueOf(200) || !responseEntity.getBody().equals("ok")) {
             log.info("error status code responded for /verify/uuid request [{}]",responseEntity.getStatusCode());
             return ResponseEntity.status(400).body(responseEntity.getBody());
         }
