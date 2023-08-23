@@ -25,6 +25,7 @@ public class RegisterForm {
     private Float lowerBodyFat = 17.0f;
     private Float upperMuscleMass = 40.0f;
     private Float lowerMuscleMass = 40.0f;
+    private String uuid;
 
     public String validateFields(){
         String regexPattern = "^(.+)@(\\S+)$";
