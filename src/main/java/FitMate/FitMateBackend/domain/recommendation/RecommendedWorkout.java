@@ -24,27 +24,31 @@ public class RecommendedWorkout {
 
     private String englishName;
     private String koreanName;
-    private String videoLink;
     private String imgPath;
+
+    private String weight;
+    private String repeat;
+    private String set;
 
     @Column(length = 2000)
     private String workoutDescription;
 
-    @Column(length = 2000)
-    private String korDescription;
+//    @Column(length = 2000)
+//    private String korDescription;
+//
+//    @Column(length = 2000)
+//    private String engDescription;
 
-    @Column(length = 2000)
-    private String engDescription;
-
-    public void update(WorkoutRecommendation workoutRecommendation, String englishName, String koreanName, String videoLink, String imgPath,
-                       String workoutDescription, String engDescription, String korDescription) {
+    public void update(WorkoutRecommendation workoutRecommendation, String englishName, String koreanName, String imgPath,
+                       String workoutDescription, String weight, String repeat, String set) {
         this.workoutRecommendation = workoutRecommendation;
         this.englishName = englishName;
         this.koreanName = koreanName;
-        this.videoLink = videoLink;
         this.imgPath = imgPath;
         this.workoutDescription = workoutDescription;
-        this.korDescription = korDescription;
-        this.engDescription = engDescription;
+
+        this.weight = weight;
+        this.repeat = repeat;
+        this.set = set;
     }
 }

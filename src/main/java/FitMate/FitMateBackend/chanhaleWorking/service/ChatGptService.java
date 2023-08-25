@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Objects;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -59,9 +61,9 @@ public class ChatGptService {
         HttpEntity<ChatGptRequestDto> httpEntity = new HttpEntity<>(new ChatGptRequestDto(question), headers);
 
         ResponseEntity<ChatGptResponseDto> responseEntity = restTemplate.postForEntity(ChatGptConfig.URL, httpEntity, ChatGptResponseDto.class);
-        log.info("\n======================\n{} 에 대한 response 도착! \n======================\n{}", question, responseEntity.getBody().getChoices().get(0).getMessage().get("content"));
+        String gptResponse = Objects.requireNonNull(responseEntity.getBody()).getChoices().get(0).getMessage().get("content");
 
-        String gptResponse = responseEntity.getBody().getChoices().get(0).getMessage().get("content");
+        log.info("\n======================\n{} 에 대한 response 도착! \n======================\n{}", question, gptResponse);
         workoutRecommendationService.updateResponse(userId, recommendationId, gptResponse);
     }
 }

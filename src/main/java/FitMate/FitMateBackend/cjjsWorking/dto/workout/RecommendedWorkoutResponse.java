@@ -20,7 +20,7 @@ public class RecommendedWorkoutResponse {
         this.date = date;
         this.question = question;
         for (RecommendedWorkout recommend : recommends) {
-            this.recommends.add(new RecommendData(recommend.getKoreanName(), recommend.getVideoLink(), recommend.getKorDescription(), recommend.getImgPath()));
+            this.recommends.add(new RecommendData(recommend.getKoreanName(), recommend.getWorkoutDescription(), recommend.getImgPath()));
         }
     }
 }

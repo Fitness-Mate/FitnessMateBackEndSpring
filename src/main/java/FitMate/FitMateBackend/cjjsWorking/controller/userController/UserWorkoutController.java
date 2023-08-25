@@ -22,6 +22,7 @@ public class UserWorkoutController {
 
     @PostMapping("workouts/search/list/{page}") //운동 페이지검색 (TEST 완료)
     public ResponseEntity<List<WorkoutDto>> searchWorkouts_page(@PathVariable("page") int page, @RequestBody UserWorkoutRequest request) {
+        System.out.println("sdf");
         return ResponseEntity.ok(
                 workoutService.searchAll(page, request).stream()
                 .map(WorkoutDto::new)

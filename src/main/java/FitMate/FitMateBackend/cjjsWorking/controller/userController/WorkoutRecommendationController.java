@@ -38,12 +38,9 @@ public class WorkoutRecommendationController {
                 createWorkoutRecommendation(userId, request);
 
         WorkoutRecommendation workoutRecommendation = workoutRecommendationService.findById(recommendationId);
+        String question = workoutRecommendation.getQueryText();
 
-        String question = workoutService.getAllWorkoutToString().concat("\n");
-        question = question.concat(workoutRecommendation.getQueryText());
-        workoutRecommendationRepository.updateQuery(workoutRecommendation);
         log.info(question);
-
         chatGptService.sendWorkoutRequest(userId, workoutRecommendation.getId(), question);
         return recommendationId;
     }

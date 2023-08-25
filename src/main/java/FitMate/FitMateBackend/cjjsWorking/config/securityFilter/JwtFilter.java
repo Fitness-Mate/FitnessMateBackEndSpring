@@ -39,20 +39,18 @@ public class JwtFilter extends OncePerRequestFilter {
         final String loginId;
         final String uri = request.getRequestURI();;
 
-        if(uri.equals("/auth/refresh")) { //토큰 재발급을 위한 요청인 경우 //
+        if(uri.equals("/auth/refresh")) { //토큰 재발급을 위한 요청인 경우
             filterChain.doFilter(request, response);
             return;
         }
         if(authHeader == null) {
-            if(isPublic(uri)) {
+            if(isPublic(uri)) { //inPublic 요청 이외에는 토큰이 없으면 예외처리
                 filterChain.doFilter(request, response);
                 return;
             }
-            //inPublic 요청 이외에는 토큰이 없으면 예외처리
             throw new JwtFilterException(CustomErrorCode.JWT_NOT_FOUND_EXCEPTION);
         }
-        if(!authHeader.startsWith("Bearer ")) {
-            //Bearer로 시작하지 않을 경우
+        if(!authHeader.startsWith("Bearer ")) { //Bearer로 시작하지 않을 경우
             throw new JwtFilterException(CustomErrorCode.NON_START_BEARER_EXCEPTION);
         }
 
@@ -60,7 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
         loginId = JwtService.getLoginEmail(accessToken); //JwtFilterException 발생 부분
 
         log.info("loginId: [{}]", loginId);
-        //권한 관련 예외처리 -> 권한이 없습니다! 이런식으로
+        //권한 관련 예외처리 -> 권한이 없습니다! 이런식으로 ->
         if(loginId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(loginId);
 

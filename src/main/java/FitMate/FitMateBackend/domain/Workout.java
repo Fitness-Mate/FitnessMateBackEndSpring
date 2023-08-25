@@ -23,6 +23,10 @@ public class Workout {
         inverseJoinColumns = @JoinColumn(name = "body_part_id"))
     private List<BodyPart> bodyParts = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "machine_id")
+    private Machine machine;
+
     private String englishName;
     private String koreanName;
     private String videoLink;
