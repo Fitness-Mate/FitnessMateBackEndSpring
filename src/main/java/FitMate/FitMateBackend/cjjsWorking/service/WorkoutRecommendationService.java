@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hibernate.query.sqm.tree.SqmNode.log;
 
@@ -30,10 +31,8 @@ public class WorkoutRecommendationService {
     private final WorkoutRecommendationRepository workoutRecommendationRepository;
     private final BodyPartRepository bodyPartRepository;
     private final MachineRepository machineRepository;
-    private final WorkoutRepository workoutRepository;
     private final WorkoutService workoutService;
     private final RecommendedWorkoutRepository recommendedWorkoutRepository;
-    private final DeepLTranslateService deepLTranslateService;
 
     @Transactional
     public Long createWorkoutRecommendation(Long userId, WorkoutRecommendationRequest request) {
@@ -51,13 +50,14 @@ public class WorkoutRecommendationService {
     }
 
     @Transactional
-    public void updateResponse(Long userId, Long recommendationId, String response) throws Exception {
+    public void updateResponse(Long recommendationId, String response) throws Exception {
         WorkoutRecommendation workoutRecommendation = workoutRecommendationRepository.findById(recommendationId);
         //response가 [ 로 시작하지 않을때에 대한 exception 처리필요
 
         String[] sentences = response.split("\n");
         for (String sentence : sentences) {
             RecommendedWorkout recommendedWorkout = new RecommendedWorkout();
+
             String[] info = sentence.split("]");
             long workoutId = Long.parseLong(info[0].substring(1));
             String weight = info[1].substring(1);
@@ -65,20 +65,14 @@ public class WorkoutRecommendationService {
             String set = info[3].substring(1);
 
             //find workout
-            Workout workout = workoutRepository.findById(workoutId).orElse(null);
-            System.out.println("====================================");
-            System.out.println(workout.getKoreanName());
-            System.out.println("====================================");
+            Workout workout = workoutService.findOne(workoutId);
 
-            if(workout == null) return;
-
-//            //eng, kor description 생성
-//            String engDescription = sentence.substring(endIdx+4);
-//            String korDescription = deepLTranslateService.sendRequest(engDescription);
-            String accessURL = S3FileService.getAccessURL(ServiceConst.S3_DIR_WORKOUT, workout.getImgFileName());
-//
-            recommendedWorkout.update(workoutRecommendation, workout.getEnglishName(), workout.getKoreanName(),
-                    accessURL, workout.getDescription(), weight, repeat, set);
+            recommendedWorkout.update(
+                    workoutRecommendation,
+                    workout,
+                    weight,
+                    repeat,
+                    set);
             workoutRecommendation.getRws().add(recommendedWorkout);
             recommendedWorkoutRepository.save(recommendedWorkout);
         }

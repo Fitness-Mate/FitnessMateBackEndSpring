@@ -54,7 +54,7 @@ public class ChatGptService {
     }
 
     @Async("threadPoolTaskExecutor")
-    public void sendWorkoutRequest(Long userId, Long recommendationId, String question) throws Exception {
+    public void sendWorkoutRequest(Long recommendationId, String question) throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(ChatGptConfig.MEDIA_TYPE));
         headers.add(ChatGptConfig.AUTHORIZATION, ChatGptConfig.BEARER + apiKey);
@@ -64,6 +64,6 @@ public class ChatGptService {
         String gptResponse = Objects.requireNonNull(responseEntity.getBody()).getChoices().get(0).getMessage().get("content");
 
         log.info("\n======================\n{} 에 대한 response 도착! \n======================\n{}", question, gptResponse);
-        workoutRecommendationService.updateResponse(userId, recommendationId, gptResponse);
+        workoutRecommendationService.updateResponse(recommendationId, gptResponse);
     }
 }
