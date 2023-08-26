@@ -13,10 +13,12 @@ import java.util.List;
 @NoArgsConstructor
 public class RecommendedWorkoutResponse {
     private List<RecommendData> recommends = new ArrayList<>(); //추천 운동
+    private LocalDate date;
 
     public RecommendedWorkoutResponse(List<RecommendedWorkout> recommends) {
         for (RecommendedWorkout recommend : recommends) {
             this.recommends.add(new RecommendData(recommend));
         }
+        this.date = recommends.get(0).getWorkoutRecommendation().getDate();
     }
 }
