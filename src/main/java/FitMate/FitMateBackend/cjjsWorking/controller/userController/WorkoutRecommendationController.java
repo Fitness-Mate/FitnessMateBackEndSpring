@@ -38,13 +38,10 @@ public class WorkoutRecommendationController {
                 createWorkoutRecommendation(userId, request);
 
         WorkoutRecommendation workoutRecommendation = workoutRecommendationService.findById(recommendationId);
+        String question = workoutRecommendation.getQueryText();
 
-        String question = workoutService.getAllWorkoutToString().concat("\n");
-        question = question.concat(workoutRecommendation.getQueryText());
-        workoutRecommendationRepository.updateQuery(workoutRecommendation);
         log.info(question);
-
-        chatGptService.sendWorkoutRequest(userId, workoutRecommendation.getId(), question);
+        chatGptService.sendWorkoutRequest(workoutRecommendation.getId(), question);
         return recommendationId;
     }
 
@@ -62,8 +59,6 @@ public class WorkoutRecommendationController {
     @GetMapping("recommendation/workout/history/{workoutRecommendationId}") //운동 추천 history 단건 요청
     public RecommendedWorkoutResponse findRecommendedWorkout(@PathVariable("workoutRecommendationId") Long workoutRecommendationId) {
         List<RecommendedWorkout> findRecommend = recommendedWorkoutService.findById(workoutRecommendationId);
-        WorkoutRecommendation wr = workoutRecommendationService.findById(workoutRecommendationId);
-
-        return new RecommendedWorkoutResponse(wr.getDate(), wr.getQueryText(), findRecommend);
+        return new RecommendedWorkoutResponse(findRecommend);
     }
 }

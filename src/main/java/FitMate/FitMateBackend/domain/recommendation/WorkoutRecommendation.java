@@ -18,9 +18,9 @@ public class WorkoutRecommendation extends Recommendation {
     private List<RecommendedWorkout> rws = new ArrayList<>();
 
     public static WorkoutRecommendation createWorkoutRecommendation
-            (BodyData bodyData, User user, List<BodyPart> bodyParts, List<Machine> machines) {
+            (User user, List<BodyPart> bodyParts, List<Machine> machines, String workoutList) {
         WorkoutRecommendation workoutRecommendation = new WorkoutRecommendation();
-        workoutRecommendation.setBodyData(bodyData);
+        workoutRecommendation.setBodyData(user.getBodyDataHistory().get(0));
         workoutRecommendation.setUser(user);
 
         workoutRecommendation.setRecommendationType("Workout");
@@ -28,16 +28,28 @@ public class WorkoutRecommendation extends Recommendation {
         String bodyPartQuery = updateBodyPartQuery(bodyParts);
         String machineQuery = updateMachineQuery(machines);
 
-        String qString = "suggest up to 3 workouts with id and description in this list and id should only be wrapped in <<<>>>. "
-            + "also, you have to explain including weight and number of sets and considering sex and body data described later."
-            + "present each workout as a single line.\nFor a ";
-        qString = qString.concat(user.getSex().equals("남성") ? "man" : "woman").concat(" who is ");
-        qString = qString.concat(bodyData.describe());
+        String qString = "You have to recommend an exercise considering my gender, height, weight, body composition information," +
+                " and the exercise part and exercise equipment I want. I'm ";
 
-        qString = qString.concat(user.getSex().equals("남성") ? " He" : " She").concat(" wants to work out").
-                concat(user.getSex().equals("남성") ? " His " : " Her ").concat(bodyPartQuery);
-        if(machineQuery != null) qString = qString.concat(" using ").concat(machineQuery);
-        qString = qString.concat(".");
+        qString = qString.concat(user.getSex().equals("남성") ? "male, " : "female, ").concat(user.getBodyDataHistory().get(0).describe());
+        qString = qString.concat(" The part I want to exercise is my ");
+        qString = qString.concat(bodyPartQuery).concat(" and I want to use a ");
+        if(machineQuery != null) qString = qString.concat(machineQuery).concat("\n\n");
+
+        qString = qString.concat("When answering, be sure to observe the requirements below.\n" +
+                "1. Find a workout from the list below and recommend it.\n");
+        qString = qString.concat(workoutList).concat("\n\n");
+        qString = qString.concat("2. When answering, do not add any comments," +
+                " and answer the three exercises in the form " +
+                "[workout index in list] [weight(kg)] [repeat] [set] in exactly three lines, one line for each exercise. " +
+                "Below is an example for you to answer\n" +
+                "[1][40kg][12][4]\n" +
+                "[2][60kg][10][5]\n" +
+                "[20][40kg][12][4]\n\n");
+        qString = qString.concat("3. When recommending a weight, " +
+                "please suggest an exact number (kg) instead of an ambiguous expression such as a medium weight.\n\n");
+        qString = qString.concat("4. Only recommend exercises that use the exercise equipment I suggested. " +
+                "The recommended exercise and the equipment used must match.");
 
         workoutRecommendation.setQueryText(qString);
         return workoutRecommendation;
@@ -59,6 +71,7 @@ public class WorkoutRecommendation extends Recommendation {
             if (i == (machines.size()-1)) machineQuery = machineQuery.concat(" and ").concat(machines.get(i).getEnglishName());
             else machineQuery = machineQuery.concat(", ").concat(machines.get(i).getEnglishName());
         }
+        machineQuery = machineQuery.concat(" for exercise equipment.");
         return machineQuery;
     }
 }

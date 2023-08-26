@@ -12,15 +12,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class RecommendedWorkoutResponse {
-    private LocalDate date; //추천 일자
-    private String question; //추천 요청 쿼리
     private List<RecommendData> recommends = new ArrayList<>(); //추천 운동
+    private LocalDate date;
 
-    public RecommendedWorkoutResponse(LocalDate date, String question, List<RecommendedWorkout> recommends) {
-        this.date = date;
-        this.question = question;
+    public RecommendedWorkoutResponse(List<RecommendedWorkout> recommends) {
         for (RecommendedWorkout recommend : recommends) {
-            this.recommends.add(new RecommendData(recommend.getKoreanName(), recommend.getVideoLink(), recommend.getKorDescription(), recommend.getImgPath()));
+            this.recommends.add(new RecommendData(recommend));
         }
+        this.date = recommends.get(0).getWorkoutRecommendation().getDate();
     }
 }

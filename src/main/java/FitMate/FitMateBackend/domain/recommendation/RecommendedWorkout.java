@@ -1,13 +1,9 @@
 package FitMate.FitMateBackend.domain.recommendation;
 
 import FitMate.FitMateBackend.domain.Workout;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -22,29 +18,21 @@ public class RecommendedWorkout {
     @JoinColumn(name = "recommend_id")
     private WorkoutRecommendation workoutRecommendation;
 
-    private String englishName;
-    private String koreanName;
-    private String videoLink;
-    private String imgPath;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "workout_id")
+    private Workout workout;
 
-    @Column(length = 2000)
-    private String workoutDescription;
+    private String weight;
+    private String repeats;
+    private String sets;
 
-    @Column(length = 2000)
-    private String korDescription;
-
-    @Column(length = 2000)
-    private String engDescription;
-
-    public void update(WorkoutRecommendation workoutRecommendation, String englishName, String koreanName, String videoLink, String imgPath,
-                       String workoutDescription, String engDescription, String korDescription) {
+    public void update(WorkoutRecommendation workoutRecommendation,
+                       Workout workout, String weight,
+                       String repeats, String sets) {
         this.workoutRecommendation = workoutRecommendation;
-        this.englishName = englishName;
-        this.koreanName = koreanName;
-        this.videoLink = videoLink;
-        this.imgPath = imgPath;
-        this.workoutDescription = workoutDescription;
-        this.korDescription = korDescription;
-        this.engDescription = engDescription;
+        this.workout = workout;
+        this.weight = weight;
+        this.repeats = repeats;
+        this.sets = sets;
     }
 }
