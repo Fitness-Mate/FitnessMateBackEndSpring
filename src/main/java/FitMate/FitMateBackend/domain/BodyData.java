@@ -1,6 +1,7 @@
 package FitMate.FitMateBackend.domain;
 
 import FitMate.FitMateBackend.chanhaleWorking.form.bodyData.BodyDataForm;
+import FitMate.FitMateBackend.consts.ServiceConst;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -25,20 +26,18 @@ public class BodyData {
     private LocalDate date;
     private Float height;
     private Float weight;
-    private Float upperBodyFat;
-    private Float lowerBodyFat;
-    private Float upperMuscleMass;
-    private Float lowerMuscleMass;
+    private Float bodyFat;
+    private Float muscleMass;
+    private Float upDownBalance;
 
     public static BodyData createBodyData(BodyDataForm bodyDataForm) {
         BodyData bodyData = new BodyData();
         bodyData.date = bodyDataForm.getDate();
         bodyData.height = bodyDataForm.getHeight();
         bodyData.weight = bodyDataForm.getWeight();
-        bodyData.upperBodyFat = bodyDataForm.getUpperBodyFat();
-        bodyData.lowerBodyFat = bodyDataForm.getLowerBodyFat();
-        bodyData.upperMuscleMass = bodyDataForm.getUpperMuscleMass();
-        bodyData.lowerMuscleMass = bodyDataForm.getLowerMuscleMass();
+        bodyData.bodyFat = bodyDataForm.getBodyFat();
+        bodyData.muscleMass = bodyDataForm.getMuscleMass();
+        bodyData.upDownBalance = bodyDataForm.getUpDownBalance();
         return bodyData;
     }
 
@@ -48,12 +47,33 @@ public class BodyData {
 
     public String describe() {
         String str = "";
-        return str.concat(height.toString()).concat("cm tall, ")
-                .concat("weights ").concat(weight.toString()).concat("kg, ")
-                .concat("has ").concat(upperBodyFat.toString()).concat("% upper body fat, ")
-                .concat(lowerBodyFat.toString()).concat("% lower body fat, ")
-                .concat(upperMuscleMass.toString()).concat("% upper body skeletal muscle mass, and ")
-                .concat(lowerMuscleMass.toString()).concat("% lower body skeletal muscle mass.");
+        StringBuilder sb = new StringBuilder(str);
+        String sex;
+        if (user.getSex().equals(ServiceConst.SEX_MALE)) {
+            sex = "His";
+        } else {
+            sex = "Her";
+        }
+        sb.append(height.toString()).append("cm tall, ")
+                .append("weights ").append(weight).append("kg, ")
+                .append("has ").append(bodyFat).append("% body fat, ")
+                .append(muscleMass).append("% muscle mass. ");
+        sb.append(sex);
+        if (upDownBalance < 0.3f) {
+            sb.append(" lower body is very well developed but ").append(sex).append(" upper body is not.");
+        }
+        else if (0.3f <= upDownBalance && upDownBalance <0.45f ) {
+            sb.append(" lower body is slightly more developed than ").append(sex).append(" upper body.");
+        }
+        else if (0.45f <= upDownBalance && upDownBalance <=0.55f ) {
+            sb.append(" lower body and ").append(sex).append(" upper body is equally developed");
+        }
+        else if (0.55f < upDownBalance && upDownBalance <=0.7f ) {
+            sb.append(" upper body is slightly more developed than ").append(sex).append(" lower body.");
+        }else if (0.7f<upDownBalance ) {
+            sb.append(" upper body is very well developed but ").append(sex).append(" lower body is not.");
+        }
+        return sb.toString();
     }
 
 }
