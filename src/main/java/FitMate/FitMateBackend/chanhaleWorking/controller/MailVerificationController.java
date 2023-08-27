@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -127,10 +128,8 @@ public class MailVerificationController {
             result.setMessage(responseEntity.getBody());
             return result;
         }
-        result.setStatus("ok");
-        result.setMessage(userService.getUserPassword(codeVerifyingRequestForm.getMailAddress()));
 
-        return result;
+        return userService.updateUserPassword(codeVerifyingRequestForm.getMailAddress());
     }
     @PostMapping("/register/verify/purge")
     @ResponseBody

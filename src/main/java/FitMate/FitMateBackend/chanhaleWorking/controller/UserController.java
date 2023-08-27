@@ -75,7 +75,7 @@ public class UserController {
     public String updateUserPassword(@Login UserArgResolverDto loginUser, @RequestBody UpdatePasswordForm form) {
         log.info("old={}, new={}", form.getOldPassword(), form.getNewPassword());
         User user = userService.getUserWithId(loginUser.getUserId());
-        if (user.getPassword().equals(form.getOldPassword())) {
+        if (userService.checkPassword(loginUser.getUserId(), form.getOldPassword())) {
             userService.updateUserPassword(loginUser.getUserId(), form.getNewPassword());
             return "ok";
         }
