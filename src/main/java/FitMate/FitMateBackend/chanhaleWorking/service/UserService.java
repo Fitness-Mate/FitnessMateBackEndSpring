@@ -60,6 +60,16 @@ public class UserService {
         return userRepository.findOne(userId);
     }
 
+    public String getUserPassword(String loginEmail) {
+        User user = userRepository.findByLoginEmail(loginEmail)
+                .filter(u -> u.getLoginEmail().equals(loginEmail))
+                .orElse(null);
+        if (user == null) {
+            return "no Matching email";
+        }
+        return user.getPassword();
+    }
+
 
     //🔽🔽🔽 Jwt 🔽🔽🔽
     private final JwtService jwtService;

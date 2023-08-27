@@ -152,7 +152,7 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(ServiceConst.MAIL_SERVER_MEDIA_TYPE));
         HttpEntity<UuidVerifyingRequestDto> httpEntity = new HttpEntity<>(new UuidVerifyingRequestDto(registerForm.getLoginEmail(), registerForm.getUuid()), headers);
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(ServiceConst.MAIL_SERVER_ADDRESS.concat("/verify/uuid"), httpEntity, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(ServiceConst.MAIL_SERVER_ADDRESS.concat("/register/verify/uuid"), httpEntity, String.class);
         if (responseEntity.getStatusCode() != HttpStatusCode.valueOf(200) || !responseEntity.getBody().equals("ok")) {
             log.info("error status code responded for /verify/uuid request [{}]",responseEntity.getStatusCode());
             return ResponseEntity.status(400).body(responseEntity.getBody());

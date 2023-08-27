@@ -21,10 +21,9 @@ public class RegisterForm {
     private LocalDate birthDate;
     private Float height = 170.0f;
     private Float weight = 70.0f;
-    private Float upperBodyFat = 17.0f;
-    private Float lowerBodyFat = 17.0f;
-    private Float upperMuscleMass = 40.0f;
-    private Float lowerMuscleMass = 40.0f;
+    private Float bodyFat = 17.0f;
+    private Float muscleMass = 40.0f;
+    private Float upDownBalance = 0.5f;
     private String uuid;
 
     public String validateFields(){
@@ -39,21 +38,19 @@ public class RegisterForm {
             return "너무 짧은 password: 8자리 이상 필요";
         if (!sex.equals("남성") && !sex.equals("여성"))
             return "성별 선택 오류: 남성 또는 여성";
-        if (height < 20 || height>350)
-            return "적절하지 않은 신장: 20cm 이상, 350cm 이하";
-        if (weight < 30 || height>350)
+        if (height < 80 || height>350)
+            return "적절하지 않은 신장: 80cm 이상, 350cm 이하";
+        if (weight < 30 || weight>350)
             return "적절하지 않은 몸무게: 30kg 이상, 350kg 이하 ";
-        if (upperBodyFat < 0 || upperBodyFat > 95)
-            return "적절하지 않은 상체 체지방량 0% 이상, 95%이하";
-        if (lowerBodyFat < 0 || lowerBodyFat > 95)
-            return "적절하지 않은 하체 체지방량 0% 이상, 95%이하";
-        if (upperMuscleMass < 0 || upperMuscleMass > 95)
-            return "적절하지 않은 상체 골격근량 0% 이상, 95%이하";
-        if (lowerMuscleMass < 0 || lowerMuscleMass > 95)
-            return "적절하지 않은 하체 골격근량 0% 이상, 95%이하";
+        if (bodyFat < 0 || bodyFat > 95)
+            return "적절하지 않은 체지방량 0% 이상, 95%이하";
+        if (muscleMass < 0 || muscleMass > 95)
+            return "적절하지 않은 골격근량 0% 이상, 95%이하";
+        if (upDownBalance < 0f || upDownBalance > 1f)
+            return "적절하지 않은 체형 밸런스 0.0 이상, 1.0이하";
         return "ok";
     }
     public BodyDataForm getBodyDataForm(){
-        return new BodyDataForm(date, height, weight, upperBodyFat, lowerBodyFat, upperMuscleMass, lowerMuscleMass);
+        return new BodyDataForm(date, height, weight, bodyFat, muscleMass, upDownBalance);
     }
 }
