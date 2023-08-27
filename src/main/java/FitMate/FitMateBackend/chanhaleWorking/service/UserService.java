@@ -1,5 +1,6 @@
 package FitMate.FitMateBackend.chanhaleWorking.service;
 
+import FitMate.FitMateBackend.chanhaleWorking.dto.GeneralResponseDto;
 import FitMate.FitMateBackend.chanhaleWorking.dto.UserArgResolverDto;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.RegisterForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.UpdateUserForm;
@@ -11,6 +12,8 @@ import FitMate.FitMateBackend.cjjsWorking.service.storageService.RedisCacheServi
 import FitMate.FitMateBackend.domain.BodyData;
 import FitMate.FitMateBackend.domain.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
 
@@ -46,9 +50,29 @@ public class UserService {
 
     }
 
+    public boolean checkPassword(Long userId, String password) {
+        User user = userRepository.findOne(userId);
+        return passwordEncoder.matches(password, user.getPassword());
+    }
+
     @Transactional
     public void updateUserPassword(Long userId, String newPassword) {
-        userRepository.findOne(userId).updatePassword(newPassword);
+        userRepository.findOne(userId).updatePassword(passwordEncoder.encode(newPassword));
+    }
+
+    @Transactional
+    public GeneralResponseDto updateUserPassword(String loginEmail) {
+        GeneralResponseDto result = new GeneralResponseDto();
+        User user = userRepository.findByLoginEmail(loginEmail).orElse(null);
+        if (user == null) {
+            result.setStatus("fail");
+            return result;
+        }
+        String newPassword = RandomStringUtils.randomAlphanumeric(8);
+        user.updatePassword(passwordEncoder.encode(newPassword));
+        result.setStatus("ok");
+        result.setMessage(newPassword);
+        return result;
     }
 
     @Transactional
