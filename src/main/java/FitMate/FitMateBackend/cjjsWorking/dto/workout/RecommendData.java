@@ -13,7 +13,7 @@ import java.util.List;
 public class RecommendData {
     private String koreanName;
     private String englishName;
-    private String machine;
+    private String machineName;
     private List<String> bodyPartKoreanName = new ArrayList<>();
     private String description;
     private String imgPath;
@@ -24,7 +24,7 @@ public class RecommendData {
     public RecommendData(RecommendedWorkout recommend) {
         this.koreanName = recommend.getWorkout().getKoreanName();
         this.englishName = recommend.getWorkout().getEnglishName();
-        this.machine = "dummy machine";
+        this.machineName = "dummy machine";
         this.description = recommend.getWorkout().getDescription();
         this.imgPath = S3FileService.getAccessURL(ServiceConst.S3_DIR_WORKOUT, recommend.getWorkout().getImgFileName());
         this.weight = recommend.getWeight();
