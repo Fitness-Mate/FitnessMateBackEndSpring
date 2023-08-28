@@ -19,10 +19,9 @@ public class BodyDataDto {
     private LocalDate date;
     private Float height;
     private Float weight;
-    private Float upperBodyFat;
-    private Float lowerBodyFat;
-    private Float upperMuscleMass;
-    private Float lowerMuscleMass;
+    private Float BodyFat;
+    private Float MuscleMass;
+    private Float upDownBalance;
 
     public static BodyDataDto createBodyDataDto(BodyData bodyData) {
         BodyDataDto bodyDataDto = new BodyDataDto();
@@ -31,10 +30,9 @@ public class BodyDataDto {
             bodyDataDto.date = bodyData.getDate();
             bodyDataDto.height = bodyData.getHeight();
             bodyDataDto.weight = bodyData.getWeight();
-            bodyDataDto.upperBodyFat = bodyData.getUpperBodyFat();
-            bodyDataDto.lowerBodyFat = bodyData.getLowerBodyFat();
-            bodyDataDto.upperMuscleMass = bodyData.getUpperMuscleMass();
-            bodyDataDto.lowerMuscleMass = bodyData.getLowerMuscleMass();
+            bodyDataDto.BodyFat = bodyData.getBodyFat();
+            bodyDataDto.MuscleMass = bodyData.getMuscleMass();
+            bodyDataDto.upDownBalance = bodyData.getUpDownBalance();
         }
         return bodyDataDto;
     }

@@ -84,6 +84,9 @@ public class JwtFilter extends OncePerRequestFilter {
         // mail 인증 관련 요청
         if(uri.startsWith("/register/verify") || uri.startsWith("/user/auth/withuuid")) return true;
 
+        // 비밀번호 찾기 관련 요청
+        if(uri.startsWith("/password/verify")) return true;
+
         //비회원 접근 가능 workout 관련 요청
         if(uri.startsWith("/workouts")) return true;
 
