@@ -13,15 +13,17 @@ import java.util.List;
 @NoArgsConstructor
 public class RecommendedWorkoutResponse {
     private LocalDate date;
-    private String requestedBodyParts;
+    private List<String> requestedBodyParts = new ArrayList<>();
     private List<RecommendData> recommends = new ArrayList<>(); //추천 운동
-
 
     public RecommendedWorkoutResponse(List<RecommendedWorkout> recommends) {
         for (RecommendedWorkout recommend : recommends) {
             this.recommends.add(new RecommendData(recommend));
         }
         this.date = recommends.get(0).getWorkoutRecommendation().getDate();
-        this.requestedBodyParts = recommends.get(0).getWorkoutRecommendation().getRequestedBodyParts();
+        String[] bodyPartsKoreanName = recommends.get(0).getWorkoutRecommendation().getRequestedBodyParts().split(",");
+        for (String koreanName : bodyPartsKoreanName) {
+            this.requestedBodyParts.add(koreanName);
+        }
     }
 }

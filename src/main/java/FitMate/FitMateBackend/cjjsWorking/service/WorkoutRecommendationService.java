@@ -54,6 +54,7 @@ public class WorkoutRecommendationService {
         WorkoutRecommendation workoutRecommendation = workoutRecommendationRepository.findById(recommendationId);
         //response가 [ 로 시작하지 않을때에 대한 exception 처리필요
 
+        String[] bodyParts = workoutRecommendation.getRequestedBodyParts().split(",");
         String[] sentences = response.split("\n");
         for (String sentence : sentences) {
             RecommendedWorkout recommendedWorkout = new RecommendedWorkout();
@@ -66,6 +67,20 @@ public class WorkoutRecommendationService {
 
             //find workout
             Workout workout = workoutService.findOne(workoutId);
+
+            //사용자가 요청한 운동부위가 추천받은 운동에 관련된 운동부위에 포함되지 않을 경우 예외처리
+            boolean canRecommend = false;
+            for (String koreanName : bodyParts) {
+                BodyPart findBodyPart = bodyPartRepository.findByKoreanName(koreanName).orElse(null);
+                if(workout.getBodyParts().contains(findBodyPart)) {
+                    canRecommend= true;
+                    break;
+                }
+            }
+            if(!canRecommend) continue;
+
+            //사용자가 요청한 운동기구가 추천받은 운동에 관련된 운동기구에 포함되지 않을 경우 예외처리
+            //이거 하고 response에 관련 machine 추가해주기
 
             recommendedWorkout.update(
                     workoutRecommendation,
