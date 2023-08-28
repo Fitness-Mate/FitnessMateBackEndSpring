@@ -129,7 +129,16 @@ public class MailVerificationController {
             return result;
         }
 
-        return userService.updateUserPassword(codeVerifyingRequestForm.getMailAddress());
+        result = userService.updateUserPassword(codeVerifyingRequestForm.getMailAddress());
+        if (result.getMessage().equals("ok")){
+            log.info("new password creation request accepted! mail=[{}], newPassword=[{}]", codeVerifyingRequestForm.getMailAddress(), result.getMessage());
+            HttpEntity<SendNewPasswordDto> newPasswordDtoHttpEntity = new HttpEntity<>(new SendNewPasswordDto(codeVerifyingRequestForm.getMailAddress(), result.getMessage()), headers);
+            // TODO
+            // 전송 실패시 패스워드 롤백 처리 또는 전송 재시도하는 코드 구현해야 함
+            restTemplate.postForEntity(ServiceConst.MAIL_SERVER_ADDRESS.concat("/password/send/new"), newPasswordDtoHttpEntity, String.class);
+        }
+        result.setMessage("new password sent. check your email!");
+        return result;
     }
     @PostMapping("/register/verify/purge")
     @ResponseBody
