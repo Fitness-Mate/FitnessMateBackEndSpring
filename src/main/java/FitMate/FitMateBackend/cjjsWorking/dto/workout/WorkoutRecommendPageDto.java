@@ -12,11 +12,13 @@ import java.util.List;
 public class WorkoutRecommendPageDto {
     private Long recommendId;
     private LocalDate date;
+    private String requestedBodyParts;
     private List<RecommendData> workouts = new ArrayList<>();
 
     public WorkoutRecommendPageDto(WorkoutRecommendation workoutRecommendation) {
         this.recommendId = workoutRecommendation.getId();
         this.date = workoutRecommendation.getDate();
+        this.requestedBodyParts = workoutRecommendation.getRequestedBodyParts();
         for (RecommendedWorkout recommend : workoutRecommendation.getRws()) {
             workouts.add(new RecommendData(recommend));
         }

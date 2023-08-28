@@ -4,12 +4,14 @@ import FitMate.FitMateBackend.domain.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @DiscriminatorValue("Workout")
 public class WorkoutRecommendation extends Recommendation {
 
@@ -17,12 +19,19 @@ public class WorkoutRecommendation extends Recommendation {
     @OneToMany(mappedBy = "workoutRecommendation")
     private List<RecommendedWorkout> rws = new ArrayList<>();
 
+    private String requestedBodyParts;
+
     public static WorkoutRecommendation createWorkoutRecommendation
             (User user, List<BodyPart> bodyParts, List<Machine> machines, String workoutList) {
         WorkoutRecommendation workoutRecommendation = new WorkoutRecommendation();
         workoutRecommendation.setBodyData(user.getBodyDataHistory().get(0));
         workoutRecommendation.setUser(user);
-
+        String bodyPartString = "";
+        for (int i = 0; i < bodyParts.size(); i++) {
+            if(i == (bodyParts.size()-1)) bodyPartString = bodyPartString.concat(bodyParts.get(i).getKoreanName());
+            else bodyPartString = bodyPartString.concat(bodyParts.get(i).getKoreanName()).concat(",");
+        }
+        workoutRecommendation.setRequestedBodyParts(bodyPartString);
         workoutRecommendation.setRecommendationType("Workout");
 
         String bodyPartQuery = updateBodyPartQuery(bodyParts);
