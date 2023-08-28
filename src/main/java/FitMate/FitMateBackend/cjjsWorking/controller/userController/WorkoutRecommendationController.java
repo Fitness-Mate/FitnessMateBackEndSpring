@@ -25,10 +25,8 @@ import static org.hibernate.query.sqm.tree.SqmNode.log;
 public class WorkoutRecommendationController {
 
     private final WorkoutRecommendationService workoutRecommendationService;
-    private final WorkoutService workoutService;
     private final ChatGptService chatGptService;
     private final RecommendedWorkoutService recommendedWorkoutService;
-    private final WorkoutRecommendationRepository workoutRecommendationRepository;
     private final JwtService jwtService;
 
     @PostMapping("recommendation/workout") //운동 추천 요청
