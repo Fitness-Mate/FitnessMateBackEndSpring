@@ -44,6 +44,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Recommendation> recommendationHistory = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Routine> routines = new ArrayList<>();
+
     public void addBodyDataHistory(BodyData bodyData){
         bodyDataHistory.add(bodyData);
         bodyData.setUser(this);

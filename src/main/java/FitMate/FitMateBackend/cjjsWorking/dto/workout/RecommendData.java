@@ -29,7 +29,7 @@ public class RecommendData {
         this.imgPath = S3FileService.getAccessURL(ServiceConst.S3_DIR_WORKOUT, recommend.getWorkout().getImgFileName());
         this.weight = recommend.getWeight();
         this.repeat = recommend.getRepeats();
-        this.set = recommend.getSets(); //
+        this.set = recommend.getSets();
 
         for (BodyPart bodyPart : recommend.getWorkout().getBodyParts()) {
             this.bodyPartKoreanName.add(bodyPart.getKoreanName());
