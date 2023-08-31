@@ -33,11 +33,12 @@ public class Workout {
     private String description;
     private String imgFileName;
 
-    public void update(WorkoutForm form, String imgFileName) {
+    public void update(WorkoutForm form, Machine machine, String imgFileName) {
         this.englishName = form.getEnglishName();
         this.koreanName = form.getKoreanName();
         this.videoLink = form.getVideoLink();
         this.description = form.getDescription();
         this.imgFileName = imgFileName;
+        this.machine = machine;
     }
 }

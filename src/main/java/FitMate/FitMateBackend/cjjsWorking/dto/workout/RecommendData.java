@@ -24,7 +24,7 @@ public class RecommendData {
     public RecommendData(RecommendedWorkout recommend) {
         this.koreanName = recommend.getWorkout().getKoreanName();
         this.englishName = recommend.getWorkout().getEnglishName();
-        this.machineName = "dummy machine";
+        this.machineName = recommend.getWorkout().getMachine().getKoreanName();
         this.description = recommend.getWorkout().getDescription();
         this.imgPath = S3FileService.getAccessURL(ServiceConst.S3_DIR_WORKOUT, recommend.getWorkout().getImgFileName());
         this.weight = recommend.getWeight();

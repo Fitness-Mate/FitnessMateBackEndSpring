@@ -167,6 +167,7 @@ public class UserController {
         log.info(registerForm.getLoginEmail());
         log.info("REGISTER Admin [{}] [{}]", registerForm.getUserName(), registerForm.getSex());
         String errMsg = registerForm.validateFields();
+        log.info(errMsg);
         if (!errMsg.equals("ok"))
             return ResponseEntity.status(400).body(null); // errMsg 참고
         log.info(errMsg);

@@ -5,11 +5,13 @@ import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutDto;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.form.WorkoutForm;
+import FitMate.FitMateBackend.cjjsWorking.repository.MachineRepository;
 import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutRepository;
 import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutSearch;
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
+import FitMate.FitMateBackend.domain.Machine;
 import FitMate.FitMateBackend.domain.Workout;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class WorkoutService {
 
     private final WorkoutRepository workoutRepository;
+    private final MachineRepository machineRepository;
     private final BodyPartService bodyPartService;
     private final S3FileService s3FileService;
 
@@ -34,12 +37,15 @@ public class WorkoutService {
             throw new CustomException(CustomErrorCode.WORKOUT_ALREADY_EXIST_EXCEPTION);
 
         Workout workout = new Workout();
+        Machine machine = machineRepository.findByKoreanName(form.getMachineKoreanName()).orElse(null);
+        if(machine == null)
+            throw new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION);
 
         if(!form.getImage().isEmpty()) {
             String fileName = s3FileService.uploadImage(ServiceConst.S3_DIR_WORKOUT, form.getImage());
-            workout.update(form, fileName);
+            workout.update(form, machine, fileName);
         } else {
-            workout.update(form, ServiceConst.DEFAULT_WORKOUT_IMAGE_NAME);
+            workout.update(form, machine, ServiceConst.DEFAULT_WORKOUT_IMAGE_NAME);
         }
 
         for (String koreanName : form.getBodyPartKoreanName()) {
@@ -57,18 +63,19 @@ public class WorkoutService {
         if(!this.checkWorkoutNameDuplicate(form.getKoreanName(), form.getEnglishName()))
             throw new CustomException(CustomErrorCode.WORKOUT_ALREADY_EXIST_EXCEPTION);
 
-        Workout findWorkout = workoutRepository.findById(workoutId).orElse(null);
-        if(findWorkout == null)
-            throw new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION);
+        Workout findWorkout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION));
+        Machine findMachine = machineRepository.findByKoreanName(form.getMachineKoreanName())
+                .orElseThrow(() -> new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION));
 
         if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_WORKOUT_IMAGE_NAME)) //기존 이미지 삭제
             s3FileService.deleteImage(ServiceConst.S3_DIR_WORKOUT,findWorkout.getImgFileName());
 
         if(!form.getImage().isEmpty()) {
             String fileName = s3FileService.uploadImage(ServiceConst.S3_DIR_WORKOUT, form.getImage()); //s3에 이미지 추가
-            findWorkout.update(form, fileName);
+            findWorkout.update(form, findMachine, fileName);
         } else {
-            findWorkout.update(form, ServiceConst.DEFAULT_WORKOUT_IMAGE_NAME);
+            findWorkout.update(form, findMachine, ServiceConst.DEFAULT_WORKOUT_IMAGE_NAME);
         }
 
         for (BodyPart bodyPart : findWorkout.getBodyParts()) {
