@@ -1,6 +1,6 @@
 package FitMate.FitMateBackend.domain.myfit;
 
-import FitMate.FitMateBackend.cjjsWorking.dto.myfit.MyWorkoutCreateRequest;
+import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutCreateRequest;
 import FitMate.FitMateBackend.domain.Routine;
 import FitMate.FitMateBackend.domain.Workout;
 import jakarta.persistence.*;

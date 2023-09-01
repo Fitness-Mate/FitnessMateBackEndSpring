@@ -5,12 +5,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Table(name = "routine")
-@NoArgsConstructor
 public class Routine {
 
     @Id @GeneratedValue
@@ -22,7 +22,12 @@ public class Routine {
     private User user;
 
     @OneToMany(mappedBy = "routine", cascade = CascadeType.ALL)
-    private List<MyFit> myFit;
+    private final List<MyFit> myFit = new ArrayList<>();
 
-    private String name;
+    private String routineName;
+
+    public Routine(User user, String routineName) {
+        this.user = user;
+        this.routineName = routineName;
+    }
 }

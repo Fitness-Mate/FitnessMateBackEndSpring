@@ -7,7 +7,7 @@ import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.form.WorkoutForm;
 import FitMate.FitMateBackend.cjjsWorking.repository.MachineRepository;
 import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutRepository;
-import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutSearch;
+import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutSearch;
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;

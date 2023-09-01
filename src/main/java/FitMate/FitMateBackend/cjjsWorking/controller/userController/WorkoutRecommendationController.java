@@ -31,7 +31,7 @@ public class WorkoutRecommendationController {
 
     @PostMapping("recommendation/workout") //운동 추천 요청
     public Long getWorkoutRecommendation(@RequestHeader HttpHeaders header, @RequestBody WorkoutRecommendationRequest request) throws Exception {
-        Long userId = JwtService.getUserId(jwtService.getToken(header));
+        Long userId = JwtService.getUserId(JwtService.getToken(header));
         Long recommendationId = workoutRecommendationService.
                 createWorkoutRecommendation(userId, request);
 
@@ -46,7 +46,7 @@ public class WorkoutRecommendationController {
     @GetMapping("recommendation/workout/history/list/{page}") //운동 추천 history batch 요청
     public List<WorkoutRecommendPageDto> findRecommendedWorkouts_page(@RequestHeader HttpHeaders header,
                                                                       @PathVariable("page") int page) {
-        Long userId = JwtService.getUserId(jwtService.getToken(header));
+        Long userId = JwtService.getUserId(JwtService.getToken(header));
         List<WorkoutRecommendation> findWR = workoutRecommendationService.findAllWithWorkoutRecommendation(page, userId);
 
         return findWR

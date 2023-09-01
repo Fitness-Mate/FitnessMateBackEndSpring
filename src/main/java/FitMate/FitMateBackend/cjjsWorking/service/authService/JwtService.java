@@ -93,7 +93,7 @@ public class JwtService {
                 .compact();
     }
 
-    public String getToken(HttpHeaders header) {
+    public static String getToken(HttpHeaders header) {
         return Objects.requireNonNull(header.getFirst("authorization")).substring("Bearer ".length());
     }
 

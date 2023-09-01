@@ -92,6 +92,22 @@ public class User implements UserDetails {
         return this.userName;
     }
 
+    public int getAge() {
+        int age = LocalDate.now().getYear() - this.birthDate.getYear();
+
+        if((LocalDate.now().getMonthValue() < this.birthDate.getMonthValue())) {
+            return age-1;
+        } else if(LocalDate.now().getMonthValue() > this.birthDate.getMonthValue()) {
+            return age;
+        } else {
+            if(LocalDate.now().getDayOfMonth() < this.birthDate.getDayOfMonth()) {
+                return age-1;
+            } else {
+                return age;
+            }
+        }
+    }
+
     //🔽🔽🔽 For Spring Security 🔽🔽🔽
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
