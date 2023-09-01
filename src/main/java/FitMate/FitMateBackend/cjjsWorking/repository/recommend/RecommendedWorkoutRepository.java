@@ -1,4 +1,4 @@
-package FitMate.FitMateBackend.cjjsWorking.repository;
+package FitMate.FitMateBackend.cjjsWorking.repository.recommend;
 
 import FitMate.FitMateBackend.domain.Workout;
 import FitMate.FitMateBackend.domain.recommendation.RecommendedWorkout;

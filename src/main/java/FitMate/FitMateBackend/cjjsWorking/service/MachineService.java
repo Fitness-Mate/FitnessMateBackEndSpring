@@ -8,6 +8,7 @@ import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.repository.MachineRepository;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
+import FitMate.FitMateBackend.domain.Workout;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -83,12 +84,9 @@ public class MachineService {
     }
     //Overloading
 
-    public ResponseEntity<?> findOne(Long machineId) {
-        Machine findMachine = machineRepository.findById(machineId).orElse(null);
-        if(findMachine == null)
-            throw new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION);
-
-        return ResponseEntity.ok(new GetMachineResponse(findMachine));
+    public Machine findOne(Long machineId) {
+        return machineRepository.findById(machineId)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION));
     }
 
     public boolean checkMachineNameDuplicate(String koreanName, String englishName) {
@@ -108,8 +106,13 @@ public class MachineService {
         if(findMachine == null)
             throw new CustomException(CustomErrorCode.MACHINE_NOT_FOUND_EXCEPTION);
 
+        //machine과 관련된 운동부위 삭제
         for (BodyPart bodyPart : findMachine.getBodyParts()) {
             bodyPart.removeMachine(findMachine);
+        }
+        //machine과 관련된 운동 삭제
+        for (Workout workout : findMachine.getWorkouts()) {
+            workout.removeMachine(findMachine);
         }
 
         machineRepository.remove(findMachine);
