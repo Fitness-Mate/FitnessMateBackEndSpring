@@ -1,4 +1,4 @@
-package FitMate.FitMateBackend.cjjsWorking.repository;
+package FitMate.FitMateBackend.cjjsWorking.repository.recommend;
 
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.QWorkout;

@@ -1,18 +1,17 @@
 package FitMate.FitMateBackend.cjjsWorking.repository;
 
+import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutSearch;
 import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
+import FitMate.FitMateBackend.domain.Machine;
 import FitMate.FitMateBackend.domain.QWorkout;
 import FitMate.FitMateBackend.domain.Workout;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.jdbc.Work;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -64,8 +63,6 @@ public class WorkoutRepository {
     public void remove(Workout workout) {
         em.remove(workout);
     }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     public List<Workout> searchAll(int page, WorkoutSearch search) {
         int offset = (page-1)*ServiceConst.PAGE_BATCH_SIZE;
@@ -137,4 +134,13 @@ public class WorkoutRepository {
             return weight;
         }
     }
+
+//    public List<Machine> findRelatedMachine(Workout workout) {
+//        return em.createQuery(
+//                        "select m from Machine m" +
+//                                " join fetch m.workouts w" +
+//                                " where w = :workout", Machine.class)
+//                .setParameter("workout", workout)
+//                .getResultList();
+//    }
 }

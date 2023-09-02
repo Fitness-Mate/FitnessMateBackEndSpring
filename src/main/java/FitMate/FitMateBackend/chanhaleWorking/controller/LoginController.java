@@ -65,7 +65,7 @@ public class LoginController {
 
     @PutMapping("/auth/logout") //logout
     public void logoutWithJwt(@RequestHeader HttpHeaders header) {
-        String refreshToken = jwtService.getToken(header);
+        String refreshToken = JwtService.getToken(header);
 
         log.info("logout attempt! Token: [{}], User: [{}]",
                 refreshToken,
@@ -76,7 +76,7 @@ public class LoginController {
 
     @GetMapping("/auth/refresh") //access token 재발급
     public ResponseEntity<AuthResponse> refresh(@RequestHeader HttpHeaders header) {
-        String refreshToken = jwtService.getToken(header);
+        String refreshToken = JwtService.getToken(header);
         String accessToken = jwtService.generateAccessTokenWithRefreshToken(refreshToken);
         return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken, true));
     }

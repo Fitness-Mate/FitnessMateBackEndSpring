@@ -1,12 +1,10 @@
 package FitMate.FitMateBackend.cjjsWorking.service;
 
 import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
-import FitMate.FitMateBackend.cjjsWorking.controller.userController.WorkoutRecommendationController;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutRecommendationRequest;
 import FitMate.FitMateBackend.cjjsWorking.repository.*;
-import FitMate.FitMateBackend.cjjsWorking.service.apiService.DeepLTranslateService;
-import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
-import FitMate.FitMateBackend.consts.ServiceConst;
+import FitMate.FitMateBackend.cjjsWorking.repository.recommend.RecommendedWorkoutRepository;
+import FitMate.FitMateBackend.cjjsWorking.repository.recommend.WorkoutRecommendationRepository;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
 import FitMate.FitMateBackend.domain.User;
@@ -18,9 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-
-import static org.hibernate.query.sqm.tree.SqmNode.log;
 
 @Service
 @RequiredArgsConstructor

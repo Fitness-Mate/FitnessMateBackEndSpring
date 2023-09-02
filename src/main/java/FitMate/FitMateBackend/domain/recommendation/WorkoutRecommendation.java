@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import nonapi.io.github.classgraph.json.JSONUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,8 @@ public class WorkoutRecommendation extends Recommendation {
     public static WorkoutRecommendation createWorkoutRecommendation
             (User user, List<BodyPart> bodyParts, List<Machine> machines, String workoutList) {
         WorkoutRecommendation workoutRecommendation = new WorkoutRecommendation();
-        workoutRecommendation.setBodyData(user.getBodyDataHistory().get(0));
+        BodyData bodyData = user.getBodyDataHistory().get(user.getBodyDataHistory().size() - 1);
+        workoutRecommendation.setBodyData(bodyData);
         workoutRecommendation.setUser(user);
 
         String bodyPartString = "";
@@ -50,7 +52,7 @@ public class WorkoutRecommendation extends Recommendation {
         String qString = "You have to recommend an exercise considering my gender, height, weight, body composition information," +
                 " and the exercise part and exercise equipment I want. I'm ";
 
-        qString = qString.concat(user.getSex().equals("남성") ? "male, " : "female, ").concat(user.getBodyDataHistory().get(0).describe());
+        qString = qString.concat(user.getSex().equals("남성") ? "male, " : "female, ").concat(bodyData.describe());
         qString = qString.concat(" The part I want to exercise is my ");
         qString = qString.concat(bodyPartQuery).concat(" and I want to use a ");
         if(machineQuery != null) qString = qString.concat(machineQuery).concat("\n\n");
@@ -59,11 +61,13 @@ public class WorkoutRecommendation extends Recommendation {
                 "1. Find a workout from the list below and recommend it.\n");
         qString = qString.concat(workoutList).concat("\n\n");
         qString = qString.concat("2. When answering, do not add any comments," +
-                " and answer the three exercises in the form " +
+                " and answer the five exercises in the form " +
                 "[workout index in list] [weight(kg)] [repeat] [set] in exactly three lines, one line for each exercise. " +
                 "Below is an example for you to answer\n" +
                 "[1][40kg][12][4]\n" +
                 "[2][60kg][10][5]\n" +
+                "[17][40kg][10][5]\n" +
+                "[24][30kg][10][5]\n" +
                 "[20][40kg][12][4]\n\n");
         qString = qString.concat("3. When recommending a weight, " +
                 "please suggest an exact number (kg) instead of an ambiguous expression such as a medium weight.\n\n");

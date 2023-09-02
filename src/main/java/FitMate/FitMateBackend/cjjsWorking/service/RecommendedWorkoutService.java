@@ -1,8 +1,7 @@
 package FitMate.FitMateBackend.cjjsWorking.service;
 
-import FitMate.FitMateBackend.cjjsWorking.repository.RecommendedWorkoutRepository;
+import FitMate.FitMateBackend.cjjsWorking.repository.recommend.RecommendedWorkoutRepository;
 import FitMate.FitMateBackend.domain.recommendation.RecommendedWorkout;
-import FitMate.FitMateBackend.domain.recommendation.WorkoutRecommendation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

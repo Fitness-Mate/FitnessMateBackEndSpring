@@ -44,6 +44,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Recommendation> recommendationHistory = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Routine> routines = new ArrayList<>();
+
     public void addBodyDataHistory(BodyData bodyData){
         bodyDataHistory.add(bodyData);
         bodyData.setUser(this);
@@ -87,6 +90,22 @@ public class User implements UserDetails {
 
     public String getUserName() {
         return this.userName;
+    }
+
+    public int getAge() {
+        int age = LocalDate.now().getYear() - this.birthDate.getYear();
+
+        if((LocalDate.now().getMonthValue() < this.birthDate.getMonthValue())) {
+            return age-1;
+        } else if(LocalDate.now().getMonthValue() > this.birthDate.getMonthValue()) {
+            return age;
+        } else {
+            if(LocalDate.now().getDayOfMonth() < this.birthDate.getDayOfMonth()) {
+                return age-1;
+            } else {
+                return age;
+            }
+        }
     }
 
     //🔽🔽🔽 For Spring Security 🔽🔽🔽

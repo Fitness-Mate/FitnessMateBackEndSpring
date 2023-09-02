@@ -1,4 +1,4 @@
-package FitMate.FitMateBackend.cjjsWorking.repository;
+package FitMate.FitMateBackend.cjjsWorking.dto.workout;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

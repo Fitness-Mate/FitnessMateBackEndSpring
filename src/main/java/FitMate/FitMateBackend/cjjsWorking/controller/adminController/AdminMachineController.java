@@ -1,5 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.controller.adminController;
 
+import FitMate.FitMateBackend.cjjsWorking.dto.Machine.GetMachineResponse;
 import FitMate.FitMateBackend.cjjsWorking.dto.Machine.MachineRequest;
 import FitMate.FitMateBackend.cjjsWorking.service.MachineService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class AdminMachineController {
 
     @GetMapping("/machines/{machineId}") //운동기구 단일조회 (TEST 완료)
     public ResponseEntity<?> findMachine(@PathVariable("machineId") Long machineId) {
-        return machineService.findOne(machineId);
+        return ResponseEntity.ok(new GetMachineResponse(machineService.findOne(machineId)));
     }
 
     @GetMapping("/machines/list/{page}") //운동기구 페이지조회 (TEST 완료)

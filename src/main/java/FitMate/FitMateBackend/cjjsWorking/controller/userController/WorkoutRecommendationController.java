@@ -4,10 +4,8 @@ import FitMate.FitMateBackend.chanhaleWorking.service.ChatGptService;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.RecommendedWorkoutResponse;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutRecommendPageDto;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutRecommendationRequest;
-import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutRecommendationRepository;
 import FitMate.FitMateBackend.cjjsWorking.service.RecommendedWorkoutService;
 import FitMate.FitMateBackend.cjjsWorking.service.WorkoutRecommendationService;
-import FitMate.FitMateBackend.cjjsWorking.service.WorkoutService;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
 import FitMate.FitMateBackend.domain.recommendation.RecommendedWorkout;
 import FitMate.FitMateBackend.domain.recommendation.WorkoutRecommendation;
@@ -31,7 +29,7 @@ public class WorkoutRecommendationController {
 
     @PostMapping("recommendation/workout") //운동 추천 요청
     public Long getWorkoutRecommendation(@RequestHeader HttpHeaders header, @RequestBody WorkoutRecommendationRequest request) throws Exception {
-        Long userId = JwtService.getUserId(jwtService.getToken(header));
+        Long userId = JwtService.getUserId(JwtService.getToken(header));
         Long recommendationId = workoutRecommendationService.
                 createWorkoutRecommendation(userId, request);
 
@@ -46,7 +44,7 @@ public class WorkoutRecommendationController {
     @GetMapping("recommendation/workout/history/list/{page}") //운동 추천 history batch 요청
     public List<WorkoutRecommendPageDto> findRecommendedWorkouts_page(@RequestHeader HttpHeaders header,
                                                                       @PathVariable("page") int page) {
-        Long userId = JwtService.getUserId(jwtService.getToken(header));
+        Long userId = JwtService.getUserId(JwtService.getToken(header));
         List<WorkoutRecommendation> findWR = workoutRecommendationService.findAllWithWorkoutRecommendation(page, userId);
 
         return findWR

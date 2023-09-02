@@ -16,5 +16,6 @@ public class WorkoutForm {
     private String videoLink;
     private String description;
     private List<String> bodyPartKoreanName;
+    private List<String> machineKoreanName;
     private MultipartFile image;
 }

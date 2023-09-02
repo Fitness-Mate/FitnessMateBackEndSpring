@@ -23,13 +23,17 @@ public class Workout {
         inverseJoinColumns = @JoinColumn(name = "body_part_id"))
     private List<BodyPart> bodyParts = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "machine_id")
-    private Machine machine;
+    @ManyToMany
+    @JoinTable(name = "workout_machine",
+        joinColumns = @JoinColumn(name = "workout_id"),
+        inverseJoinColumns = @JoinColumn(name = "machine_id"))
+    private List<Machine> machines = new ArrayList<>();
 
     private String englishName;
     private String koreanName;
     private String videoLink;
+
+    @Column(length = 2000)
     private String description;
     private String imgFileName;
 
@@ -39,5 +43,9 @@ public class Workout {
         this.videoLink = form.getVideoLink();
         this.description = form.getDescription();
         this.imgFileName = imgFileName;
+    }
+
+    public void removeMachine(Machine machine) {
+        this.machines.remove(machine);
     }
 }

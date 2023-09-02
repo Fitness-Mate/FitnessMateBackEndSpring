@@ -21,11 +21,23 @@ public class Machine {
     @ManyToMany(mappedBy = "machines")
     private List<BodyPart> bodyParts = new ArrayList<>();
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "machines")
+    private List<Workout> workouts = new ArrayList<>();
+
     private String englishName;
     private String koreanName;
 
     public void update(String englishName, String koreanName) {
         this.englishName = englishName;
         this.koreanName = koreanName;
+    }
+
+    public void addWorkout(Workout workout) {
+        this.workouts.add(workout);
+    }
+
+    public void removeWorkout(Workout workout) {
+        this.workouts.remove(workout);
     }
 }
