@@ -5,9 +5,11 @@ import FitMate.FitMateBackend.domain.Routine;
 import FitMate.FitMateBackend.domain.Workout;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class MyWorkout extends MyFit {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -18,13 +20,9 @@ public class MyWorkout extends MyFit {
     private String rep;
     private String setCount;
 
-    public MyWorkout() {
-        super();
-    }
-
     public MyWorkout(Routine routine, Workout workout,
-                     MyWorkoutCreateRequest request) {
-        super(routine);
+                     MyWorkoutCreateRequest request, int myFitIndex) {
+        super(routine, myFitIndex);
         this.workout = workout;
         this.weight = request.getWeight();
         this.rep = request.getRep();

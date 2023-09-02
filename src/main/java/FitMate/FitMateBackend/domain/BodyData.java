@@ -19,7 +19,7 @@ public class BodyData {
     @Column(name = "body_data_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 

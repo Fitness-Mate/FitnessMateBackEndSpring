@@ -8,14 +8,11 @@ import FitMate.FitMateBackend.cjjsWorking.repository.RoutineRepository;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.Routine;
 import FitMate.FitMateBackend.domain.User;
-import FitMate.FitMateBackend.domain.myfit.MyWorkout;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +27,6 @@ public class RoutineService {
     @Transactional
     public Long saveRoutine(User user, String routineName, int routineIndex) {
         Routine routine = new Routine(user, routineName, routineIndex);
-        user.addRoutine(routine);
         return routineRepository.save(routine);
     }
 
@@ -78,9 +74,5 @@ public class RoutineService {
                 this.removeRoutine(routine);
             }
         }
-    }
-
-    public void saveMyWorkout(MyWorkout myWorkout) {
-
     }
 }

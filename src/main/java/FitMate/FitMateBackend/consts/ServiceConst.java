@@ -30,6 +30,6 @@ public interface ServiceConst {
 
     //routine constraint
     public static final int ROUTINE_MAX_SIZE = 5;
-    public static final int MY_WORKOUT_MAX_SIZE = 5;
+    public static final int MY_WORKOUT_MAX_SIZE = 7;
 
 }

@@ -3,6 +3,7 @@ package FitMate.FitMateBackend.domain.myfit;
 import FitMate.FitMateBackend.domain.Routine;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -18,8 +19,15 @@ public abstract class MyFit {
     @JoinColumn(name = "routine_id")
     private Routine routine;
 
+    private int myFitIndex;
+
     public MyFit() {}
-    public MyFit(Routine routine) {
+    public MyFit(Routine routine, int myFitIndex) {
         this.routine = routine;
+        this.myFitIndex = myFitIndex;
+    }
+
+    public void downMyFitIndex() {
+        this.myFitIndex--;
     }
 }

@@ -1,7 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.repository;
 
 import FitMate.FitMateBackend.domain.Routine;
-import FitMate.FitMateBackend.domain.Workout;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

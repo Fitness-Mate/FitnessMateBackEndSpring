@@ -12,6 +12,7 @@ import java.util.List;
 
 @Data
 public class RecommendData {
+    private Long workoutId;
     private String koreanName;
     private String englishName;
     private List<String> machineKoreanName = new ArrayList<>();
@@ -23,6 +24,7 @@ public class RecommendData {
     private String set;
 
     public RecommendData(RecommendedWorkout recommend) {
+        this.workoutId = recommend.getWorkout().getId();
         this.koreanName = recommend.getWorkout().getKoreanName();
         this.englishName = recommend.getWorkout().getEnglishName();
         this.description = recommend.getWorkout().getDescription();
