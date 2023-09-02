@@ -11,6 +11,6 @@ public class MySupplement extends MyFit {
     }
 
     public MySupplement(Routine routine) {
-        super(routine, 1);
+        super(routine);
     }
 }

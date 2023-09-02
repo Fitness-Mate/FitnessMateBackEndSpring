@@ -108,6 +108,10 @@ public class User implements UserDetails {
         }
     }
 
+    public void addRoutine(Routine routine) {
+        this.routines.add(routine);
+    }
+
     //🔽🔽🔽 For Spring Security 🔽🔽🔽
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

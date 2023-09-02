@@ -134,13 +134,4 @@ public class WorkoutRepository {
             return weight;
         }
     }
-
-//    public List<Machine> findRelatedMachine(Workout workout) {
-//        return em.createQuery(
-//                        "select m from Machine m" +
-//                                " join fetch m.workouts w" +
-//                                " where w = :workout", Machine.class)
-//                .setParameter("workout", workout)
-//                .getResultList();
-//    }
 }

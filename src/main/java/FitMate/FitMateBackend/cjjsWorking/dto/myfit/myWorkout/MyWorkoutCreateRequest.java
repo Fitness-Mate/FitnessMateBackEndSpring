@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MyWorkoutCreateRequest {
     private int routineIndex;
-    private Long workoutId;
 
+    private Long workoutId;
     private String weight;
     private String rep;
     private String setCount;

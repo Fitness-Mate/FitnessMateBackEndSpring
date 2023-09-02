@@ -3,7 +3,8 @@ package FitMate.FitMateBackend.cjjsWorking.controller.userController;
 import FitMate.FitMateBackend.chanhaleWorking.service.UserService;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutCreateRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.ReadUserInfoResponse;
-import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineCreateRequest;
+import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineReadAllResponse;
+import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineSetRequest;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.service.RoutineService;
@@ -17,6 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,21 +41,32 @@ public class RoutineController {
         return ResponseEntity.ok(new ReadUserInfoResponse(user));
     }
 
-    @PostMapping("/routines/workout")
-    public ResponseEntity<String> createRoutine(@RequestHeader HttpHeaders header,
-                                                @RequestBody RoutineCreateRequest request) {
+    @GetMapping("/routines/workout") //운동 루틴 목록 조회 - 테스트 완료
+    public ResponseEntity<List<RoutineReadAllResponse>> readAllWorkoutRoutine(@RequestHeader HttpHeaders header) {
         Long userId = JwtService.getUserId(JwtService.getToken(header));
         User user = userService.getUserWithId(userId);
 
-        return routineService.saveRoutine(user, request.getRoutineName());
+        return ResponseEntity.ok(
+                routineService.findAllRoutineWithIndex(user.getId()).stream()
+                        .map(RoutineReadAllResponse::new)
+                        .collect(Collectors.toList())
+        );
     }
 
+    @PostMapping("/routines/workout") //운동 루틴 관리 - 테스트 완료
+    public void setWorkoutRoutine(@RequestHeader HttpHeaders header,
+                                  @RequestBody RoutineSetRequest request) {
+        Long userId = JwtService.getUserId(JwtService.getToken(header));
+        User user = userService.getUserWithId(userId);
 
-    @PostMapping("/routine/{routineId}")
+        routineService.setRoutines(user, request);
+    }
+
+    @PostMapping("/routine/{routineId}") //루틴에 운동 추가
     public void createMyWorkout(@RequestBody MyWorkoutCreateRequest request,
-                     @PathVariable("routineId") Long routineId) {
+                                @PathVariable("routineId") Long routineId) {
         Workout workout = workoutService.findOne(request.getWorkoutId());
-        Routine routine = routineService.findById(routineId);
+        Routine routine = routineService.findRoutineById(routineId);
 
         MyWorkout myWorkout = new MyWorkout(routine, workout, request);
         routineService.saveMyWorkout(myWorkout);

@@ -36,6 +36,9 @@ public enum CustomErrorCode {
 
     USER_NOT_FOUND_EXCEPTION("존재하지 않는 유저입니다."),
 
+    ROUTINE_NOT_FOUND_EXCEPTION("존재하지 않는 운동루틴입니다."),
+    ROUTINE_SIZE_OVER_EXCEPTION("등록할 수 있는 운동루틴의 갯수는 5개입니다."),
+
     PAGE_NOT_FOUND_EXCEPTION("존재하지 않는 페이지입니다.");
 
     private final String statusMessage;

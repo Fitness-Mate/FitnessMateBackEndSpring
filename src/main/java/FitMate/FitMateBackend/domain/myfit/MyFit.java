@@ -18,14 +18,8 @@ public abstract class MyFit {
     @JoinColumn(name = "routine_id")
     private Routine routine;
 
-    private int routineIndex;
-
     public MyFit() {}
-    public MyFit(Routine routine, int routineIndex) {
+    public MyFit(Routine routine) {
         this.routine = routine;
-        this.routineIndex = routineIndex;
-    }
-    public void setRoutineIndex(int routineIndex) {
-        this.routineIndex = routineIndex;
     }
 }

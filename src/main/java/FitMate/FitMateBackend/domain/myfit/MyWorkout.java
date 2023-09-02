@@ -24,7 +24,7 @@ public class MyWorkout extends MyFit {
 
     public MyWorkout(Routine routine, Workout workout,
                      MyWorkoutCreateRequest request) {
-        super(routine, request.getRoutineIndex());
+        super(routine);
         this.workout = workout;
         this.weight = request.getWeight();
         this.rep = request.getRep();

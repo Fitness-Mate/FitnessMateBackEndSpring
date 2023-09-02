@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Table(name = "routine")
+@NoArgsConstructor
 public class Routine {
 
     @Id @GeneratedValue
@@ -25,9 +26,16 @@ public class Routine {
     private final List<MyFit> myFit = new ArrayList<>();
 
     private String routineName;
+    private int routineIndex;
 
-    public Routine(User user, String routineName) {
+    public Routine(User user, String routineName, int routineIndex) {
         this.user = user;
         this.routineName = routineName;
+        this.routineIndex = routineIndex;
+    }
+
+    public void update(String routineName, int routineIndex) {
+        this.routineName = routineName;
+        this.routineIndex = routineIndex;
     }
 }
