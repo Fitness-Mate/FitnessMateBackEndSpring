@@ -1,9 +1,8 @@
 package FitMate.FitMateBackend.domain.myfit;
 
-import FitMate.FitMateBackend.domain.Routine;
+import FitMate.FitMateBackend.domain.routine.Routine;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -24,6 +23,10 @@ public abstract class MyFit {
     public MyFit() {}
     public MyFit(Routine routine, int myFitIndex) {
         this.routine = routine;
+        this.myFitIndex = myFitIndex;
+    }
+
+    public void setMyFitIndex(int myFitIndex) {
         this.myFitIndex = myFitIndex;
     }
 

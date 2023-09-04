@@ -41,7 +41,7 @@ public class RoutineController {
         User user = userService.getUserWithId(userId);
 
         return ResponseEntity.ok(
-                routineService.findAllRoutineWithIndex(user.getId()).stream()
+                routineService.findAllWorkoutRoutineWithIndex(user.getId()).stream()
                         .map(RoutineReadAllResponse::new)
                         .collect(Collectors.toList())
         );
@@ -53,6 +53,12 @@ public class RoutineController {
         Long userId = JwtService.getUserId(JwtService.getToken(header));
         User user = userService.getUserWithId(userId);
 
-        routineService.setRoutines(user, request);
+//        routineService.saveSupplementRoutine(user);
+        routineService.setWorkoutRoutines(user, request);
+    }
+
+    @PutMapping("/routines/supplement") //보조제 루틴 이름 수정
+    public void updateSupplementRoutineName() {
+        //findBy Routine Index
     }
 }

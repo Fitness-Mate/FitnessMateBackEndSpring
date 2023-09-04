@@ -6,8 +6,10 @@ import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.repository.RoutineRepository;
 import FitMate.FitMateBackend.consts.ServiceConst;
-import FitMate.FitMateBackend.domain.Routine;
+import FitMate.FitMateBackend.domain.routine.Routine;
 import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.domain.routine.SupplementRoutine;
+import FitMate.FitMateBackend.domain.routine.WorkoutRoutine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,8 +27,14 @@ public class RoutineService {
     private final RoutineRepository routineRepository;
 
     @Transactional
-    public Long saveRoutine(User user, String routineName, int routineIndex) {
-        Routine routine = new Routine(user, routineName, routineIndex);
+    public Long saveWorkoutRoutine(User user, String routineName, int routineIndex) {
+        Routine routine = new WorkoutRoutine(user, routineName, routineIndex);
+        return routineRepository.save(routine);
+    }
+
+    @Transactional
+    public Long saveSupplementRoutine(User user) {
+        Routine routine = new SupplementRoutine(user, null, 0);
         return routineRepository.save(routine);
     }
 
@@ -41,8 +49,8 @@ public class RoutineService {
                 .orElseThrow(() -> new CustomException(CustomErrorCode.ROUTINE_NOT_FOUND_EXCEPTION));
     }
 
-    public List<Routine> findAllRoutineWithIndex(Long userId) {
-        return routineRepository.findAllWithRoutineIndex(userId);
+    public List<WorkoutRoutine> findAllWorkoutRoutineWithIndex(Long userId) {
+        return routineRepository.findAllWorkoutRoutineWithIndex(userId);
     }
     @Transactional
     public void removeRoutine(Routine routine) {
@@ -50,7 +58,7 @@ public class RoutineService {
     }
 
     @Transactional
-    public void setRoutines(User user, RoutineSetRequest request) {
+    public void setWorkoutRoutines(User user, RoutineSetRequest request) {
         if(request.getRoutines().size() >= ServiceConst.ROUTINE_MAX_SIZE)
             throw new CustomException(CustomErrorCode.ROUTINE_SIZE_OVER_EXCEPTION);
 
@@ -58,7 +66,7 @@ public class RoutineService {
         for (RoutineSetData routine : request.getRoutines()) {
             if(routine.getRoutineId() == -1) {
                 //create routine
-                Long savedRoutineId = this.saveRoutine(user, routine.getRoutineName(), routine.getRoutineIndex());
+                Long savedRoutineId = this.saveWorkoutRoutine(user, routine.getRoutineName(), routine.getRoutineIndex());
                 routineIds.add(savedRoutineId);
             } else {
                 //update routine
@@ -68,8 +76,8 @@ public class RoutineService {
         }
 
         //delete routine
-        List<Routine> routines = this.findAllRoutineWithIndex(user.getId());
-        for (Routine routine : routines) {
+        List<WorkoutRoutine> routines = this.findAllWorkoutRoutineWithIndex(user.getId());
+        for (WorkoutRoutine routine : routines) {
             if(!routineIds.contains(routine.getId())) {
                 this.removeRoutine(routine);
             }

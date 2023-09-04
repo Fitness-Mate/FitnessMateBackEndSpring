@@ -1,6 +1,7 @@
 package FitMate.FitMateBackend.cjjsWorking.repository;
 
-import FitMate.FitMateBackend.domain.Routine;
+import FitMate.FitMateBackend.domain.routine.Routine;
+import FitMate.FitMateBackend.domain.routine.WorkoutRoutine;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -23,11 +24,11 @@ public class RoutineRepository {
         return Optional.ofNullable(em.find(Routine.class, routineId));
     }
 
-    public List<Routine> findAllWithRoutineIndex(Long userId) {
-        return em.createQuery("select r from Routine r" +
-                        " join fetch r.user u" +
-                        " where u.id = :userId" +
-                        " order by r.routineIndex asc", Routine.class)
+    public List<WorkoutRoutine> findAllWorkoutRoutineWithIndex(Long userId) {
+        return em.createQuery(
+                "select w from WorkoutRoutine w" +
+                        " where w.user.id = :userId" +
+                        " order by w.routineIndex asc", WorkoutRoutine.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }
