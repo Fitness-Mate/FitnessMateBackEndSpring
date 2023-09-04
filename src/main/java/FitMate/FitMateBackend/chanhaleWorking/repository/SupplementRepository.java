@@ -1,5 +1,7 @@
 package FitMate.FitMateBackend.chanhaleWorking.repository;
 
+import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementFlavorDto;
+import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementFlavorServingDto;
 import FitMate.FitMateBackend.chanhaleWorking.form.supplement.SupplementSearchForm;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.supplement.Supplement;
@@ -42,7 +44,7 @@ public class SupplementRepository {
         return em.createQuery("select s from Supplement s", Supplement.class).getResultList();}
 
     public List<Supplement> getSupplementBatch(Long page) {
-        return em.createQuery("select s from Supplement s order by s.id", Supplement.class)
+        return em.createQuery("select s from Supplement s where s.isCaptain = true order by s.id", Supplement.class)
                 .setFirstResult((int) (ServiceConst.PAGE_BATCH_SIZE * (page - 1))).setMaxResults(ServiceConst.PAGE_BATCH_SIZE)
                 .getResultList();
     }
@@ -58,5 +60,31 @@ public class SupplementRepository {
                 .getResultList();
         log.info("{}",supplementList.size());
         return supplementList;
+    }
+
+    public List<SupplementFlavorDto> getSupplementLineup(Supplement supplement) {
+        List<SupplementFlavorDto> result = new ArrayList<>();
+        List<Supplement> supplementList = em.createQuery("select s from Supplement s where s.koreanName = :name order by s.flavor", Supplement.class)
+                .setParameter("name", supplement.getKoreanName())
+                .getResultList();
+        String lastFlavor = "null";
+        int idx = -1;
+        for (Supplement supplement1 : supplementList) {
+            if (lastFlavor.equals(supplement1.getFlavor())) {
+                result.get(idx).getUnits().add(new SupplementFlavorServingDto(supplement1.getId(), supplement1.getServings(), supplement1.getPrice()));
+            } else {
+                result.add(new SupplementFlavorDto(supplement1.getFlavor()));
+                idx ++;
+                result.get(idx).getUnits().add(new SupplementFlavorServingDto(supplement1.getId(), supplement1.getServings(), supplement1.getPrice()));
+                lastFlavor = supplement1.getFlavor();
+            }
+        }
+        return result;
+    }
+    public List<Supplement> getAllCaptains() {
+        List<Supplement> result = em.createQuery("select s from Supplement s where s.isCaptain = true", Supplement.class)
+                .getResultList();
+        log.info("true=[{}]", result.size());
+        return result;
     }
 }

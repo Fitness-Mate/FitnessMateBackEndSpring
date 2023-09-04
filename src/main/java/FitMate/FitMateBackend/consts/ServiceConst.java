@@ -13,6 +13,10 @@ public interface ServiceConst {
     // ex) 53번 보충제: RECOMMEND_PREFIX+53+RECOMMEND_SUFFIX
     public static final String RECOMMEND_PREFIX = "<<";
     public static final String RECOMMEND_SUFFIX = ">>";
+    public static final String EN_REASON_PREFIX = "Reasons:\n";
+    public static final String EN_REASON_SUFFIX = "\n\n";
+    public static final String KOR_REASON_PREFIX = "%%";
+    public static final String KOR_REASON_SUFFIX = "$$";
 
     //s3 directory constraint
     public static final String S3_URL = "https://fitmate-bucket.s3.ap-northeast-2.amazonaws.com/images/";

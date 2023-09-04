@@ -4,5 +4,5 @@ package FitMate.FitMateBackend.domain.supplement;
  * 그리고 supplementDto, supplementService 수정
  */
 public enum SupplementType {
-    BCAA, Gainer, Protein
+    AminoAcid, Gainer, Protein, Other
 }

@@ -25,7 +25,8 @@ public abstract class Supplement {
     private String marketURL;
     private String flavor;
     private SupplementType type;
-    private Float gramsPerServing;
+    private Boolean isCaptain;  // 제품군의 대표인지 (제품군의 주장일 경우 ChatGPT의 질의문에 포함된다.)
+                                // 무맛이 주장이 된다.
 
     // 앞에 디렉터리 정보를 제외한 상대경로를 저장
     private String imageName;
@@ -39,6 +40,7 @@ public abstract class Supplement {
         this.marketURL = supplementForm.getMarketURL();
         this.flavor = supplementForm.getFlavor();
         this.type = supplementForm.getSupplementType();
+        this.isCaptain = supplementForm.getIsCaptain();
     }
 
     public void updateFields(SupplementForm supplementForm) {
@@ -50,6 +52,7 @@ public abstract class Supplement {
         this.marketURL = supplementForm.getMarketURL();
         this.flavor = supplementForm.getFlavor();
         this.type = supplementForm.getSupplementType();
+        this.isCaptain = supplementForm.getIsCaptain();
     }
 
     public void setImageName(String imageName) {

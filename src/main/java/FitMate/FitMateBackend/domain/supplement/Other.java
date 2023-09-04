@@ -11,30 +11,24 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@DiscriminatorValue("BCAA")
+@DiscriminatorValue("OtherSupplement")
 @NoArgsConstructor
-public class BCAA extends Supplement {
-
-
-    private Float leucine;
-    private Float IsoLeucine;
-    private Float Valine;
-    public BCAA(SupplementForm supplementForm) {
+public class Other extends Supplement {
+    private String contains;
+    public Other(SupplementForm supplementForm) {
         super(supplementForm);
+        this.contains = supplementForm.getContains();
     }
-    public void updateFields(SupplementForm supplementForm) {
-        super.updateFields(supplementForm);
-    }
-
     @Override
     public String createIntroduction() {
         return "{" +
                 "Name: \""+ ServiceConst.RECOMMEND_PREFIX +this.getId()+ ServiceConst.RECOMMEND_SUFFIX+"\", "+
                 "type: "+this.getType()+", "+
-                "price: "+(this.getPrice() / this.getServings())+"won, "+
-                "leucine: 2.5g, "+
-                "Isoleucine: 1.25g, "+
-                "Valine: 1.25g}"
-                ;
+                "price: "+this.getPrice()+"Won, "+
+                "contains: "+this.contains+"}";
+    }
+    public void updateFields(SupplementForm supplementForm) {
+        super.updateFields(supplementForm);
+        this.contains = supplementForm.getContains();
     }
 }
