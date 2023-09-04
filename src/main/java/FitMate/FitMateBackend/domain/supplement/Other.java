@@ -25,6 +25,7 @@ public class Other extends Supplement {
                 "Name: \""+ ServiceConst.RECOMMEND_PREFIX +this.getId()+ ServiceConst.RECOMMEND_SUFFIX+"\", "+
                 "type: "+this.getType()+", "+
                 "price: "+this.getPrice()+"Won, "+
+                "servings: "+this.getServings()+"serving, "+
                 "contains: "+this.contains+"}";
     }
     public void updateFields(SupplementForm supplementForm) {
