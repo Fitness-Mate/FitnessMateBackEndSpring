@@ -16,20 +16,21 @@ import java.util.List;
 public class SupplementRecommendationDto {
     private Long supplementRecommendationId;
     private LocalDate date;
-    private String question;
     private Long monthlyBudget;
+    private String purposes;
     private List<RecommendedSupplementDto> recommendedSupplementList;
 
     public static SupplementRecommendationDto createSupplementRecommendationDto(SupplementRecommendation supplementRecommendation) {
         SupplementRecommendationDto supplementRecommendationDto = new SupplementRecommendationDto();
         supplementRecommendationDto.supplementRecommendationId = supplementRecommendation.getId();
         supplementRecommendationDto.date = supplementRecommendation.getDate();
-        supplementRecommendationDto.question = supplementRecommendation.getQueryText();
         supplementRecommendationDto.monthlyBudget = supplementRecommendation.getMonthlyBudget();
+        supplementRecommendationDto.purposes = supplementRecommendation.getPurposes();
         supplementRecommendationDto.recommendedSupplementList = new ArrayList<>();
-        for (RecommendedSupplement recommendedSupplement : supplementRecommendation.getRecommendedSupplements()) {
-            supplementRecommendationDto.recommendedSupplementList.add(RecommendedSupplementDto.createRecommendedSupplementDto(recommendedSupplement));
-        }
         return supplementRecommendationDto;
+    }
+
+    public void addRecommendedSupplement(RecommendedSupplementDto recommendedSupplementDto) {
+        recommendedSupplementList.add(recommendedSupplementDto);
     }
 }

@@ -46,7 +46,7 @@ public class BodyData {
     }
 
     public String describe() {
-        String str = "";
+        String str = " ";
         StringBuilder sb = new StringBuilder(str);
         String sex;
         if (user.getSex().equals(ServiceConst.SEX_MALE)) {

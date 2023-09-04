@@ -5,12 +5,15 @@ import FitMate.FitMateBackend.domain.BodyData;
 import FitMate.FitMateBackend.domain.EnglishPurpose;
 import FitMate.FitMateBackend.domain.Purpose;
 import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.domain.supplement.Supplement;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -45,22 +48,38 @@ public class SupplementRecommendation extends Recommendation {
         }
         supplementRecommendation.monthlyBudget = monthlyBudget;
         supplementRecommendation.setRecommendationType("Supplement");
-        String qString = "suggest up to 3 supplements in this list. For a ";
-        qString = qString.concat(user.getSex() == "남성" ? "man" : "woman").concat(" who is ");
-        qString = qString.concat(bodyData.describe());
-        log.info(bodyData.describe());
-        qString = qString.concat(user.getSex() == "남성" ? " His" : " Her")
-                .concat(" purpose is ");
-        idx = 0L;
+        StringBuilder sb = new StringBuilder(" For a");
+        sb.append(user.getSex() == "남성" ? " man" : " woman")
+                .append(" who is")
+                .append(bodyData.describe())
+                .append(user.getSex() == "남성" ? " His" : " Her")
+                .append(" purpose is");
         for (Purpose purpose : purposes) {
             idx++;
-            qString = qString.concat(EnglishPurpose.values()[purpose.ordinal()].name());
+            sb.append(" ").append(EnglishPurpose.values()[purpose.ordinal()].name());
             if (idx < purposes.size()) {
-                qString = qString.concat(" and ");
+                sb.append(" and");
             }
         }
-        qString = qString.concat(". your budget is ").concat(monthlyBudget.toString()).concat("Won.");
-        supplementRecommendation.setQueryText(qString);
+        sb.append(" choose up to 3 supplements in this list and give me the {name, Reasons} sets. Try not to compare with other supplement in Reasons");
+        sb.append(". your budget is ").append(monthlyBudget.toString()).append("Won.");
+        supplementRecommendation.setQueryText(sb.toString());
+//        String qString = "suggest up to 3 supplements in this list. ";
+//        qString = qString.concat(user.getSex() == "남성" ? "man" : "woman").concat(" who is ");
+//        qString = qString.concat(bodyData.describe());
+//        log.info(bodyData.describe());
+//        qString = qString.concat(user.getSex() == "남성" ? " His" : " Her")
+//                .concat(" purpose is ");
+//        idx = 0L;
+//        for (Purpose purpose : purposes) {
+//            idx++;
+//            qString = qString.concat(EnglishPurpose.values()[purpose.ordinal()].name());
+//            if (idx < purposes.size()) {
+//                qString = qString.concat(" and ");
+//            }
+//        }
+//        qString = qString.concat(". your budget is ").concat(monthlyBudget.toString()).concat("Won.");
+//        supplementRecommendation.setQueryText(qString);
         return supplementRecommendation;
     }
 }

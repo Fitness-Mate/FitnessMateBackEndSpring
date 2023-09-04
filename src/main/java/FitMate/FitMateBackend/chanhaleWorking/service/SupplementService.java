@@ -1,5 +1,7 @@
 package FitMate.FitMateBackend.chanhaleWorking.service;
 
+import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementDto;
+import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementFlavorDto;
 import FitMate.FitMateBackend.chanhaleWorking.form.supplement.SupplementForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.supplement.SupplementSearchForm;
 import FitMate.FitMateBackend.chanhaleWorking.repository.SupplementRepository;
@@ -27,15 +29,17 @@ public class SupplementService {
     @Transactional
     public Long createSupplement(SupplementForm supplementForm) throws IOException {
         Supplement supplement;
-        if (supplementForm.getSupplementType() == SupplementType.BCAA) {
-            supplement = new BCAA(supplementForm);
+        if (supplementForm.getSupplementType() == SupplementType.AminoAcid) {
+            supplement = new AminoAcid(supplementForm);
         } else if (supplementForm.getSupplementType() == SupplementType.Gainer) {
             supplement = new Gainer(supplementForm);
+        }else if (supplementForm.getSupplementType() == SupplementType.Other) {
+            supplement = new Other(supplementForm);
         } else {
             supplement = new Protein(supplementForm);
         }
         // 이미지 등록 절차
-        if (!supplementForm.getImage().isEmpty()) {// 이미지를 업로드 했다면,
+        if (supplementForm.getImage()!=null && !supplementForm.getImage().isEmpty()) {// 이미지를 업로드 했다면,
 //            String newImage = FileStoreService.storeFile(supplementForm.getImage()); //  업로드 한 이미지 저장
             String newImage = s3FileService.uploadImage(ServiceConst.S3_DIR_SUPPLEMENT, supplementForm.getImage());
             supplement.setImageName(newImage); // 이미지 이름 등록
@@ -72,8 +76,8 @@ public class SupplementService {
                 String newImage = s3FileService.uploadImage(ServiceConst.S3_DIR_SUPPLEMENT, supplementForm.getImage());
                 supplement.setImageName(newImage); // 이미지 이름 등록
                 // 텍스트 정보 업데이트
-                if (supplement.getType() == SupplementType.BCAA) {
-                    BCAA sp = (BCAA)supplement;
+                if (supplement.getType() == SupplementType.AminoAcid) {
+                    AminoAcid sp = (AminoAcid)supplement;
                     sp.updateFields(supplementForm);
                     updateSupplementString();
                     return id;
@@ -139,7 +143,7 @@ public class SupplementService {
 
     public String getSupplementString() {
         if (supplementString.equals("")) {
-            for (Supplement s : supplementRepository.findAll()) {
+            for (Supplement s : supplementRepository.getAllCaptains()) {
                 supplementString = supplementString.concat(s.createIntroduction());
             }
         }
@@ -148,11 +152,16 @@ public class SupplementService {
 
     private void updateSupplementString(){
         supplementString = "";
-        for (Supplement s : supplementRepository.findAll()) {
+        for (Supplement s : supplementRepository.getAllCaptains()) {
             supplementString = supplementString.concat(s.createIntroduction());
         }
     }
     public List<Supplement> searchSupplementBatch(Long page, SupplementSearchForm form){
         return supplementRepository.searchSupplement(page, form.getSupplementType(), form.getSearchKeyword());
+    }
+
+    public SupplementDto makeSupplementDto(Supplement supplement) {
+        List<SupplementFlavorDto> lineup = supplementRepository.getSupplementLineup(supplement);
+        return new SupplementDto(supplement, lineup);
     }
 }

@@ -1,0 +1,13 @@
+
+this.leucine
+this.isoLeucine
+this.valine
+this.L_Carnitine
+this.L_Glutamine
+this.L_Alanine
+this.L_Lysine
+this.methionine
+this.phenylalanine
+this.threonine
+this.histidine
+this.tryptophan

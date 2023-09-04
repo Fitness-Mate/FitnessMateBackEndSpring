@@ -40,7 +40,7 @@ public class Gainer extends Supplement {
         return "{" +
                 "Name: \""+ ServiceConst.RECOMMEND_PREFIX +this.getId()+ ServiceConst.RECOMMEND_SUFFIX+"\", "+
                 "type: "+this.getType()+", "+
-                "price: "+(this.getPrice() / this.getServings())+"won, "+
+                "price: "+this.getPrice()+"Won, "+
                 "protein: "+this.proteinPerServing+"g, "+
                 "fat: "+this.fatPerServing+"g, "+
                 "carbohydrate: "+this.carbohydratePerServing+"g}"

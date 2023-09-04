@@ -22,14 +22,11 @@ public class RecommendedSupplement {
     @ManyToOne
     private Supplement supplement;
     @Column(length = 2000)
-    private String englishRecommendationString;
-    @Column(length = 2000)
     private String koreanRecommendationString;
 
-    public static RecommendedSupplement createRecommendedSupplement(Supplement supplement, String englishRecommendationString, String koreanRecommendationString) {
+    public static RecommendedSupplement createRecommendedSupplement(Supplement supplement, String koreanRecommendationString) {
         RecommendedSupplement recommendedSupplement = new RecommendedSupplement();
         recommendedSupplement.supplement = supplement;
-        recommendedSupplement.englishRecommendationString = englishRecommendationString;
         recommendedSupplement.koreanRecommendationString = koreanRecommendationString;
         return recommendedSupplement;
     }
