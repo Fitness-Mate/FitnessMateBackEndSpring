@@ -41,6 +41,7 @@ public class Protein extends Supplement {
                 "Name: \""+ ServiceConst.RECOMMEND_PREFIX +this.getId()+ ServiceConst.RECOMMEND_SUFFIX+"\", "+
                 "type: "+this.getType()+", "+
                 "price: "+this.getPrice()+"Won, "+
+                "servings: "+this.getServings()+"serving, "+
                 "protein: "+this.proteinPerServing+"g, "+
                 "fat: "+this.fatPerServing+"g, "+
                 "carbohydrate: "+this.carbohydratePerServing+"g}"

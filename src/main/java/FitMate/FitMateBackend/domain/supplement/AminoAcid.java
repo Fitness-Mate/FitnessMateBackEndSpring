@@ -64,7 +64,8 @@ public class AminoAcid extends Supplement {
         StringBuilder sb = new StringBuilder("{" +
                 "Name: \"" + ServiceConst.RECOMMEND_PREFIX + this.getId() + ServiceConst.RECOMMEND_SUFFIX + "\", " +
                 "type: " + this.getType() + ", " +
-                "price: " + this.getPrice() + "Won, ");
+                "price: " + this.getPrice() + "Won, "+
+                "servings: "+this.getServings()+"serving, ");
         if (leucine != null && leucine != 0f) {
             sb.append("leucine: ").append(this.leucine).append("g, ");
         }
