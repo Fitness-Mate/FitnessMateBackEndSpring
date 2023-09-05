@@ -19,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MyWorkoutReadAllResponse {
     private Long myWorkoutId;
+    private int myWorkoutIndex;
     private String weight;
     private String rep;
     private String setCount;
@@ -32,6 +33,7 @@ public class MyWorkoutReadAllResponse {
 
     public MyWorkoutReadAllResponse(MyWorkout myWorkout) {
         this.myWorkoutId = myWorkout.getId();
+        this.myWorkoutIndex = myWorkout.getMyFitIndex();
         this.rep = myWorkout.getRep();
         this.setCount = myWorkout.getSetCount();
         this.weight = myWorkout.getWeight();

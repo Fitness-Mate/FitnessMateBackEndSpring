@@ -1,6 +1,7 @@
 package FitMate.FitMateBackend.cjjsWorking.repository;
 
 import FitMate.FitMateBackend.domain.routine.Routine;
+import FitMate.FitMateBackend.domain.routine.SupplementRoutine;
 import FitMate.FitMateBackend.domain.routine.WorkoutRoutine;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,15 @@ public class RoutineRepository {
 
     public Optional<Routine> findById(Long routineId) {
         return Optional.ofNullable(em.find(Routine.class, routineId));
+    }
+
+    public Optional<SupplementRoutine> findSupplementRoutineByUserId(Long userId) {
+        return em.createQuery(
+                "select r from SupplementRoutine r" +
+                        " where r.user.id = :userId", SupplementRoutine.class)
+                .setParameter("userId", userId)
+                .getResultList()
+                .stream().findAny();
     }
 
     public List<WorkoutRoutine> findAllWorkoutRoutineWithIndex(Long userId) {

@@ -30,6 +30,10 @@ public abstract class MyFit {
         this.myFitIndex = myFitIndex;
     }
 
+    public void upMyFitIndex() {
+        this.myFitIndex++;
+    }
+
     public void downMyFitIndex() {
         this.myFitIndex--;
     }

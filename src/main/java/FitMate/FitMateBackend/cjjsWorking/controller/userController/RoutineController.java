@@ -4,11 +4,13 @@ import FitMate.FitMateBackend.chanhaleWorking.service.UserService;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.ReadUserInfoResponse;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineReadAllResponse;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineSetRequest;
+import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.SupplementRoutineUpdateRequest;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.service.RoutineService;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
 import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.domain.routine.Routine;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -57,8 +59,10 @@ public class RoutineController {
         routineService.setWorkoutRoutines(user, request);
     }
 
-    @PutMapping("/routines/supplement") //보조제 루틴 이름 수정
-    public void updateSupplementRoutineName() {
-        //findBy Routine Index
+    @PutMapping("/routines/supplement") //보조제 루틴 이름 수정 - 테스트 완료
+    public void updateSupplementRoutineName(@RequestHeader HttpHeaders header,
+                                            @RequestBody SupplementRoutineUpdateRequest request) {
+        Long userId = JwtService.getUserId(JwtService.getToken(header));
+        routineService.updateSupplementRoutineName(userId, request);
     }
 }

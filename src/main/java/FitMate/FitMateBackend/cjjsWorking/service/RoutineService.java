@@ -2,6 +2,7 @@ package FitMate.FitMateBackend.cjjsWorking.service;
 
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineSetData;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineSetRequest;
+import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.SupplementRoutineUpdateRequest;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.repository.RoutineRepository;
@@ -44,8 +45,19 @@ public class RoutineService {
         findRoutine.update(routine.getRoutineName(), routine.getRoutineIndex());
     }
 
+    @Transactional
+    public void updateSupplementRoutineName(Long userId, SupplementRoutineUpdateRequest request) {
+        Routine routine = findSupplementRoutineByUserId(userId);
+        routine.update(request.getRoutineName(), 0);
+    }
+
     public Routine findRoutineById(Long routineId) {
         return routineRepository.findById(routineId)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.ROUTINE_NOT_FOUND_EXCEPTION));
+    }
+
+    public Routine findSupplementRoutineByUserId(Long userId) {
+        return routineRepository.findSupplementRoutineByUserId(userId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.ROUTINE_NOT_FOUND_EXCEPTION));
     }
 
