@@ -46,8 +46,8 @@ public class WorkoutService {
         }
 
         //workout과 연관된 bodyPart연결
-        for (String workoutKoreanName : form.getBodyPartKoreanName()) {
-            BodyPart findBodyPart = bodyPartService.findByKoreanName(workoutKoreanName);
+        for (String bodyPartKoreanName : form.getBodyPartKoreanName()) {
+            BodyPart findBodyPart = bodyPartService.findByKoreanName(bodyPartKoreanName);
             workout.getBodyParts().add(findBodyPart);
             findBodyPart.addWorkout(workout);
         }

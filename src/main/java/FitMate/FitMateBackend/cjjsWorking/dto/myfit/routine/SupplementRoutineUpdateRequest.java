@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoutineCreateRequest {
+public class SupplementRoutineUpdateRequest {
     private String routineName;
 }

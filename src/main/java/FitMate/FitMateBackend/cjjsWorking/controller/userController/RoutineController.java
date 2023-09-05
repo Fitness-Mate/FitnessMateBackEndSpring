@@ -1,22 +1,23 @@
 package FitMate.FitMateBackend.cjjsWorking.controller.userController;
 
 import FitMate.FitMateBackend.chanhaleWorking.service.UserService;
-import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutCreateRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.ReadUserInfoResponse;
-import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineCreateRequest;
+import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineReadAllResponse;
+import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineSetRequest;
+import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.SupplementRoutineUpdateRequest;
 import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.service.RoutineService;
-import FitMate.FitMateBackend.cjjsWorking.service.WorkoutService;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
-import FitMate.FitMateBackend.domain.Routine;
 import FitMate.FitMateBackend.domain.User;
-import FitMate.FitMateBackend.domain.Workout;
-import FitMate.FitMateBackend.domain.myfit.MyWorkout;
+import FitMate.FitMateBackend.domain.routine.Routine;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 public class RoutineController {
 
     private final RoutineService routineService;
-    private final WorkoutService workoutService;
     private final UserService userService;
 
     @GetMapping("/userInfo") //내 정보 요약 - 테스트 완료
@@ -37,23 +37,32 @@ public class RoutineController {
         return ResponseEntity.ok(new ReadUserInfoResponse(user));
     }
 
-    @PostMapping("/routines/workout")
-    public ResponseEntity<String> createRoutine(@RequestHeader HttpHeaders header,
-                                                @RequestBody RoutineCreateRequest request) {
+    @GetMapping("/routines/workout") //운동 루틴 목록 조회 - 테스트 완료
+    public ResponseEntity<List<RoutineReadAllResponse>> readAllWorkoutRoutine(@RequestHeader HttpHeaders header) {
         Long userId = JwtService.getUserId(JwtService.getToken(header));
         User user = userService.getUserWithId(userId);
 
-        return routineService.saveRoutine(user, request.getRoutineName());
+        return ResponseEntity.ok(
+                routineService.findAllWorkoutRoutineWithIndex(user.getId()).stream()
+                        .map(RoutineReadAllResponse::new)
+                        .collect(Collectors.toList())
+        );
     }
 
+    @PostMapping("/routines/workout") //운동 루틴 관리 - 테스트 완료
+    public void setWorkoutRoutine(@RequestHeader HttpHeaders header,
+                                  @RequestBody RoutineSetRequest request) {
+        Long userId = JwtService.getUserId(JwtService.getToken(header));
+        User user = userService.getUserWithId(userId);
 
-    @PostMapping("/routine/{routineId}")
-    public void createMyWorkout(@RequestBody MyWorkoutCreateRequest request,
-                     @PathVariable("routineId") Long routineId) {
-        Workout workout = workoutService.findOne(request.getWorkoutId());
-        Routine routine = routineService.findById(routineId);
+//        routineService.saveSupplementRoutine(user);
+        routineService.setWorkoutRoutines(user, request);
+    }
 
-        MyWorkout myWorkout = new MyWorkout(routine, workout, request);
-        routineService.saveMyWorkout(myWorkout);
+    @PutMapping("/routines/supplement") //보조제 루틴 이름 수정 - 테스트 완료
+    public void updateSupplementRoutineName(@RequestHeader HttpHeaders header,
+                                            @RequestBody SupplementRoutineUpdateRequest request) {
+        Long userId = JwtService.getUserId(JwtService.getToken(header));
+        routineService.updateSupplementRoutineName(userId, request);
     }
 }

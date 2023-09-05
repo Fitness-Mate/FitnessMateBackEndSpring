@@ -1,5 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.exception;
 
+import FitMate.FitMateBackend.consts.ServiceConst;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -35,6 +36,17 @@ public enum CustomErrorCode {
     WORKOUT_NOT_FOUND_EXCEPTION("존재하지 않는 운동입니다."),
 
     USER_NOT_FOUND_EXCEPTION("존재하지 않는 유저입니다."),
+
+    ROUTINE_NOT_FOUND_EXCEPTION("존재하지 않는 운동루틴입니다."),
+    ROUTINE_SIZE_OVER_EXCEPTION("등록할 수 있는 운동루틴의 갯수는 " + ServiceConst.ROUTINE_MAX_SIZE + "개입니다."),
+
+    MY_WORKOUT_SIZE_OVER_EXCEPTION("등록할 수 있는 운동의 갯수는 " + ServiceConst.MY_WORKOUT_MAX_SIZE +"개입니다."),
+    MY_WORKOUT_NOT_FOUND_EXCEPTION("존재하지 않는 내 운동입니다."),
+    ALREADY_EXIST_MY_WORKOUT_EXCEPTION("루틴에 이미 존재하는 내 운동입니다."),
+
+    MY_SUPPLEMENT_SIZE_OVER_EXCEPTION("등록할 수 있는 보조제의 갯수는 " + ServiceConst.MY_SUPPLEMENT_MAX_SIZE +"개입니다."),
+    MY_SUPPLEMENT_NOT_FOUND_EXCEPTION("존재하지 않는 내 보조제입니다."),
+    ALREADY_EXIST_MY_SUPPLEMENT_EXCEPTION("루틴에 이미 존재하는 내 보조제입니다."),
 
     PAGE_NOT_FOUND_EXCEPTION("존재하지 않는 페이지입니다.");
 

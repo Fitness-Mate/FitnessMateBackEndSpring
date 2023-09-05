@@ -32,4 +32,9 @@ public interface ServiceConst {
     public static final String SEX_MALE = "남성";
     public static final String SEX_FEMALE = "여성";
 
+    //routine constraint
+    public static final int ROUTINE_MAX_SIZE = 5;
+    public static final int MY_WORKOUT_MAX_SIZE = 7;
+    public static final int MY_SUPPLEMENT_MAX_SIZE = 7;
+
 }
