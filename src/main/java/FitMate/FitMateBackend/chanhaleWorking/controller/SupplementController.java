@@ -38,7 +38,7 @@ public class SupplementController {
         if (supplement == null) {
             return new SupplementDto();
         }
-        return new SupplementDto(supplement);
+        return supplementService.makeSupplementDto(supplement);
     }
 
 //    @GetMapping("/image/{supplementId}")

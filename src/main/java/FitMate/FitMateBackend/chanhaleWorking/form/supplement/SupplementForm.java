@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Slf4j
 public class SupplementForm {
     private String englishName;
     private String koreanName;
@@ -19,14 +21,36 @@ public class SupplementForm {
     private String description;
     private String marketURL;
     private SupplementType supplementType;
+    private String flavor;
+    private MultipartFile image;
+    private Boolean isCaptain;
+
+    // protein, Gainer
     private Float proteinPerServing;
     private Float fatPerServing;
     private Float carbohydratePerServing;
     private String source;
-    private String flavor;
-    private MultipartFile image;
+
+    // AminoAcid
+    private Float leucine;
+    private Float isoLeucine;
+    private Float valine;
+    private Float L_Carnitine;
+    private Float L_Glutamine;
+    private Float L_Alanine;
+    private Float L_Lysine;
+    private Float methionine;
+    private Float phenylalanine;
+    private Float threonine;
+    private Float histidine;
+    private Float tryptophan;
+
+    //Other
+    private String contains;
+
 
     public String validateFields() {
+        log.info("l={}", this.leucine);
         if (price < 0) {
             return "잘못된 가격";
         }

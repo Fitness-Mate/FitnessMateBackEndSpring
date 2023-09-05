@@ -49,6 +49,7 @@ public class ChatGptService {
 
 
         String gptResponse = responseEntity.getBody().getChoices().get(0).getMessage().get("content");
+        log.info(gptResponse);
         // recommend 서비스에게 recommendation에 gpt추천문을 업데이트 하라고 요청
         supplementRecommendationService.updateGptResponse(userId, recommendationId, gptResponse);
     }

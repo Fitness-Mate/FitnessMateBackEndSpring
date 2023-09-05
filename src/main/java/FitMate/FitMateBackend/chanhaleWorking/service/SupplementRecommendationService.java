@@ -1,6 +1,9 @@
 package FitMate.FitMateBackend.chanhaleWorking.service;
 
 import FitMate.FitMateBackend.chanhaleWorking.config.ChatGptConfig;
+import FitMate.FitMateBackend.chanhaleWorking.dto.RecommendedSupplementDto;
+import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementFlavorDto;
+import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementRecommendationDto;
 import FitMate.FitMateBackend.chanhaleWorking.form.recommendation.SupplementRecommendationForm;
 import FitMate.FitMateBackend.chanhaleWorking.repository.RecommendedSupplementRepository;
 import FitMate.FitMateBackend.chanhaleWorking.repository.SupplementRecommendationRepository;
@@ -86,13 +89,24 @@ public class SupplementRecommendationService {
 
             int numStart = -1;
             int numEnd = -1;
-            int strStart = -1;
-            int strEnd = -1;
             int numStartKor = -1;
-            int strStartKor = -1;
-            int strEndKor = -1;
-            response = response.replaceAll("\n", "|");
-            String responseKor = deepLTranslateService.sendRequest(response);
+            int prevReasonEnd = 0;
+            int reasonStart;
+            StringBuilder sb = new StringBuilder();
+           response = response.replace("   ", "");
+           while (true) {
+               reasonStart = response.indexOf(ServiceConst.EN_REASON_PREFIX, prevReasonEnd + 1);
+               if (reasonStart == -1) {
+                   break;
+               }
+               sb.append(ServiceConst.KOR_REASON_PREFIX);
+               prevReasonEnd = response.indexOf(ServiceConst.EN_REASON_SUFFIX, reasonStart + 1);
+               log.info("len=[{}] resS=[{}] resE[{}]",response.length(), reasonStart, prevReasonEnd);
+               sb.append(response.substring(reasonStart+1 + ServiceConst.EN_REASON_PREFIX.length(), prevReasonEnd));
+               sb.append(ServiceConst.KOR_REASON_SUFFIX);
+           }
+            String responseKor = deepLTranslateService.sendRequest(sb.toString());
+           prevReasonEnd = -1;
             while (true) {
                 numStart = response.indexOf(ServiceConst.RECOMMEND_PREFIX, numStart+1);
                 numStartKor = responseKor.indexOf(ServiceConst.RECOMMEND_PREFIX, numStartKor+1);
@@ -101,23 +115,15 @@ public class SupplementRecommendationService {
                 }
                 numEnd = response.indexOf(ServiceConst.RECOMMEND_SUFFIX, numEnd+1);
                 Long number = Long.parseLong(response.substring(numStart + ServiceConst.RECOMMEND_PREFIX.length(), numEnd));
-                strStart = response.indexOf("-", numStart + 1);
-                strEnd = response.indexOf("||", numStart + 1);
-                strStartKor = responseKor.indexOf("-", numStartKor + 1);
-                strEndKor = responseKor.indexOf("||", numStartKor+1);
-                if (strEnd == -1) {
-                    strEnd = response.length()-1;
-                }
-                if (strEndKor == -1) {
-                    strEndKor = responseKor.length()-1;
-                }
-                String str = response.substring(strStart+1, strEnd);
-                String strKor = responseKor.substring(strStartKor+1, strEndKor);
                 Supplement supplement = supplementRepository.findById(number);
                 if (supplement == null) {
                     continue;
                 }
-                RecommendedSupplement recommendedSupplement = RecommendedSupplement.createRecommendedSupplement(supplement, str, strKor);
+                reasonStart = responseKor.indexOf(ServiceConst.KOR_REASON_PREFIX, prevReasonEnd + 1) + ServiceConst.KOR_REASON_PREFIX.length();
+                prevReasonEnd = responseKor.indexOf(ServiceConst.KOR_REASON_SUFFIX, reasonStart + 1);
+                String strKor = responseKor.substring(reasonStart+1, prevReasonEnd);
+                log.info(strKor);
+                RecommendedSupplement recommendedSupplement = RecommendedSupplement.createRecommendedSupplement(supplement, strKor);
                 recommendedSupplementRepository.save(recommendedSupplement);
                 supplementRecommendation.addRecommendSupplements(recommendedSupplement);
             }
@@ -128,5 +134,15 @@ public class SupplementRecommendationService {
 
     public List<SupplementRecommendation> getSupplementRecommendationBatch(Long userId, Long pageNumber) {
         return supplementRecommendationRepository.getBatch(userId, pageNumber);
+    }
+
+    public SupplementRecommendationDto createSupplementRecommendationDto(SupplementRecommendation sr){
+        SupplementRecommendationDto srd = SupplementRecommendationDto.createSupplementRecommendationDto(sr);
+        for (RecommendedSupplement recommendedSupplement : sr.getRecommendedSupplements()) {
+            List<SupplementFlavorDto> supplementLineup = supplementRepository.getSupplementLineup(recommendedSupplement.getSupplement());
+            srd.addRecommendedSupplement(new RecommendedSupplementDto(recommendedSupplement.getSupplement(), supplementLineup, recommendedSupplement.getKoreanRecommendationString()));
+
+        }
+        return srd;
     }
 }

@@ -2,12 +2,11 @@ package FitMate.FitMateBackend.chanhaleWorking.dto;
 
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
-import FitMate.FitMateBackend.domain.supplement.BCAA;
-import FitMate.FitMateBackend.domain.supplement.Gainer;
-import FitMate.FitMateBackend.domain.supplement.Protein;
-import FitMate.FitMateBackend.domain.supplement.Supplement;
+import FitMate.FitMateBackend.domain.supplement.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * 보조제 정보 조회 요청에 사용할 dto
@@ -26,15 +25,33 @@ public class SupplementDto {
     private String supplementType;
     private String imageURL;
     private String flavor;
-    // protein, gainer
+    private Boolean isCaptain;
+    private List<SupplementFlavorDto> otherFlavors;
+
+    // protein, Gainer
     private Float proteinPerServing;
     private Float fatPerServing;
     private Float carbohydratePerServing;
     private String source;
-    // protein, gainer, bcaa
-    // bcaa 는 추가요소 없음
 
-    public SupplementDto(Supplement supplement){
+    // AminoAcid
+    private Float leucine;
+    private Float isoLeucine;
+    private Float valine;
+    private Float L_Carnitine;
+    private Float L_Glutamine;
+    private Float L_Alanine;
+    private Float L_Lysine;
+    private Float methionine;
+    private Float phenylalanine;
+    private Float threonine;
+    private Float histidine;
+    private Float tryptophan;
+
+    //Other
+    private String contains;
+
+    public SupplementDto(Supplement supplement, List<SupplementFlavorDto> otherFlavors){
         this.id = supplement.getId();
         this.englishName = supplement.getEnglishName();
         this.koreanName = supplement.getKoreanName();
@@ -45,6 +62,8 @@ public class SupplementDto {
         this.flavor = supplement.getFlavor();
         this.imageURL = S3FileService.getAccessURL(ServiceConst.S3_DIR_SUPPLEMENT, supplement.getImageName());
 //        this.image = new UrlResource("file:" + FileStoreService.getFullPath(supplement.getImagePath()));
+        this.isCaptain = supplement.getIsCaptain();
+        this.otherFlavors = otherFlavors;
         if (supplement instanceof Gainer) {
             this.supplementType = "Gainer";
             Gainer sup = (Gainer) supplement;
@@ -52,9 +71,6 @@ public class SupplementDto {
             this.fatPerServing = sup.getFatPerServing();
             this.carbohydratePerServing = sup.getCarbohydratePerServing();
             this.source = sup.getSource();
-        } else if (supplement instanceof BCAA) {
-            this.supplementType = "BCAA";
-            BCAA sup = (BCAA) supplement;
         } else if(supplement instanceof Protein) {
             this.supplementType = "Protein";
             Protein sup = (Protein) supplement;
@@ -62,6 +78,25 @@ public class SupplementDto {
             this.fatPerServing = sup.getFatPerServing();
             this.carbohydratePerServing = sup.getCarbohydratePerServing();
             this.source = sup.getSource();
+        } else if (supplement instanceof AminoAcid) {
+            this.supplementType = "AminoAcid";
+            AminoAcid sup = (AminoAcid) supplement;
+            this.leucine = sup.getLeucine();
+            this.isoLeucine = sup.getIsoLeucine();
+            this.valine = sup.getValine();
+            this.L_Carnitine = sup.getL_Carnitine();
+            this.L_Glutamine = sup.getL_Glutamine();
+            this.L_Alanine = sup.getL_Alanine();
+            this.L_Lysine = sup.getL_Lysine();
+            this.methionine = sup.getMethionine();
+            this.phenylalanine = sup.getPhenylalanine();
+            this.threonine = sup.getThreonine();
+            this.histidine = sup.getHistidine();
+            this.tryptophan = sup.getTryptophan();
+        } else if (supplement instanceof Other) {
+            this.supplementType = "Other";
+            Other sup = (Other) supplement;
+            this.contains = sup.getContains();
         }
 
     }

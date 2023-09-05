@@ -31,13 +31,12 @@ public class SupplementRecommendationController {
     private final SupplementRecommendationService supplementRecommendationService;
     private final SupplementService supplementService;
     private final ChatGptService chatGptService;
-    private final DeepLTranslateService deepLTranslateService;
 
     @PostMapping
     public Long getRecommendedText(@Login UserArgResolverDto userArgDto, @RequestBody SupplementRecommendationForm form) throws Exception {
         Long recommendationId = supplementRecommendationService.createSupplementRecommendation(userArgDto.getUserId(), form);
         log.info("purpose:[{}][{}]", form.getMonthlyBudget(), form.getPurpose().get(0));
-        String question = "I have these supplements.".concat(supplementService.getSupplementString());
+        String question = "I have these supplements. ".concat(supplementService.getSupplementString());
         SupplementRecommendation supplementRecommendation = supplementRecommendationService.findById(userArgDto.getUserId(), recommendationId);
         question = question.concat(supplementRecommendation.getQueryText());
         log.info(question);
@@ -55,7 +54,7 @@ public class SupplementRecommendationController {
         if (!Objects.equals(sr.getBodyData().getUser().getId(), userArgDto.getUserId())) {
             return new SupplementRecommendationDto();
         }
-        return SupplementRecommendationDto.createSupplementRecommendationDto(sr);
+        return supplementRecommendationService.createSupplementRecommendationDto(sr);
     }
 
     @GetMapping("/history/list/{pageNum}")
@@ -76,5 +75,10 @@ public class SupplementRecommendationController {
             result.add(p.name());
         }
         return result;
+    }
+
+    @GetMapping("/test")
+    public String test(){
+        return supplementService.getSupplementString();
     }
 }
