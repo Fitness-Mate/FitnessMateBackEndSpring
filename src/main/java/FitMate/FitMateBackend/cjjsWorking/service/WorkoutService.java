@@ -149,10 +149,11 @@ public class WorkoutService {
         for (Machine machine : findWorkout.getMachines()) {
             machine.removeWorkout(findWorkout);
         }
-
-        //workout 이미지 삭제
-        if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_WORKOUT_IMAGE_NAME))
-            s3FileService.deleteImage(ServiceConst.S3_DIR_WORKOUT, findWorkout.getImgFileName());
+        if(findWorkout.getImgFileName() != null) {
+            //workout 이미지 삭제
+            if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_WORKOUT_IMAGE_NAME))
+                s3FileService.deleteImage(ServiceConst.S3_DIR_WORKOUT, findWorkout.getImgFileName());
+        }
 
         workoutRepository.remove(findWorkout);
         return ResponseEntity.ok("[" + findWorkout.getKoreanName() + ":" + findWorkout.getEnglishName() + "] 삭제 완료");
