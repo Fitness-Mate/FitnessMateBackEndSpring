@@ -1,10 +1,13 @@
 package FitMate.FitMateBackend.cjjsWorking.controller.userController;
 
 import FitMate.FitMateBackend.chanhaleWorking.service.SupplementService;
+import FitMate.FitMateBackend.cjjsWorking.dto.myfit.MyFitSearchRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.mySupplement.MySupplementReadAllResponse;
+import FitMate.FitMateBackend.cjjsWorking.dto.myfit.mySupplement.MySupplementSearchResponse;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.mySupplement.MySupplementUpdateRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutCreateRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutReadAllResponse;
+import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutSearchResponse;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutUpdateRequest;
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
@@ -62,6 +65,16 @@ public class MyFitController {
                 .collect(Collectors.toList());
     }
 
+    @PostMapping("/routines/workout/search/{routineId}") //루틴에 추가할 운동 검색 - 테스트 완료
+    public ResponseEntity<List<MyWorkoutSearchResponse>> searchWorkoutWithRoutineId(@PathVariable("routineId") Long routineId,
+                                                                                    @RequestBody MyFitSearchRequest request) {
+        return ResponseEntity.ok(
+                myFitService.searchWorkoutWithRoutineId(request.getSearchKeyword(), routineId).stream()
+                        .map(MyWorkoutSearchResponse::new)
+                        .collect(Collectors.toList())
+        );
+    }
+
     @PutMapping("/routines/workout/{myFitId}") //루틴에 속한 운동 수정 - 테스트 완료
     public ResponseEntity<String> updateMyWorkout(@PathVariable("myFitId") Long myWorkoutId,
                                                   @RequestBody MyWorkoutUpdateRequest request) {
@@ -99,6 +112,17 @@ public class MyFitController {
 
         List<MySupplement> mySupplements = myFitService.findAllMySupplementWithRoutineId(routine.getId());
         return ResponseEntity.ok(new MySupplementReadAllResponse(routine, mySupplements));
+    }
+
+    @PostMapping("/routines/supplement/search") //루틴에 추가할 보조제 검색 - 테스트 완료
+    public ResponseEntity<List<MySupplementSearchResponse>> searchSupplementWithRoutine(@RequestBody MyFitSearchRequest request,
+                                                                                        @RequestHeader HttpHeaders header) {
+        Long userId = JwtService.getUserId(JwtService.getToken(header));
+        Routine routine = routineService.findSupplementRoutineByUserId(userId);
+
+        return ResponseEntity.ok(myFitService.searchSupplementWithRoutineId(request.getSearchKeyword(), routine.getId()).stream()
+                .map(MySupplementSearchResponse::new)
+                .collect(Collectors.toList()));
     }
 
     @PutMapping("/routines/supplement/{myFitId}") //루틴에 속한 보조제 수정 - 테스트 완료

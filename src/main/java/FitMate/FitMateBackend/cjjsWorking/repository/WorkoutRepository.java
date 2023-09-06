@@ -91,14 +91,25 @@ public class WorkoutRepository {
 
         QWorkout workout = QWorkout.workout;
         JPAQueryFactory query = new JPAQueryFactory(em);
-        List<Workout> result = query
-                .select(workout)
-                .from(workout)
-                .where(builder)
-                .orderBy(workout.id.desc())
-                .offset(offset)
-                .limit(limit)
-                .fetch();
+        List<Workout> result;
+
+        if(page == -1) {
+            result = query
+                    .select(workout)
+                    .from(workout)
+                    .where(builder)
+                    .orderBy(workout.id.desc())
+                    .fetch();
+        } else {
+            result = query
+                    .select(workout)
+                    .from(workout)
+                    .where(builder)
+                    .orderBy(workout.id.desc())
+                    .offset(offset)
+                    .limit(limit)
+                    .fetch();
+        }
 
         if(search.getSearchKeyword() != null) { //keyword weight sorting
             List<WorkoutWeight> list = new ArrayList<>(result.stream().map(w -> {

@@ -1,0 +1,19 @@
+package FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout;
+
+import FitMate.FitMateBackend.domain.Workout;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class MyWorkoutSearchResponse {
+    private Long workoutId;
+    private String workoutName;
+
+    public MyWorkoutSearchResponse(Workout workout) {
+        this.workoutId = workout.getId();
+        this.workoutName = workout.getKoreanName();
+    }
+}

@@ -53,11 +53,21 @@ public class SupplementRepository {
         if (typeList == null || typeList.size() == 0) {
             typeList = List.of(SupplementType.values());
         }
-        List<Supplement> supplementList = em.createQuery("select s from Supplement s where s.type in :typ and (s.koreanName like :str or s.flavor like :str or s.englishName like :str) order by s.id", Supplement.class)
-                .setParameter("str", "%"+matchString.trim()+"%")
-                .setParameter("typ", typeList)
-                .setFirstResult((int) (ServiceConst.PAGE_BATCH_SIZE * (page - 1))).setMaxResults(ServiceConst.PAGE_BATCH_SIZE)
-                .getResultList();
+        //마이페이지 검색 기능에는 페이징을 적용하면 안돼서 아래 조건을 임의로 추가했습니다.. 기분 나쁘셨다면 진심으로 죄송합니다..
+        List<Supplement> supplementList;
+        if(page == -1) {
+            supplementList = em.createQuery("select s from Supplement s where s.type in :typ and (s.koreanName like :str or s.flavor like :str or s.englishName like :str) order by s.id", Supplement.class)
+                    .setParameter("str", "%"+matchString.trim()+"%")
+                    .setParameter("typ", typeList)
+                    .getResultList();
+        } else {
+            supplementList = em.createQuery("select s from Supplement s where s.type in :typ and (s.koreanName like :str or s.flavor like :str or s.englishName like :str) order by s.id", Supplement.class)
+                    .setParameter("str", "%"+matchString.trim()+"%")
+                    .setParameter("typ", typeList)
+                    .setFirstResult((int) (ServiceConst.PAGE_BATCH_SIZE * (page - 1))).setMaxResults(ServiceConst.PAGE_BATCH_SIZE)
+                    .getResultList();
+        }
+
         log.info("{}",supplementList.size());
         return supplementList;
     }
