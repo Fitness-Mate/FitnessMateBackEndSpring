@@ -115,6 +115,7 @@ public class WorkoutService {
         Workout findWorkout = workoutRepository.findById(workoutId).orElse(null);
         if(findWorkout == null)
             throw new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION);
+
         return findWorkout;
     }
 
