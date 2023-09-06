@@ -1,19 +1,27 @@
 package FitMate.FitMateBackend.cjjsWorking.service;
 
+import FitMate.FitMateBackend.chanhaleWorking.repository.SupplementRepository;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.mySupplement.MySupplementUpdateRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutUpdateRequest;
+import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutSearch;
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.repository.MyFitRepository;
 import FitMate.FitMateBackend.cjjsWorking.repository.RoutineRepository;
+import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutRepository;
+import FitMate.FitMateBackend.domain.Workout;
 import FitMate.FitMateBackend.domain.myfit.MyFit;
 import FitMate.FitMateBackend.domain.myfit.MySupplement;
 import FitMate.FitMateBackend.domain.myfit.MyWorkout;
+import FitMate.FitMateBackend.domain.supplement.Supplement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +30,8 @@ public class MyFitService {
 
     private final MyFitRepository myFitRepository;
     private final RoutineRepository routineRepository;
+    private final WorkoutRepository workoutRepository;
+    private final SupplementRepository supplementRepository;
 
     @Transactional
     public String saveMyFit(MyFit myFit) {
@@ -127,5 +137,57 @@ public class MyFitService {
 
         myFitRepository.remove(mySupplement);
         return "[myFitId:" + mySupplement.getId() +"] 삭제 완료";
+    }
+
+    public List<Workout> searchWorkoutWithRoutineId(String searchKeyword, Long routineId) {
+        List<Workout> workouts = workoutRepository.searchAll(-1, new WorkoutSearch(searchKeyword, null));
+        List<MyWorkout> myWorkouts = this.findAllMyWorkoutWithRoutineId(routineId);
+
+        //routine에 속해있는 운동은 검색 결과에서 제외
+        List<Workout> filteredWorkouts = new ArrayList<>();
+        for (Workout workout : workouts) {
+            boolean canAdd = true;
+
+            for (MyWorkout myWorkout : myWorkouts) {
+                if(myWorkout.getWorkout().getId().equals(workout.getId())) {
+                    canAdd = false;
+                    break;
+                }
+            }
+
+            if(canAdd) filteredWorkouts.add(workout);
+        }
+
+        return filteredWorkouts;
+    }
+
+    public List<Supplement> searchSupplementWithRoutineId(String searchKeyword, Long routineId) {
+        List<Supplement> supplements = supplementRepository.searchSupplement(-1L, null, searchKeyword);
+        List<MySupplement> mySupplements = this.findAllMySupplementWithRoutineId(routineId);
+
+        List<Supplement> filteredSupplements = new ArrayList<>();
+        for (Supplement supplement : supplements) {
+            boolean canAdd = true;
+
+            for (MySupplement mySupplement : mySupplements) {
+                if(mySupplement.getSupplement().getId().equals(supplement.getId())) {
+                    canAdd = false;
+                    break;
+                }
+            }
+
+            if(canAdd) filteredSupplements.add(supplement);
+        }
+
+        //filteredSupplemnts 중복 제거
+        List<Supplement> result = new ArrayList<>();
+        result.add(filteredSupplements.get(0));
+        for (int i = 1; i < filteredSupplements.size(); i++) {
+            if(!filteredSupplements.get(i).getKoreanName().equals(filteredSupplements.get(i-1).getKoreanName())) {
+                result.add(filteredSupplements.get(i));
+            }
+        }
+
+        return result;
     }
 }
