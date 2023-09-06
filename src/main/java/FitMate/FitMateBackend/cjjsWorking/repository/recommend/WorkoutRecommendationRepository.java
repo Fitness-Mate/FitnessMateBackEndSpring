@@ -26,14 +26,6 @@ public class WorkoutRecommendationRepository {
         em.persist(workoutRecommendation);
     }
 
-    @Transactional
-    public void updateQuery(WorkoutRecommendation workoutRecommendation) {
-        String text = workoutRecommendation.getQueryText();
-        int idx = text.indexOf("For a");
-        String queryText = text.substring(idx);
-        workoutRecommendation.setQueryText(queryText);
-    }
-
     public WorkoutRecommendation findById(Long recommendationId) {
         return em.find(WorkoutRecommendation.class, recommendationId);
     }
@@ -52,5 +44,9 @@ public class WorkoutRecommendationRepository {
                 .offset(offset)
                 .limit(limit)
                 .fetch();
+    }
+
+    public void delete(WorkoutRecommendation workoutRecommendation) {
+        em.remove(workoutRecommendation);
     }
 }

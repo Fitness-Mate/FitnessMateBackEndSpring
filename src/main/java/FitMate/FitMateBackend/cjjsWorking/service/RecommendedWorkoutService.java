@@ -1,5 +1,8 @@
 package FitMate.FitMateBackend.cjjsWorking.service;
 
+import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.RecommendErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.RecommendException;
 import FitMate.FitMateBackend.cjjsWorking.repository.recommend.RecommendedWorkoutRepository;
 import FitMate.FitMateBackend.domain.recommendation.RecommendedWorkout;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,6 +25,10 @@ public class RecommendedWorkoutService {
     }
 
     public List<RecommendedWorkout> findById(Long recommendationId) {
-        return recommendedWorkoutRepository.findById(recommendationId);
+        List<RecommendedWorkout> recommendedWorkouts = recommendedWorkoutRepository.findById(recommendationId);
+        if(recommendedWorkouts.isEmpty())
+            throw new RecommendException(RecommendErrorCode.RECOMMEND_NOT_FOUND_EXCEPTION, 404);
+
+        return recommendedWorkouts;
     }
 }

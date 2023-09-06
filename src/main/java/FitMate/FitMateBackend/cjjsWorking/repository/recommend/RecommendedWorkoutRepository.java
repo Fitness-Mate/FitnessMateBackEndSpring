@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,9 +21,10 @@ public class RecommendedWorkoutRepository {
     }
 
     public List<RecommendedWorkout> findById(Long recommendationId) {
-        return em.createQuery("select rw from RecommendedWorkout rw" +
-                " join fetch rw.workoutRecommendation wr" +
-                " where wr.id = :id", RecommendedWorkout.class)
+        return em.createQuery(
+                    "select rw from RecommendedWorkout rw" +
+                    " join fetch rw.workoutRecommendation wr" +
+                    " where wr.id = :id", RecommendedWorkout.class)
                 .setParameter("id", recommendationId)
                 .getResultList();
     }

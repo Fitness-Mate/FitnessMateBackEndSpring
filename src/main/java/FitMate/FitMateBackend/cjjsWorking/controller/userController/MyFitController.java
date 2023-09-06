@@ -6,7 +6,7 @@ import FitMate.FitMateBackend.cjjsWorking.dto.myfit.mySupplement.MySupplementUpd
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutCreateRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutReadAllResponse;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutUpdateRequest;
-import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.service.MyFitService;
 import FitMate.FitMateBackend.cjjsWorking.service.RoutineService;

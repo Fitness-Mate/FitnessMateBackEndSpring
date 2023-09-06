@@ -23,7 +23,7 @@ public abstract class Recommendation {
 
     private String recommendationType; // Workout, Supplement
 
-    @Column(length = 2000)
+    @Column(length = 3000)
     private String queryText; // 질문에 들어간 텍스트
     private LocalDate date = LocalDate.now();
 

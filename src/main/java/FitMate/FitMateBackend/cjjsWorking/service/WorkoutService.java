@@ -2,7 +2,7 @@ package FitMate.FitMateBackend.cjjsWorking.service;
 
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.UserWorkoutRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutDto;
-import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.form.WorkoutForm;
 import FitMate.FitMateBackend.cjjsWorking.repository.MachineRepository;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -116,6 +115,7 @@ public class WorkoutService {
         Workout findWorkout = workoutRepository.findById(workoutId).orElse(null);
         if(findWorkout == null)
             throw new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION);
+
         return findWorkout;
     }
 
@@ -149,10 +149,11 @@ public class WorkoutService {
         for (Machine machine : findWorkout.getMachines()) {
             machine.removeWorkout(findWorkout);
         }
-
-        //workout 이미지 삭제
-        if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_WORKOUT_IMAGE_NAME))
-            s3FileService.deleteImage(ServiceConst.S3_DIR_WORKOUT, findWorkout.getImgFileName());
+        if(findWorkout.getImgFileName() != null) {
+            //workout 이미지 삭제
+            if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_WORKOUT_IMAGE_NAME))
+                s3FileService.deleteImage(ServiceConst.S3_DIR_WORKOUT, findWorkout.getImgFileName());
+        }
 
         workoutRepository.remove(findWorkout);
         return ResponseEntity.ok("[" + findWorkout.getKoreanName() + ":" + findWorkout.getEnglishName() + "] 삭제 완료");

@@ -1,6 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.config.securityFilter;
 
-import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorResponse;
+import FitMate.FitMateBackend.cjjsWorking.exception.response.CustomErrorResponse;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.JwtFilterException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;

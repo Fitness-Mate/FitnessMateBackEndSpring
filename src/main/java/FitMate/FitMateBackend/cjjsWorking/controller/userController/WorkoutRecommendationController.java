@@ -25,7 +25,6 @@ public class WorkoutRecommendationController {
     private final WorkoutRecommendationService workoutRecommendationService;
     private final ChatGptService chatGptService;
     private final RecommendedWorkoutService recommendedWorkoutService;
-    private final JwtService jwtService;
 
     @PostMapping("recommendation/workout") //운동 추천 요청
     public Long getWorkoutRecommendation(@RequestHeader HttpHeaders header, @RequestBody WorkoutRecommendationRequest request) throws Exception {
@@ -56,5 +55,10 @@ public class WorkoutRecommendationController {
     public RecommendedWorkoutResponse findRecommendedWorkout(@PathVariable("workoutRecommendationId") Long workoutRecommendationId) {
         List<RecommendedWorkout> findRecommend = recommendedWorkoutService.findById(workoutRecommendationId);
         return new RecommendedWorkoutResponse(findRecommend);
+    }
+
+    @DeleteMapping("recommendation/workout/history/{workoutRecommendationId}") //운동 추천 history 삭제
+    public void deleteWorkoutRecommendation(@PathVariable("workoutRecommendationId") Long workoutRecommendationId) {
+        workoutRecommendationService.deleteWorkoutRecommendation(workoutRecommendationId);
     }
 }
