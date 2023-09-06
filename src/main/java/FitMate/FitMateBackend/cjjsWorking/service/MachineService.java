@@ -1,9 +1,8 @@
 package FitMate.FitMateBackend.cjjsWorking.service;
 
-import FitMate.FitMateBackend.cjjsWorking.dto.Machine.GetMachineResponse;
 import FitMate.FitMateBackend.cjjsWorking.dto.Machine.MachineDto;
 import FitMate.FitMateBackend.cjjsWorking.dto.Machine.MachineRequest;
-import FitMate.FitMateBackend.cjjsWorking.exception.CustomErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.repository.MachineRepository;
 import FitMate.FitMateBackend.domain.BodyPart;

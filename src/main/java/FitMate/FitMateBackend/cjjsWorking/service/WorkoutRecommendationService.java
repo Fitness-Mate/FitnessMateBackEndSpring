@@ -95,4 +95,10 @@ public class WorkoutRecommendationService {
     public List<WorkoutRecommendation> findAllWithWorkoutRecommendation(int page, Long userId) {
         return workoutRecommendationRepository.findAllWithWorkoutRecommendation(page, userId);
     }
+
+    @Transactional
+    public void deleteWorkoutRecommendation(Long workoutRecommendationId) {
+        WorkoutRecommendation recommendation = this.findById(workoutRecommendationId);
+        workoutRecommendationRepository.delete(recommendation);
+    }
 }

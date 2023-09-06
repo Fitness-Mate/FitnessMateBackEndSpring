@@ -17,7 +17,7 @@ import java.util.List;
 public class WorkoutRecommendation extends Recommendation {
 
     @JsonIgnore
-    @OneToMany(mappedBy = "workoutRecommendation")
+    @OneToMany(mappedBy = "workoutRecommendation", cascade = CascadeType.ALL)
     private List<RecommendedWorkout> rws = new ArrayList<>();
 
     private String requestedBodyParts;
@@ -30,6 +30,7 @@ public class WorkoutRecommendation extends Recommendation {
         workoutRecommendation.setBodyData(bodyData);
         workoutRecommendation.setUser(user);
 
+        //bodyPart 필수선택
         String bodyPartString = "";
         for (int i = 0; i < bodyParts.size(); i++) {
             if(i == (bodyParts.size()-1)) bodyPartString = bodyPartString.concat(bodyParts.get(i).getKoreanName());
@@ -37,6 +38,7 @@ public class WorkoutRecommendation extends Recommendation {
         }
         workoutRecommendation.setRequestedBodyParts(bodyPartString);
 
+        //machine 필수선택
         String machineString = "";
         for (int i = 0; i < machines.size(); i++) {
             if(i == (machines.size())-1) machineString = machineString.concat(machines.get(i).getKoreanName());
@@ -61,14 +63,19 @@ public class WorkoutRecommendation extends Recommendation {
                 "1. Find a workout from the list below and recommend it.\n");
         qString = qString.concat(workoutList).concat("\n\n");
         qString = qString.concat("2. When answering, do not add any comments," +
-                " and answer the five exercises in the form " +
-                "[workout index in list] [weight(kg)] [repeat] [set] in exactly three lines, one line for each exercise. " +
+                " and answer the ten exercises in the form " +
+                "[workout index in list] [weight(kg)] [repeat] [set] in exactly ten lines, one line for each exercise. " +
                 "Below is an example for you to answer\n" +
-                "[1][40kg][12][4]\n" +
-                "[2][60kg][10][5]\n" +
-                "[17][40kg][10][5]\n" +
-                "[24][30kg][10][5]\n" +
-                "[20][40kg][12][4]\n\n");
+                "[150056][40kg][12][4]\n" +
+                "[99955][60kg][10][5]\n" +
+                "[99961][40kg][10][5]\n" +
+                "[50112][30kg][10][5]\n" +
+                "[249962][30kg][10][5]\n" +
+                "[249953][30kg][10][5]\n" +
+                "[249960][30kg][10][5]\n" +
+                "[200005][30kg][10][5]\n" +
+                "[99960][30kg][10][5]\n" +
+                "[50109][40kg][12][4]\n\n");
         qString = qString.concat("3. When recommending a weight, " +
                 "please suggest an exact number (kg) instead of an ambiguous expression such as a medium weight.\n\n");
         qString = qString.concat("4. Only recommend exercises that use the exercise equipment I suggested. " +
