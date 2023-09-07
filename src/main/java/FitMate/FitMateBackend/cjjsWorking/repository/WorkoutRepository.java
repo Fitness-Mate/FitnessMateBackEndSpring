@@ -72,7 +72,8 @@ public class WorkoutRepository {
         Set<String> keywordSet = new HashSet<>();
         if(search.getSearchKeyword() != null) {
             //search keyword tokenization
-            String match = "[^\uAC00-\uD7A30-9a-zA-Z]";
+            String match = "[^\uAC00-\uD7A30-9a-zA-Z\u3131-\u314E\u314F-\u3163]";
+
             String[] keywords = search.getSearchKeyword().replaceAll(match, "*").split("\\*");
             for (String keyword : keywords) { //remove blank and duplicate keywords
                 if(hasText(keyword)) keywordSet.add(keyword);

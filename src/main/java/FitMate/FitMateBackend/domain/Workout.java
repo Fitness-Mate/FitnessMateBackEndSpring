@@ -1,6 +1,6 @@
 package FitMate.FitMateBackend.domain;
 
-import FitMate.FitMateBackend.cjjsWorking.form.WorkoutForm;
+import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutForm;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

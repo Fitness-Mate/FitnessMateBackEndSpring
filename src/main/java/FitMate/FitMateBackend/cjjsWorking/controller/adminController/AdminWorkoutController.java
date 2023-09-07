@@ -1,7 +1,7 @@
 package FitMate.FitMateBackend.cjjsWorking.controller.adminController;
 
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutResponseDto;
-import FitMate.FitMateBackend.cjjsWorking.form.WorkoutForm;
+import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutForm;
 import FitMate.FitMateBackend.cjjsWorking.service.WorkoutService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

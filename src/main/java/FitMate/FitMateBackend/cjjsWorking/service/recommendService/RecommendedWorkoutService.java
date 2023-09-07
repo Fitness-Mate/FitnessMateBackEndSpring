@@ -1,4 +1,4 @@
-package FitMate.FitMateBackend.cjjsWorking.service;
+package FitMate.FitMateBackend.cjjsWorking.service.recommendService;
 
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.RecommendErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
