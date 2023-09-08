@@ -42,6 +42,7 @@ public class SupplementService {
         if (supplementForm.getImage()!=null && !supplementForm.getImage().isEmpty()) {// 이미지를 업로드 했다면,
 //            String newImage = FileStoreService.storeFile(supplementForm.getImage()); //  업로드 한 이미지 저장
             String newImage = s3FileService.uploadImage(ServiceConst.S3_DIR_SUPPLEMENT, supplementForm.getImage());
+            log.info("image:[{}]", newImage);
             supplement.setImageName(newImage); // 이미지 이름 등록
         }
         else  // 이미지 업로드 안했다면 디폴트 이미지로 등록
