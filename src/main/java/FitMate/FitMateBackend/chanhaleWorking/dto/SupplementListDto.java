@@ -2,7 +2,7 @@ package FitMate.FitMateBackend.chanhaleWorking.dto;
 
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
-import FitMate.FitMateBackend.domain.supplement.Supplement;
+import FitMate.FitMateBackend.domain.supplement.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,8 +15,10 @@ public class SupplementListDto {
     private String koreanName;
     private Integer price;
     private Float servings;
+    private String supplementType;
     private String flavor;
     private String imageURL;
+    private String source;
 //    private UrlResource image;
 
     public SupplementListDto(Supplement supplement){
@@ -28,5 +30,19 @@ public class SupplementListDto {
         this.imageURL = S3FileService.getAccessURL(ServiceConst.S3_DIR_SUPPLEMENT, supplement.getImageName());
 //        this.image = new UrlResource("file:" + FileStoreService.getFullPath(supplement.getImagePath()));
         this.flavor = supplement.getFlavor();
+        if (supplement.getType() == SupplementType.Gainer) {
+            this.supplementType = "Gainer";
+            this.source = ((Gainer) supplement).getSource();
+        }
+        if (supplement.getType() == SupplementType.AminoAcid) {
+            this.supplementType = "AminoAcid";
+        }
+        if (supplement.getType() == SupplementType.Protein) {
+            this.supplementType = "Protein";
+            this.source = ((Protein) supplement).getSource();
+        }
+        if (supplement.getType() == SupplementType.Other) {
+            this.supplementType = "Other";
+        }
     }
 }
