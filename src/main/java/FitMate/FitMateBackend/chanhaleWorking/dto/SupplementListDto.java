@@ -19,6 +19,7 @@ public class SupplementListDto {
     private String flavor;
     private String imageURL;
     private String source;
+    private String description;
 //    private UrlResource image;
 
     public SupplementListDto(Supplement supplement){
@@ -30,6 +31,7 @@ public class SupplementListDto {
         this.imageURL = S3FileService.getAccessURL(ServiceConst.S3_DIR_SUPPLEMENT, supplement.getImageName());
 //        this.image = new UrlResource("file:" + FileStoreService.getFullPath(supplement.getImagePath()));
         this.flavor = supplement.getFlavor();
+        this.description = supplement.getDescription();
         if (supplement.getType() == SupplementType.Gainer) {
             this.supplementType = "Gainer";
             this.source = ((Gainer) supplement).getSource();
