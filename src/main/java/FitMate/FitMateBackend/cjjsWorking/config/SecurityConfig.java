@@ -67,6 +67,7 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/user/private/**"),
                 new AntPathRequestMatcher("/bodyData/**"),
                 new AntPathRequestMatcher("/machines/**"),
+                new AntPathRequestMatcher("/supplements/**"),
                 new AntPathRequestMatcher("/recommendation/**"),
                 new AntPathRequestMatcher("/myfit/**")
         );
