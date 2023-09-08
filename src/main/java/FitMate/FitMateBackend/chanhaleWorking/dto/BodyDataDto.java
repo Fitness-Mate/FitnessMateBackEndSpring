@@ -23,6 +23,7 @@ public class BodyDataDto {
     private Float MuscleMass;
     private Float upDownBalance;
 
+
     public static BodyDataDto createBodyDataDto(BodyData bodyData) {
         BodyDataDto bodyDataDto = new BodyDataDto();
         if (bodyData != null) {
