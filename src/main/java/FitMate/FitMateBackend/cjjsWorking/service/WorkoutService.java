@@ -164,10 +164,12 @@ public class WorkoutService {
         return workoutRepository.searchAll(page, search);
     }
 
-    public String getAllWorkoutToString() {
-        List<Workout> workouts = workoutRepository.findAll();
+    public String getAllWorkoutToString(List<BodyPart> bodyParts, List<Machine> machines) {
+        List<Workout> workouts = workoutRepository.findAllWithBodyPartsAndMachines(bodyParts, machines);
+
         String str = "list: [ ";
         for (int i = 0; i < workouts.size(); i++) {
+
             if(i == (workouts.size()-1)) str += " " + workouts.get(i).getEnglishName() + "(" + workouts.get(i).getId() + ")";
             else str += workouts.get(i).getEnglishName() + "(" + workouts.get(i).getId() + "), ";
         }
@@ -175,8 +177,4 @@ public class WorkoutService {
 
         return str;
     }
-
-//    public List<Machine> findRelatedMachine(Workout workout) {
-//        return workoutRepository.findRelatedMachine(workout);
-//    }
 }
