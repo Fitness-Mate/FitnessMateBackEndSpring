@@ -65,9 +65,6 @@ public class WorkoutRepository {
         for (BodyPart bodyPart : bodyParts) {
             builder.or(QWorkout.workout.bodyParts.contains(bodyPart));
         }
-//        for (Machine machine : machines) {
-//            builder.or(QWorkout.workout.machines.contains(machine));
-//        }
 
         QWorkout workout = QWorkout.workout;
         JPAQueryFactory query = new JPAQueryFactory(em);
