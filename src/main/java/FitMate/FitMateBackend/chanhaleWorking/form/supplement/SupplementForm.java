@@ -50,7 +50,7 @@ public class SupplementForm {
 
 
     public String validateFields() {
-        log.info("l={}", this.leucine);
+        log.info("img={}, [{}]", image.getName(), image.getSize());
         if (price < 0) {
             return "잘못된 가격";
         }
