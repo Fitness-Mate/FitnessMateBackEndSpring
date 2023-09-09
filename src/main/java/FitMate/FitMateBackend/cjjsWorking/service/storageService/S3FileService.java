@@ -28,8 +28,9 @@ public class S3FileService {
         try {
             String uuid = UUID.randomUUID().toString();
             String ext = extracExt(Objects.requireNonNull(file.getOriginalFilename()));
-
+            log.info("ext={}", ext);
             String imageName = uuid + "." + ext;
+            log.info("ext={} imageName={} cType=[{}]", ext, imageName, file.getContentType());
 
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
