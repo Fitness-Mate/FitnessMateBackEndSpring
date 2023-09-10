@@ -5,6 +5,9 @@ import FitMate.FitMateBackend.chanhaleWorking.dto.UserArgResolverDto;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.RegisterForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.UpdateUserForm;
 import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
+import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineSetData;
+import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineSetRequest;
+import FitMate.FitMateBackend.cjjsWorking.service.RoutineService;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.AuthResponse;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.ExtraClaims;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
@@ -18,6 +21,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -99,6 +105,7 @@ public class UserService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final RedisCacheService redisCacheService;
+    private final RoutineService routineService;
 
     @Transactional
     public AuthResponse registerWithJwt(RegisterForm registerForm, String type) {
@@ -112,10 +119,16 @@ public class UserService {
          *      userRepository.save(newUser);
          *      부분을 토큰 발행보다 먼저 수행하도록 수정 (토큰 발행시 persist되지 않은 인스턴스에서 getId 시도시 null 반환하여 오류 발생하는 것에 대한 대처)
          */
+
+        //사용자 기본 운동, 보조제 루틴 1개씩 생성
+        List<RoutineSetData> workoutRoutine = new ArrayList<>();
+        workoutRoutine.add(new RoutineSetData(-1L, 1, "기본루틴"));
+        routineService.setWorkoutRoutines(newUser, workoutRoutine);
+        routineService.saveSupplementRoutine(newUser);
+
         String accessToken = jwtService.generateAccessToken(newUser, new ExtraClaims(newUser));
         String refreshToken = jwtService.generateRefreshToken(newUser, false);
         redisCacheService.saveToken(refreshToken, false);
-
 
         return new AuthResponse(accessToken, refreshToken, false);
     }

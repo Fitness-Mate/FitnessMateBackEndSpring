@@ -54,8 +54,7 @@ public class RoutineController {
         Long userId = JwtService.getUserId(JwtService.getToken(header));
         User user = userService.getUserWithId(userId);
 
-//        routineService.saveSupplementRoutine(user);
-        routineService.setWorkoutRoutines(user, request);
+        routineService.setWorkoutRoutines(user, request.getRoutines());
     }
 
     @PutMapping("/routines/supplement") //보조제 루틴 이름 수정 - 테스트 완료

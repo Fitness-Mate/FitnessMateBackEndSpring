@@ -59,6 +59,22 @@ public class WorkoutRepository {
                 .getResultList();
     }
     //Overloading
+    public List<Workout> findAllWithBodyPartsAndMachines(List<BodyPart> bodyParts, List<Machine> machines) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        for (BodyPart bodyPart : bodyParts) {
+            builder.or(QWorkout.workout.bodyParts.contains(bodyPart));
+        }
+
+        QWorkout workout = QWorkout.workout;
+        JPAQueryFactory query = new JPAQueryFactory(em);
+        return query
+                .select(workout)
+                .from(workout)
+                .where(builder)
+                .orderBy(workout.id.desc())
+                .fetch();
+    }
 
     public void remove(Workout workout) {
         em.remove(workout);

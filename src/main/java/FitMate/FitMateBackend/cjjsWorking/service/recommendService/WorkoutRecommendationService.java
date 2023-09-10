@@ -39,7 +39,7 @@ public class WorkoutRecommendationService {
 
         WorkoutRecommendation workoutRecommendation =
                 WorkoutRecommendation.createWorkoutRecommendation
-                        (user, bodyParts, machines, workoutService.getAllWorkoutToString());
+                        (user, bodyParts, machines, workoutService.getAllWorkoutToString(bodyParts, machines));
 
         workoutRecommendationRepository.save(workoutRecommendation);
         return workoutRecommendation.getId();

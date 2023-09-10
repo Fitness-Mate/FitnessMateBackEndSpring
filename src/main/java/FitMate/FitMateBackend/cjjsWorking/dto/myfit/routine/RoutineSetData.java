@@ -11,5 +11,4 @@ public class RoutineSetData {
     private Long routineId;
     private int routineIndex;
     private String routineName;
-
 }

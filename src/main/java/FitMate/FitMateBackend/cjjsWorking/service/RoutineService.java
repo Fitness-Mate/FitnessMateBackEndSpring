@@ -35,7 +35,7 @@ public class RoutineService {
 
     @Transactional
     public Long saveSupplementRoutine(User user) {
-        Routine routine = new SupplementRoutine(user, null, 0);
+        Routine routine = new SupplementRoutine(user, "기본루틴", 0);
         return routineRepository.save(routine);
     }
 
@@ -70,12 +70,12 @@ public class RoutineService {
     }
 
     @Transactional
-    public void setWorkoutRoutines(User user, RoutineSetRequest request) {
-        if(request.getRoutines().size() >= ServiceConst.ROUTINE_MAX_SIZE)
+    public void setWorkoutRoutines(User user, List<RoutineSetData> routines) {
+        if(routines.size() >= ServiceConst.ROUTINE_MAX_SIZE)
             throw new CustomException(CustomErrorCode.ROUTINE_SIZE_OVER_EXCEPTION);
 
         List<Long> routineIds = new ArrayList<>();
-        for (RoutineSetData routine : request.getRoutines()) {
+        for (RoutineSetData routine : routines) {
             if(routine.getRoutineId() == -1) {
                 //create routine
                 Long savedRoutineId = this.saveWorkoutRoutine(user, routine.getRoutineName(), routine.getRoutineIndex());
@@ -88,8 +88,8 @@ public class RoutineService {
         }
 
         //delete routine
-        List<WorkoutRoutine> routines = this.findAllWorkoutRoutineWithIndex(user.getId());
-        for (WorkoutRoutine routine : routines) {
+        List<WorkoutRoutine> oldRoutines = this.findAllWorkoutRoutineWithIndex(user.getId());
+        for (WorkoutRoutine routine : oldRoutines) {
             if(!routineIds.contains(routine.getId())) {
                 this.removeRoutine(routine);
             }
