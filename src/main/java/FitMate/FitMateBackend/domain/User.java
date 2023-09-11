@@ -76,6 +76,7 @@ public class User implements UserDetails {
 
     public void updateUser(UpdateUserForm updateUserForm) {
         this.userName = updateUserForm.getUserName();
+        this.birthDate = updateUserForm.getBirthDate();
     }
 
     public void updatePassword(String newPassword) {

@@ -96,4 +96,8 @@ public class AdminSupplementController {
 
         return Arrays.stream(SupplementType.values()).toList();
     }
+    @DeleteMapping("/delete/all")
+    public void deleteAllSupplement() {
+        supplementService.deleteAllSupplement();
+    }
 }
