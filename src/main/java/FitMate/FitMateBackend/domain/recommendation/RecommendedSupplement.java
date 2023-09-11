@@ -4,6 +4,7 @@ import FitMate.FitMateBackend.domain.supplement.Supplement;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 @Data
 @Entity

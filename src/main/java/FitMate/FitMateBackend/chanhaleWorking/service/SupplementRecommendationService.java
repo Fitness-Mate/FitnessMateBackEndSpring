@@ -9,6 +9,8 @@ import FitMate.FitMateBackend.chanhaleWorking.repository.RecommendedSupplementRe
 import FitMate.FitMateBackend.chanhaleWorking.repository.SupplementRecommendationRepository;
 import FitMate.FitMateBackend.chanhaleWorking.repository.SupplementRepository;
 import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
+import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.RecommendErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.RecommendException;
 import FitMate.FitMateBackend.cjjsWorking.service.apiService.DeepLTranslateService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.User;
@@ -129,7 +131,11 @@ public class SupplementRecommendationService {
             }
         }
     public SupplementRecommendation getSupplementRecommendation(Long userId, Long supplementRecommendationId) {
-        return supplementRecommendationRepository.findById(userId, supplementRecommendationId);
+        SupplementRecommendation recommendation = supplementRecommendationRepository.findById(userId, supplementRecommendationId);
+        if(recommendation.getRecommendedSupplements().isEmpty()){
+            throw new RecommendException(RecommendErrorCode.RECOMMEND_NOT_FOUND_EXCEPTION, 404);
+        }
+        return recommendation;
     }
 
     public List<SupplementRecommendation> getSupplementRecommendationBatch(Long userId, Long pageNumber) {

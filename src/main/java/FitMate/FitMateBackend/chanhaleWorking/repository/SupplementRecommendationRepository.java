@@ -1,5 +1,7 @@
 package FitMate.FitMateBackend.chanhaleWorking.repository;
 
+import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.RecommendErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.RecommendException;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.recommendation.Recommendation;
 import FitMate.FitMateBackend.domain.recommendation.SupplementRecommendation;
@@ -29,7 +31,7 @@ public class SupplementRecommendationRepository {
     }
     public SupplementRecommendation findById(Long userId, Long recId) {
         SupplementRecommendation recommendation = em.find(SupplementRecommendation.class, recId);
-        if (recommendation != null && Objects.equals(recommendation.getBodyData().getUser().getId(), userId)) {
+        if ( Objects.equals(recommendation.getBodyData().getUser().getId(), userId)) {
             return recommendation;
         }
         return null;

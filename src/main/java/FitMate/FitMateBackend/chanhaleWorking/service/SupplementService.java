@@ -137,6 +137,20 @@ public class SupplementService {
         }
         supplementRepository.deleteSupplement(id);
     }
+    @Transactional
+    public void deleteAllSupplement() {
+        List<Supplement> supplements = supplementRepository.findAll();
+        if (supplements == null || supplements.isEmpty())
+            return;
+        for (Supplement supplement : supplements) {
+            String supImg = supplement.getImageName();
+            if (supImg != null && !supImg.equals(ServiceConst.DEFAULT_IMAGE_NAME)) {
+                s3FileService.deleteImage(ServiceConst.S3_DIR_SUPPLEMENT, supImg);
+                log.info("{} 파일이 삭제되었습니다.", supImg);
+            }
+            supplementRepository.deleteSupplement(supplement.getId());
+        }
+    }
 
     public List<Supplement> getSupplementBatch(Long page) {
         return supplementRepository.getSupplementBatch(page);
