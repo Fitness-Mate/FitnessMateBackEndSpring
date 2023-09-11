@@ -59,7 +59,7 @@ public class WorkoutRecommendationService {
 
             String[] info = sentence.split("]");
             long workoutId = Long.parseLong(info[0].substring(1));
-            String weight = info[1].substring(1);
+            String weight = info[1].substring(1).split("kg")[0];
             String repeat = info[2].substring(1);
             String set = info[3].substring(1);
 
