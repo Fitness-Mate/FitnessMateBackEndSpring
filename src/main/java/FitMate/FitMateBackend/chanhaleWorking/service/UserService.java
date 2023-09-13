@@ -122,7 +122,10 @@ public class UserService {
 
         //사용자 기본 운동, 보조제 루틴 1개씩 생성
         List<RoutineSetData> workoutRoutine = new ArrayList<>();
-        workoutRoutine.add(new RoutineSetData(-1L, 1, "기본루틴"));
+        workoutRoutine.add(new RoutineSetData(-1L, 1, "루틴1"));
+        workoutRoutine.add(new RoutineSetData(-1L, 2, "루틴2"));
+        workoutRoutine.add(new RoutineSetData(-1L, 3, "루틴3"));
+        workoutRoutine.add(new RoutineSetData(-1L, 4, "루틴4"));
         routineService.setWorkoutRoutines(newUser, workoutRoutine);
         routineService.saveSupplementRoutine(newUser);
 

@@ -82,8 +82,6 @@ public class UserController {
         return "fail";
     }
 
-
-
     @PostMapping("/private/delete")
     public String deleteUser(@Login UserArgResolverDto loginUser, @RequestBody DeleteUserForm form) {
         log.info(form.getPassword());
