@@ -49,7 +49,7 @@ public class AdminSupplementController {
         return supplementService.makeSupplementDto(supplement);
     }
 
-    @PutMapping("/{supplementId}")
+    @PostMapping("/{supplementId}")
     public String updateSupplement(SupplementForm supplementForm, @PathVariable("supplementId") Long supplementId) throws IOException {
         String errorMsg = supplementForm.validateFields();
         if (!errorMsg.equals("ok"))

@@ -49,13 +49,11 @@ public class AdminLoginController {
     }
 
     @PutMapping("/logout")
-    @ResponseBody
-    public String logout(HttpServletRequest request) {
+    public void logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
 
-        return "ok";
     }
 }
