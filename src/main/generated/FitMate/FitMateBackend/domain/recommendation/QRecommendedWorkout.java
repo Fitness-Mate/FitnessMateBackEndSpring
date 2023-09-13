@@ -52,7 +52,7 @@ public class QRecommendedWorkout extends EntityPathBase<RecommendedWorkout> {
 
     public QRecommendedWorkout(Class<? extends RecommendedWorkout> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.workout = inits.isInitialized("workout") ? new FitMate.FitMateBackend.domain.QWorkout(forProperty("workout"), inits.get("workout")) : null;
+        this.workout = inits.isInitialized("workout") ? new FitMate.FitMateBackend.domain.QWorkout(forProperty("workout")) : null;
         this.workoutRecommendation = inits.isInitialized("workoutRecommendation") ? new QWorkoutRecommendation(forProperty("workoutRecommendation"), inits.get("workoutRecommendation")) : null;
     }
 
