@@ -64,7 +64,7 @@ public class UserController {
         return "ok";
     }
 
-    @PutMapping("/private")
+    @PostMapping("/private")
     public String updateUser(@Login UserArgResolverDto loginUser, @RequestBody UpdateUserForm form) {
         log.info(loginUser.getLoginEmail());
         userService.updateUser(loginUser.getUserId(), form);
