@@ -28,10 +28,12 @@ public class BodyDataService {
     public String createBodyData(Long userId, BodyDataForm bodyDataForm) {
         User user = userRepository.findOne(userId);
         List<BodyData> bodyDataList = user.getBodyDataHistory();
+        // 날짜 중복시 수정되도록 로직 변경
         for (BodyData bodyData : bodyDataList) {
             log.info("{} : {}", bodyData.getDate());
             if (bodyData.getDate().compareTo(bodyDataForm.getDate()) == 0) {
-                return "중복된 날짜 (하루에 한 건만 등록 가능)";
+                bodyData.update(bodyDataForm);
+                return bodyData.getId().toString();
             }
         }
 
