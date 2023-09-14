@@ -44,6 +44,14 @@ public class BodyData {
     public void setUser(User user) {
         this.user = user;
     }
+    public void update(BodyDataForm bodyDataForm){
+        this.date = bodyDataForm.getDate();
+        this.height = bodyDataForm.getHeight();
+        this.weight = bodyDataForm.getWeight();
+        this.bodyFat = bodyDataForm.getBodyFat();
+        this.muscleMass = bodyDataForm.getMuscleMass();
+        this.upDownBalance = bodyDataForm.getUpDownBalance();
+    }
 
     public String describe() {
         String str = " ";
