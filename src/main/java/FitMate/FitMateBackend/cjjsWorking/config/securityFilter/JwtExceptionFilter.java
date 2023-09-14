@@ -2,6 +2,7 @@ package FitMate.FitMateBackend.cjjsWorking.config.securityFilter;
 
 import FitMate.FitMateBackend.cjjsWorking.exception.response.CustomErrorResponse;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.JwtFilterException;
+import FitMate.FitMateBackend.cjjsWorking.exception.response.JwtFilterErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,7 +30,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (JwtFilterException e) {
-            log.error("ERROR: {}, URL: {}, MESSAGE: {}", e.getCustomErrorCode(),
+            log.error("ERROR: {}, URL: {}, MESSAGE: {}", e.getJwtFilterErrorCode(),
                     request.getRequestURI(), e.getMessage());
 
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -37,7 +38,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             response.setCharacterEncoding("UTF-8");
 
             ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(response.getWriter(), new CustomErrorResponse(e.getCustomErrorCode(), e.getMessage()));
+            objectMapper.writeValue(response.getWriter(), new JwtFilterErrorResponse(e.getJwtFilterErrorCode(), e.getMessage()));
         }
     }
 }

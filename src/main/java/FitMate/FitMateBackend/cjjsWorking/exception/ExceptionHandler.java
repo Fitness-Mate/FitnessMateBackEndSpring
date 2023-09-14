@@ -5,6 +5,7 @@ import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.JwtFilterException;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.RecommendException;
 import FitMate.FitMateBackend.cjjsWorking.exception.response.CustomErrorResponse;
+import FitMate.FitMateBackend.cjjsWorking.exception.response.JwtFilterErrorResponse;
 import FitMate.FitMateBackend.cjjsWorking.exception.response.RecommendErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +24,8 @@ public class ExceptionHandler {
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(JwtFilterException.class) //JwtFilterException은 Handler에서 동작하지 않음. JwtExceptionFilter에서 동작
-    public ResponseEntity<CustomErrorResponse> handleJwtFilterException(JwtFilterException e) {
-        return ResponseEntity.status(403).body(new CustomErrorResponse(e.getCustomErrorCode(), e.getMessage()));
+    public ResponseEntity<JwtFilterErrorResponse> handleJwtFilterException(JwtFilterException e) {
+        return ResponseEntity.status(403).body(new JwtFilterErrorResponse(e.getJwtFilterErrorCode(), e.getMessage()));
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(AuthException.class)

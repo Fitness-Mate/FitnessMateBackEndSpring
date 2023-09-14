@@ -2,6 +2,7 @@ package FitMate.FitMateBackend.cjjsWorking.service.authService;
 
 import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.JwtFilterErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.JwtFilterException;
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.RedisCacheService;
@@ -71,7 +72,7 @@ public class JwtService {
 
     public String generateAccessTokenWithRefreshToken(String refreshToken) {
         if(!redisCacheService.isExist(refreshToken)) {
-            throw new CustomException(CustomErrorCode.EXPIRED_REFRESH_TOKEN_EXCEPTION);
+            throw new JwtFilterException(JwtFilterErrorCode.EXPIRED_REFRESH_TOKEN_EXCEPTION);
         }
 
         User user = userRepository.findByLoginEmail(getLoginEmail(refreshToken)).orElse(null);
@@ -119,15 +120,15 @@ public class JwtService {
                     .parseClaimsJws(token)
                     .getBody();
         } catch(ExpiredJwtException e) {
-            throw new JwtFilterException(CustomErrorCode.EXPIRED_ACCESS_TOKEN_EXCEPTION);
+            throw new JwtFilterException(JwtFilterErrorCode.EXPIRED_ACCESS_TOKEN_EXCEPTION);
         } catch(UnsupportedJwtException e) {
-            throw new JwtFilterException(CustomErrorCode.UNSUPPORTED_JWT_EXCEPTION);
+            throw new JwtFilterException(JwtFilterErrorCode.UNSUPPORTED_JWT_EXCEPTION);
         } catch(MalformedJwtException e) {
-            throw new JwtFilterException(CustomErrorCode.MALFORMED_JWT_EXCEPTION);
+            throw new JwtFilterException(JwtFilterErrorCode.MALFORMED_JWT_EXCEPTION);
         } catch(SignatureException e) {
-            throw new JwtFilterException(CustomErrorCode.SIGNATURE_EXCEPTION);
+            throw new JwtFilterException(JwtFilterErrorCode.SIGNATURE_EXCEPTION);
         } catch(IllegalArgumentException e) {
-            throw new JwtFilterException(CustomErrorCode.ILLEGAL_ARGUMENT_EXCEPTION);
+            throw new JwtFilterException(JwtFilterErrorCode.ILLEGAL_ARGUMENT_EXCEPTION);
         }
     }
 
