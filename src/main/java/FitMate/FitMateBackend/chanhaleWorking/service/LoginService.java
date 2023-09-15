@@ -2,6 +2,7 @@ package FitMate.FitMateBackend.chanhaleWorking.service;
 
 import FitMate.FitMateBackend.chanhaleWorking.form.login.LoginForm;
 import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
+import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.AuthErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.AuthException;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
@@ -53,12 +54,12 @@ public class LoginService {
                     )
             );
         } catch(BadCredentialsException e) {
-            throw new AuthException(CustomErrorCode.AUTHENTICATION_EXCEPTION);
+            throw new AuthException(AuthErrorCode.AUTHENTICATION_EXCEPTION);
         }
 
         User user = userRepository.findByLoginEmail(form.getLoginEmail()).orElse(null);
         if(user == null)
-            throw new AuthException(CustomErrorCode.AUTHENTICATION_EXCEPTION);
+            throw new AuthException(AuthErrorCode.AUTHENTICATION_EXCEPTION);
 
         String accessToken = jwtService.generateAccessToken(user, new ExtraClaims(user));
         String refreshToken =jwtService.generateRefreshToken(user, form.isRememberMe());
@@ -73,7 +74,7 @@ public class LoginService {
 
     public void logoutWithJwt(String refreshToken) {
         if(!redisCacheService.isExist(refreshToken)) {
-            throw new CustomException(CustomErrorCode.ALREADY_LOGOUT_EXCEPTION);
+            throw new AuthException(AuthErrorCode.ALREADY_LOGOUT_EXCEPTION);
         }
         redisCacheService.removeToken(refreshToken);
     }

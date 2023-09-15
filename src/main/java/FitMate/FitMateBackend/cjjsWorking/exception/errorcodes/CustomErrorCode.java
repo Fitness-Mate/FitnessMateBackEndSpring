@@ -7,10 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum CustomErrorCode {
-    //Auth Exception
-    AUTHENTICATION_EXCEPTION("로그인 정보가 일치하지 않습니다."),
-    ALREADY_LOGOUT_EXCEPTION("이미 로그아웃 되었습니다."),
-
     //Domain Exception - CustomException
     BODY_PART_ALREADY_EXIST_EXCEPTION("이미 존재하는 운동 부위입니다. 이름을 확인해주세요."),
     BODY_PART_NOT_FOUND_EXCEPTION("존재하지 않는 운동 부위입니다."),
