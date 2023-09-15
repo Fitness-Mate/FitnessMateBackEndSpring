@@ -1,6 +1,7 @@
 package FitMate.FitMateBackend.cjjsWorking.config.securityFilter;
 
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.JwtFilterErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.JwtFilterException;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
 import jakarta.servlet.FilterChain;
@@ -47,10 +48,10 @@ public class JwtFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-            throw new JwtFilterException(CustomErrorCode.JWT_NOT_FOUND_EXCEPTION);
+            throw new JwtFilterException(JwtFilterErrorCode.JWT_NOT_FOUND_EXCEPTION);
         }
         if(!authHeader.startsWith("Bearer ")) { //Bearer로 시작하지 않을 경우
-            throw new JwtFilterException(CustomErrorCode.NON_START_BEARER_EXCEPTION);
+            throw new JwtFilterException(JwtFilterErrorCode.NON_START_BEARER_EXCEPTION);
         }
 
         accessToken = authHeader.substring("Bearer ".length());

@@ -1,17 +1,18 @@
 package FitMate.FitMateBackend.cjjsWorking.exception.exceptions;
 
+import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.AuthErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import lombok.Getter;
 
 @Getter
 public class AuthException extends RuntimeException {
 
-    private CustomErrorCode customErrorCode;
+    private AuthErrorCode authErrorCode;
     private String message;
 
-    public AuthException(CustomErrorCode customErrorCode) {
-        super(customErrorCode.getStatusMessage());
-        this.customErrorCode = customErrorCode;
-        this.message = customErrorCode.getStatusMessage();
+    public AuthException(AuthErrorCode authErrorCode) {
+        super(authErrorCode.getStatusMessage());
+        this.authErrorCode = authErrorCode;
+        this.message = authErrorCode.getStatusMessage();
     }
 }
