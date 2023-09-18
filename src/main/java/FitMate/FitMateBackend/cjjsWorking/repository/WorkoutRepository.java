@@ -102,7 +102,7 @@ public class WorkoutRepository {
         if(search.getBodyPartKoreanName() != null) {
             for (String koreanName : search.getBodyPartKoreanName()) {
                 BodyPart bodyPart = bodyPartService.findByKoreanName(koreanName);
-                builder.and(QWorkout.workout.bodyParts.contains(bodyPart));
+                builder.or(QWorkout.workout.bodyParts.contains(bodyPart));
             }
         }
 
