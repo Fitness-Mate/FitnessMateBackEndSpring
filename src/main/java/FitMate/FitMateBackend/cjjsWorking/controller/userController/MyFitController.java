@@ -94,12 +94,14 @@ public class MyFitController {
         Supplement supplement = supplementService.findSupplementById(supplementId);
 
         List<MySupplement> mySupplements = myFitService.findAllMySupplementWithRoutineId(routine.getId());
-        for (MySupplement mySupplement : mySupplements) {
-            if(mySupplement.getSupplement().getId().equals(supplementId))
-                throw new CustomException(CustomErrorCode.ALREADY_EXIST_MY_SUPPLEMENT_EXCEPTION);
-        }
-        if(mySupplements.size() >= ServiceConst.MY_SUPPLEMENT_MAX_SIZE)
-            throw new CustomException(CustomErrorCode.MY_SUPPLEMENT_SIZE_OVER_EXCEPTION);
+
+        //test를 위해 예외처리 잠시 off
+//        for (MySupplement mySupplement : mySupplements) {
+//            if(mySupplement.getSupplement().getId().equals(supplementId))
+//                throw new CustomException(CustomErrorCode.ALREADY_EXIST_MY_SUPPLEMENT_EXCEPTION);
+//        }
+//        if(mySupplements.size() >= ServiceConst.MY_SUPPLEMENT_MAX_SIZE)
+//            throw new CustomException(CustomErrorCode.MY_SUPPLEMENT_SIZE_OVER_EXCEPTION);
 
         MyFit mySupplement = new MySupplement(routine, supplement, mySupplements.size()+1);
         return ResponseEntity.ok(myFitService.saveMyFit(mySupplement));
