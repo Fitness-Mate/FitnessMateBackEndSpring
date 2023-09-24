@@ -63,7 +63,7 @@ public class LoginController {
         return ResponseEntity.ok(loginService.loginWithJwt(loginForm));
     }
 
-    @PutMapping("/auth/logout") //logout
+    @GetMapping("/auth/logout") //logout
     public void logoutWithJwt(@RequestHeader HttpHeaders header) {
         String refreshToken = JwtService.getToken(header);
 
