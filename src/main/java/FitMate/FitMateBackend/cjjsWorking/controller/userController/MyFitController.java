@@ -75,7 +75,7 @@ public class MyFitController {
         );
     }
 
-    @PutMapping("/routines/workout/{myFitId}") //루틴에 속한 운동 수정 - 테스트 완료
+    @PostMapping("/routines/workout/update/{myFitId}") //루틴에 속한 운동 수정 - 테스트 완료
     public ResponseEntity<String> updateMyWorkout(@PathVariable("myFitId") Long myWorkoutId,
                                                   @RequestBody MyWorkoutUpdateRequest request) {
         return ResponseEntity.ok(myFitService.updateMyWorkout(myWorkoutId, request));
