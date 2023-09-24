@@ -81,7 +81,7 @@ public class MyFitController {
         return ResponseEntity.ok(myFitService.updateMyWorkout(myWorkoutId, request));
     }
 
-    @DeleteMapping("/routines/workout/{myFitId}") //루틴에 속한 운동 삭제 - 테스트 완료
+    @GetMapping("/routines/workout/{myFitId}") //루틴에 속한 운동 삭제 - 테스트 완료
     public ResponseEntity<String> deleteMyWorkout(@PathVariable("myFitId") Long myWorkoutId) {
         return ResponseEntity.ok(myFitService.deleteMyWorkout(myWorkoutId));
     }

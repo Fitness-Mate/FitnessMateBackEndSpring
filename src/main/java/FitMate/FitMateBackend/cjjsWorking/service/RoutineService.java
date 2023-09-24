@@ -71,7 +71,7 @@ public class RoutineService {
 
     @Transactional
     public void setWorkoutRoutines(User user, List<RoutineSetData> routines) {
-        if(routines.size() >= ServiceConst.ROUTINE_MAX_SIZE)
+        if(routines.size() > ServiceConst.ROUTINE_MAX_SIZE)
             throw new CustomException(CustomErrorCode.ROUTINE_SIZE_OVER_EXCEPTION);
 
         List<Long> routineIds = new ArrayList<>();
