@@ -133,7 +133,7 @@ public class MyFitController {
         return ResponseEntity.ok(myFitService.updateMySupplement(mySupplementId, request));
     }
 
-    @DeleteMapping("/routines/supplement/{myFitId}") //루틴에 속한 보조제 삭제 - 테스트 완료
+    @GetMapping("/routines/supplement/delete/{myFitId}") //루틴에 속한 보조제 삭제 - 테스트 완료
     public ResponseEntity<String> deleteMySupplement(@PathVariable("myFitId") Long mySupplementId) {
         return ResponseEntity.ok(myFitService.deleteMySupplement(mySupplementId));
     }
