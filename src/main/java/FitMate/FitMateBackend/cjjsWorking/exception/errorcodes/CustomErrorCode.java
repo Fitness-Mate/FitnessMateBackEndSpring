@@ -17,6 +17,8 @@ public enum CustomErrorCode {
     WORKOUT_ALREADY_EXIST_EXCEPTION("이미 존재하는 운동입니다. 이름을 확인해주세요."),
     WORKOUT_NOT_FOUND_EXCEPTION("존재하지 않는 운동입니다."),
 
+    SUPPLEMENT_NOT_FOUND_EXCEPTION("존재하지 않는 보조제입니다."),
+
     USER_NOT_FOUND_EXCEPTION("존재하지 않는 유저입니다."),
 
     ROUTINE_NOT_FOUND_EXCEPTION("존재하지 않는 운동루틴입니다."),
