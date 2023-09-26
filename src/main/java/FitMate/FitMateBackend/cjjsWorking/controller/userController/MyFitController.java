@@ -28,6 +28,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,7 @@ public class MyFitController {
         int curIdx = myWorkouts.size() + 1;
         for (Long workoutId : request.getWorkoutIds()) {
             Workout workout = workoutService.findOne(workoutId);
-            MyFit myWorkout = new MyWorkout(routine, workout, request, curIdx++);
+            MyFit myWorkout = new MyWorkout(routine, workout, curIdx++);
             myFitService.saveMyFit(myWorkout);
         }
 
@@ -124,6 +125,7 @@ public class MyFitController {
         Routine routine = routineService.findSupplementRoutineByUserId(userId);
 
         List<MySupplement> mySupplements = myFitService.findAllMySupplementWithRoutineId(routine.getId());
+
         return ResponseEntity.ok(new MySupplementReadAllResponse(routine, mySupplements));
     }
 

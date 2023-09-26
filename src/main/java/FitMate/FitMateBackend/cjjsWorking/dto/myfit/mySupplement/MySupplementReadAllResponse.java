@@ -2,6 +2,7 @@ package FitMate.FitMateBackend.cjjsWorking.dto.myfit.mySupplement;
 
 import FitMate.FitMateBackend.domain.myfit.MySupplement;
 import FitMate.FitMateBackend.domain.routine.Routine;
+import FitMate.FitMateBackend.domain.supplement.Supplement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
