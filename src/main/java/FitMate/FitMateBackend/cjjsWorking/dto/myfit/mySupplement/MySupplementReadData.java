@@ -94,5 +94,4 @@ public class MySupplementReadData {
             this.contains = sup.getContains();
         }
     }
-
 }

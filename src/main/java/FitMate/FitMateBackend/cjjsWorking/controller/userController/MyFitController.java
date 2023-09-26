@@ -2,6 +2,7 @@ package FitMate.FitMateBackend.cjjsWorking.controller.userController;
 
 import FitMate.FitMateBackend.chanhaleWorking.service.SupplementService;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.MyFitSearchRequest;
+import FitMate.FitMateBackend.cjjsWorking.dto.myfit.mySupplement.MySupplementCreateRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.mySupplement.MySupplementReadAllResponse;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.mySupplement.MySupplementSearchResponse;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.mySupplement.MySupplementUpdateRequest;
@@ -27,6 +28,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,17 +47,23 @@ public class MyFitController {
                                                   @PathVariable("routineId") Long routineId) {
         List<MyWorkout> myWorkouts = myFitService.findAllMyWorkoutWithRoutineId(routineId);
         for (MyWorkout myWorkout : myWorkouts) {
-            if(myWorkout.getWorkout().getId().equals(request.getWorkoutId()))
-                throw new CustomException(CustomErrorCode.ALREADY_EXIST_MY_WORKOUT_EXCEPTION);
+            for (Long workoutId : request.getWorkoutIds()) {
+                if(myWorkout.getWorkout().getId().equals(workoutId))
+                    throw new CustomException(CustomErrorCode.ALREADY_EXIST_MY_WORKOUT_EXCEPTION);
+            }
         }
         if(myWorkouts.size() >= ServiceConst.MY_WORKOUT_MAX_SIZE)
             throw new CustomException(CustomErrorCode.MY_WORKOUT_SIZE_OVER_EXCEPTION);
 
-        Workout workout = workoutService.findOne(request.getWorkoutId());
         Routine routine = routineService.findRoutineById(routineId);
+        int curIdx = myWorkouts.size() + 1;
+        for (Long workoutId : request.getWorkoutIds()) {
+            Workout workout = workoutService.findOne(workoutId);
+            MyFit myWorkout = new MyWorkout(routine, workout, curIdx++);
+            myFitService.saveMyFit(myWorkout);
+        }
 
-        MyFit myWorkout = new MyWorkout(routine, workout, request, myWorkouts.size()+1);
-        return ResponseEntity.ok(myFitService.saveMyFit(myWorkout));
+        return ResponseEntity.ok("ok");
     }
 
     @GetMapping("/routines/workout/{routineId}") //루틴에 속한 운동 리스트 조회 - 테스트 완료
@@ -86,25 +94,29 @@ public class MyFitController {
         return ResponseEntity.ok(myFitService.deleteMyWorkout(myWorkoutId));
     }
 
-    @PostMapping("/routines/supplement/{supplementId}") //루틴에 보조제 추가 - 테스트 완료
-    public ResponseEntity<String> createMySupplement(@PathVariable("supplementId") Long supplementId,
+    @PostMapping("/routines/supplement") //루틴에 보조제 추가 - 테스트 완료
+    public ResponseEntity<String> createMySupplement(@RequestBody MySupplementCreateRequest request,
                                                      @RequestHeader HttpHeaders header) {
         Long userId = JwtService.getUserId(JwtService.getToken(header));
         Routine routine = routineService.findSupplementRoutineByUserId(userId);
-        Supplement supplement = supplementService.findSupplementById(supplementId);
 
         List<MySupplement> mySupplements = myFitService.findAllMySupplementWithRoutineId(routine.getId());
-
         //test를 위해 예외처리 잠시 off
 //        for (MySupplement mySupplement : mySupplements) {
 //            if(mySupplement.getSupplement().getId().equals(supplementId))
 //                throw new CustomException(CustomErrorCode.ALREADY_EXIST_MY_SUPPLEMENT_EXCEPTION);
 //        }
-//        if(mySupplements.size() >= ServiceConst.MY_SUPPLEMENT_MAX_SIZE)
-//            throw new CustomException(CustomErrorCode.MY_SUPPLEMENT_SIZE_OVER_EXCEPTION);
 
-        MyFit mySupplement = new MySupplement(routine, supplement, mySupplements.size()+1);
-        return ResponseEntity.ok(myFitService.saveMyFit(mySupplement));
+        int curIdx = mySupplements.size()+1;
+        for (Long supplementId : request.getSupplementIds()) {
+            Supplement supplement = supplementService.findSupplementById(supplementId);
+            if(supplement == null)
+                throw new CustomException(CustomErrorCode.SUPPLEMENT_NOT_FOUND_EXCEPTION);
+            MyFit mySupplement = new MySupplement(routine, supplement, curIdx++);
+            myFitService.saveMyFit(mySupplement);
+        }
+
+        return ResponseEntity.ok("ok");
     }
 
     @GetMapping("/routines/supplement") //루틴에 속한 보조제 리스트 조회 - 테스트 완료
@@ -113,6 +125,7 @@ public class MyFitController {
         Routine routine = routineService.findSupplementRoutineByUserId(userId);
 
         List<MySupplement> mySupplements = myFitService.findAllMySupplementWithRoutineId(routine.getId());
+
         return ResponseEntity.ok(new MySupplementReadAllResponse(routine, mySupplements));
     }
 
