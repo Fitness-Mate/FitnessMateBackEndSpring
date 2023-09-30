@@ -10,4 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MyWorkoutCreateRequest {
     private List<Long> workoutIds = new ArrayList<>();
+    private String weight;
+    private String rep;
+    private String setCount;
 }
