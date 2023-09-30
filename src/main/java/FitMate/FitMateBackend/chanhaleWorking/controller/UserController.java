@@ -67,6 +67,9 @@ public class UserController {
     @PostMapping("/private")
     public String updateUser(@Login UserArgResolverDto loginUser, @RequestBody UpdateUserForm form) {
         log.info(loginUser.getLoginEmail());
+        if (form.getUserName().length()>8 || form.getUserName().length()<3) {
+            return "너무 짧은 유저명: 3자리 이상, 8자리 이하";
+        }
         userService.updateUser(loginUser.getUserId(), form);
         return "ok";
     }
@@ -87,7 +90,7 @@ public class UserController {
         log.info(form.getPassword());
         if (loginUser != null) {
             User user = userService.getUserWithId(loginUser.getUserId());
-            if (user.getPassword().equals(form.getPassword())) {
+            if (userService.checkPassword(loginUser.getUserId(), form.getPassword())) {
                 userService.deleteUser(loginUser.getUserId());
                 return "ok";
             }
