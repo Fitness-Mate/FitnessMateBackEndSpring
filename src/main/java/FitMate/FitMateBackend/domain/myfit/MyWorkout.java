@@ -25,6 +25,13 @@ public class MyWorkout extends MyFit {
         super(routine, myFitIndex);
         this.workout = workout;
     }
+    public MyWorkout(Routine routine, Workout workout, MyWorkoutCreateRequest request, int myFitIndex) {
+        super(routine, myFitIndex);
+        this.workout = workout;
+        this.weight = request.getWeight();
+        this.rep = request.getRep();
+        this.setCount = request.getSetCount();
+    }
 
     public void update(MyWorkoutUpdateRequest request) {
         this.setMyFitIndex(request.getMyWorkoutIndex());

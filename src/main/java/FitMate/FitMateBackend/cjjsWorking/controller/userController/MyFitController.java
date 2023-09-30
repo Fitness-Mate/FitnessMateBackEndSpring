@@ -52,14 +52,20 @@ public class MyFitController {
                     throw new CustomException(CustomErrorCode.ALREADY_EXIST_MY_WORKOUT_EXCEPTION);
             }
         }
-        if(myWorkouts.size() >= ServiceConst.MY_WORKOUT_MAX_SIZE)
+        if((myWorkouts.size() + request.getWorkoutIds().size()) > ServiceConst.MY_WORKOUT_MAX_SIZE)
             throw new CustomException(CustomErrorCode.MY_WORKOUT_SIZE_OVER_EXCEPTION);
 
         Routine routine = routineService.findRoutineById(routineId);
         int curIdx = myWorkouts.size() + 1;
         for (Long workoutId : request.getWorkoutIds()) {
             Workout workout = workoutService.findOne(workoutId);
-            MyFit myWorkout = new MyWorkout(routine, workout, curIdx++);
+                MyFit myWorkout;
+            if(request.getWeight() != null && request.getRep() != null && request.getSetCount() != null) {
+                myWorkout = new MyWorkout(routine, workout, request, curIdx++);
+            } else {
+                myWorkout = new MyWorkout(routine, workout, curIdx++);
+            }
+
             myFitService.saveMyFit(myWorkout);
         }
 
