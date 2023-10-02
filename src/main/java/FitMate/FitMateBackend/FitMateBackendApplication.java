@@ -12,4 +12,4 @@ public class FitMateBackendApplication {
 	}
 }
 
-//token access time 변경을 위한 commit
+//token access time 변경을 위한 commit.
