@@ -24,7 +24,7 @@ public class SupplementRecommendation extends Recommendation {
     private Long monthlyBudget; // 예산
     private String purposes = ""; // purposes 들을 and 로 묶은 것
 
-    @OneToMany(cascade = {CascadeType.REMOVE})
+    @OneToMany(cascade = CascadeType.ALL)
     List<RecommendedSupplement> recommendedSupplements = new ArrayList<>();
 
 

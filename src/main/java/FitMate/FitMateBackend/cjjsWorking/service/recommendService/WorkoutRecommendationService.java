@@ -42,6 +42,7 @@ public class WorkoutRecommendationService {
                         (user, bodyParts, machines, workoutService.getAllWorkoutToString(bodyParts, machines));
 
         workoutRecommendationRepository.save(workoutRecommendation);
+        user.addRecommendationHistory(workoutRecommendation);
         return workoutRecommendation.getId();
     }
 

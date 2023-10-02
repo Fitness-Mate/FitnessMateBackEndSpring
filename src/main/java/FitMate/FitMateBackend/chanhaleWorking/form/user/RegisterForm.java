@@ -28,10 +28,10 @@ public class RegisterForm {
 
     public String validateFields(){
         String regexPattern = "^(.+)@(\\S+)$";
-        if (userName.length() > 10)
-            return "너무 긴 유저명: 3자리 이상, 10자리 이하";
+        if (userName.length() > 8)
+            return "너무 긴 유저명: 3자리 이상, 8자리 이하";
         if (userName.length() < 3)
-            return "너무 짧은 유저명: 3자리 이상, 10자리 이하";
+            return "너무 짧은 유저명: 3자리 이상, 8자리 이하";
         if (!loginEmail.matches(regexPattern))
             return "형식에 맞지 않는 이메일 주소";
         if (password.length() < 8)

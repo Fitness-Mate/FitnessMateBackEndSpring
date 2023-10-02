@@ -46,6 +46,7 @@ public class SupplementRecommendationService {
         SupplementRecommendation supplementRecommendation = SupplementRecommendation
                 .createSupplementRecommendation(user.getBodyDataHistory().get(0), user, supplementRecommendationForm.getPurpose(), supplementRecommendationForm.getMonthlyBudget());
         supplementRecommendationRepository.save(supplementRecommendation);
+        user.addRecommendationHistory(supplementRecommendation);
         return supplementRecommendation.getId();
     }
 

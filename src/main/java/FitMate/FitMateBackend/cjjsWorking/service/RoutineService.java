@@ -30,13 +30,17 @@ public class RoutineService {
     @Transactional
     public Long saveWorkoutRoutine(User user, String routineName, int routineIndex) {
         Routine routine = new WorkoutRoutine(user, routineName, routineIndex);
-        return routineRepository.save(routine);
+        Long result = routineRepository.save(routine);
+        user.addRoutine(routine);
+        return result;
     }
 
     @Transactional
     public Long saveSupplementRoutine(User user) {
         Routine routine = new SupplementRoutine(user, "기본루틴", 0);
-        return routineRepository.save(routine);
+        Long result = routineRepository.save(routine);
+        user.addRoutine(routine);
+        return result;
     }
 
     @Transactional
