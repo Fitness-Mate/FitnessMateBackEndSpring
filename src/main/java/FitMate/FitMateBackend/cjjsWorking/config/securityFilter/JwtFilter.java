@@ -93,6 +93,8 @@ public class JwtFilter extends OncePerRequestFilter {
         //비회원 접근 가능 bodyPart 관련 요청
         if(uri.startsWith("/bodyParts")) return true;
 
+        // test api
+        if(uri.startsWith("/test")) return true;
         //비회원 접근 가능 supplements 관련 요청
         if(uri.startsWith("/supplements")) return true;
 
