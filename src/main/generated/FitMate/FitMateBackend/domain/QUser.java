@@ -34,6 +34,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final ListPath<FitMate.FitMateBackend.domain.recommendation.Recommendation, FitMate.FitMateBackend.domain.recommendation.QRecommendation> recommendationHistory = this.<FitMate.FitMateBackend.domain.recommendation.Recommendation, FitMate.FitMateBackend.domain.recommendation.QRecommendation>createList("recommendationHistory", FitMate.FitMateBackend.domain.recommendation.Recommendation.class, FitMate.FitMateBackend.domain.recommendation.QRecommendation.class, PathInits.DIRECT2);
 
+    public final ListPath<FitMate.FitMateBackend.domain.routine.Routine, FitMate.FitMateBackend.domain.routine.QRoutine> routines = this.<FitMate.FitMateBackend.domain.routine.Routine, FitMate.FitMateBackend.domain.routine.QRoutine>createList("routines", FitMate.FitMateBackend.domain.routine.Routine.class, FitMate.FitMateBackend.domain.routine.QRoutine.class, PathInits.DIRECT2);
+
     public final StringPath sex = createString("sex");
 
     public final StringPath type = createString("type");
