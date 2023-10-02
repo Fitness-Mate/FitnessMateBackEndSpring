@@ -52,7 +52,8 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/user/auth/**"), //admin, user register
                 new AntPathRequestMatcher("/workouts/**"), //workout 검색 조회 - 비회원 접근 가능 기능
                 new AntPathRequestMatcher("/supplements/**"), //supplement 검색 조회 - 비회원 접근 가능 기능
-                new AntPathRequestMatcher("/bodyParts/**") //bodyPart 전체 조회 요청 - 비회원 접근 가능 기능
+                new AntPathRequestMatcher("/bodyParts/**"), //bodyPart 전체 조회 요청 - 비회원 접근 가능 기능
+                new AntPathRequestMatcher("/test/**") //테스트를 위한 api 경로 - radis 통신이나 여타의 것들을 우회하기 위한 것.
         );
     }
 
