@@ -27,6 +27,8 @@ public class RedisCacheService {
         ValueOperations<String, String> valueOperations = userRedisTemplate.opsForValue();
         valueOperations.set(refreshToken, refreshToken); //value 값 필요 X
         userRedisTemplate.expire(refreshToken, exp, TimeUnit.MINUTES);
+
+        //redis test
     }
 
     public Boolean isExist(String refreshToken) {
