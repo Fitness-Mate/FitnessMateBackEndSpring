@@ -24,8 +24,8 @@ public interface ServiceConst {
     public static final String S3_DIR_SUPPLEMENT = "supplement";
 
     // mail service config
-//    public static final String MAIL_SERVER_ADDRESS = "http://fitmate-mail-svc-clusterip:8081";
-    public static final String MAIL_SERVER_ADDRESS = "http://localhost:8081";
+    public static final String MAIL_SERVER_ADDRESS = "http://fitmate-mail-svc-clusterip:8081";
+//    public static final String MAIL_SERVER_ADDRESS = "http://localhost:8081";
     public static final String MAIL_SERVER_MEDIA_TYPE = "application/json";
 
 
