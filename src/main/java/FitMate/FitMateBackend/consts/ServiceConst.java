@@ -25,7 +25,7 @@ public interface ServiceConst {
 
     // mail service config
 //    public static final String MAIL_SERVER_ADDRESS = "http://fitmate-mail-svc-clusterip:8081";
-    public static final String MAIL_SERVER_ADDRESS = "http://localhost:8081";
+    public static final String MAIL_SERVER_ADDRESS = "http://43.200.20.25:8081";
     public static final String MAIL_SERVER_MEDIA_TYPE = "application/json";
 
 
