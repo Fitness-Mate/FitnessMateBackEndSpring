@@ -1,11 +1,8 @@
 package FitMate.FitMateBackend.chanhaleWorking.repository;
 
-import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.RecommendErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.RecommendException;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.recommendation.Recommendation;
 import FitMate.FitMateBackend.domain.recommendation.SupplementRecommendation;
-import FitMate.FitMateBackend.domain.supplement.Supplement;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;

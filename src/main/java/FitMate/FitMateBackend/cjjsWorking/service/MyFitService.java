@@ -13,7 +13,7 @@ import FitMate.FitMateBackend.domain.Workout;
 import FitMate.FitMateBackend.domain.myfit.MyFit;
 import FitMate.FitMateBackend.domain.myfit.MySupplement;
 import FitMate.FitMateBackend.domain.myfit.MyWorkout;
-import FitMate.FitMateBackend.domain.supplement.Supplement;
+import FitMate.FitMateBackend.supplement.entity.Supplement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

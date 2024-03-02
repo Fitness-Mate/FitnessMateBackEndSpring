@@ -1,25 +1,16 @@
-package FitMate.FitMateBackend.chanhaleWorking.controller;
+package FitMate.FitMateBackend.supplement.controller;
 
 import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementDto;
 import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementListDto;
-import FitMate.FitMateBackend.chanhaleWorking.form.supplement.SupplementForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.supplement.SupplementSearchForm;
-import FitMate.FitMateBackend.chanhaleWorking.service.FileStoreService;
 import FitMate.FitMateBackend.chanhaleWorking.service.SupplementService;
-import FitMate.FitMateBackend.domain.supplement.Supplement;
+import FitMate.FitMateBackend.supplement.entity.Supplement;
 import FitMate.FitMateBackend.domain.supplement.SupplementType;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

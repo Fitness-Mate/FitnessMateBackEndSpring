@@ -2,8 +2,8 @@ package FitMate.FitMateBackend.chanhaleWorking.dto;
 
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
-import FitMate.FitMateBackend.domain.recommendation.RecommendedSupplement;
 import FitMate.FitMateBackend.domain.supplement.*;
+import FitMate.FitMateBackend.supplement.entity.Supplement;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

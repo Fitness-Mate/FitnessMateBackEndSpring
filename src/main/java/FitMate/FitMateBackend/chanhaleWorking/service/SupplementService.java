@@ -8,6 +8,7 @@ import FitMate.FitMateBackend.chanhaleWorking.repository.SupplementRepository;
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.supplement.*;
+import FitMate.FitMateBackend.supplement.entity.Supplement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

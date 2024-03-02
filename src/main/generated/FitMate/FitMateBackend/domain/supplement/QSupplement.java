@@ -2,6 +2,7 @@ package FitMate.FitMateBackend.domain.supplement;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import FitMate.FitMateBackend.supplement.entity.Supplement;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;

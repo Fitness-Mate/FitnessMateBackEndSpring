@@ -2,18 +2,12 @@ package FitMate.FitMateBackend.chanhaleWorking.controller.admin;
 
 import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementListDto;
 import FitMate.FitMateBackend.chanhaleWorking.form.supplement.SupplementForm;
-import FitMate.FitMateBackend.chanhaleWorking.service.FileStoreService;
 import FitMate.FitMateBackend.chanhaleWorking.service.SupplementService;
 import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementDto;
-import FitMate.FitMateBackend.domain.supplement.Supplement;
+import FitMate.FitMateBackend.supplement.entity.Supplement;
 import FitMate.FitMateBackend.domain.supplement.SupplementType;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
