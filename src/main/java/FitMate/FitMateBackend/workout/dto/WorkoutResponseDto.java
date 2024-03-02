@@ -1,4 +1,4 @@
-package FitMate.FitMateBackend.cjjsWorking.dto.workout;
+package FitMate.FitMateBackend.workout.dto;
 
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
@@ -10,18 +10,18 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
 @NoArgsConstructor
-public class WorkoutDto {
+public class WorkoutResponseDto {
     private Long id;
     private String englishName;
     private String koreanName;
     private String imgPath;
     private String videoLink;
     private String description;
-    private List<String> bodyPartKoreanName = new ArrayList<>();
+    private final List<String> bodyPartKoreanName = new ArrayList<>();
 
-    public WorkoutDto(Workout workout) {
+    public WorkoutResponseDto(Workout workout) {
         this.id = workout.getId();
         this.englishName = workout.getEnglishName();
         this.koreanName = workout.getKoreanName();
@@ -29,7 +29,7 @@ public class WorkoutDto {
         this.videoLink = workout.getVideoLink();
         this.description = workout.getDescription();
         for (BodyPart bodyPart : workout.getBodyParts()) {
-            bodyPartKoreanName.add(bodyPart.getKoreanName());
+            this.bodyPartKoreanName.add(bodyPart.getKoreanName());
         }
     }
 }

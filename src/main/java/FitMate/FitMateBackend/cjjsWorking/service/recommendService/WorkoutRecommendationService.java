@@ -2,10 +2,12 @@ package FitMate.FitMateBackend.cjjsWorking.service.recommendService;
 
 import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutRecommendationRequest;
+import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
+import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.repository.*;
 import FitMate.FitMateBackend.cjjsWorking.repository.recommend.RecommendedWorkoutRepository;
 import FitMate.FitMateBackend.cjjsWorking.repository.recommend.WorkoutRecommendationRepository;
-import FitMate.FitMateBackend.cjjsWorking.service.WorkoutService;
+import FitMate.FitMateBackend.workout.service.WorkoutServiceImpl;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
 import FitMate.FitMateBackend.domain.User;
@@ -27,7 +29,8 @@ public class WorkoutRecommendationService {
     private final WorkoutRecommendationRepository workoutRecommendationRepository;
     private final BodyPartRepository bodyPartRepository;
     private final MachineRepository machineRepository;
-    private final WorkoutService workoutService;
+    private final WorkoutServiceImpl workoutServiceImpl;
+    private final WorkoutRepository workoutRepository;
     private final RecommendedWorkoutRepository recommendedWorkoutRepository;
 
     @Transactional
@@ -39,7 +42,7 @@ public class WorkoutRecommendationService {
 
         WorkoutRecommendation workoutRecommendation =
                 WorkoutRecommendation.createWorkoutRecommendation
-                        (user, bodyParts, machines, workoutService.getAllWorkoutToString(bodyParts, machines));
+                        (user, bodyParts, machines, workoutServiceImpl.getAllWorkoutToString(bodyParts, machines));
 
         workoutRecommendationRepository.save(workoutRecommendation);
         user.addRecommendationHistory(workoutRecommendation);
@@ -65,7 +68,8 @@ public class WorkoutRecommendationService {
             String set = info[3].substring(1);
 
             //find workout
-            Workout workout = workoutService.findOne(workoutId);
+            Workout workout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION));
 
             //사용자가 요청한 운동부위가 추천받은 운동에 관련된 운동부위에 포함되지 않을 경우 예외처리
             boolean canRecommend = false;

@@ -1,9 +1,17 @@
-# FitnessMateBackEndSpring
-프로젝트 백엔드 Spring 코드
+# FitnessMateBackEnd
 
-## Timeline
+***
 
-* 2023.06.27
+## Contributors
 
-  fit-mate 프로젝트 개선작업 시작
+| 이름  | Github | 블로그|
+|-----|-----|---|
+| 이찬하 | <a href="https://github.com/zzzzseong">![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)</a>|https://zzzzseong.tistory.com/
+| 정지성 | <a href="https://github.com/zzzzseong">![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)</a>|https://zzzzseong.tistory.com/
+
+
+## 코드 리팩터링 타임라인
+
+- `2024.03.02` `Jisung Jung` Directory architecture DDD로 변경 시작
+
 

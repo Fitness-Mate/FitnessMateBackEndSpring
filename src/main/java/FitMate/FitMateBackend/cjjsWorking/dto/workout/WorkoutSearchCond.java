@@ -1,13 +1,14 @@
 package FitMate.FitMateBackend.cjjsWorking.dto.workout;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
-public class WorkoutSearch {
+public class WorkoutSearchCond {
     private String searchKeyword;
     private List<String> bodyPartKoreanName;
 }

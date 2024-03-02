@@ -1,13 +1,13 @@
-package FitMate.FitMateBackend.cjjsWorking.service;
+package FitMate.FitMateBackend.workout.service;
 
-import FitMate.FitMateBackend.cjjsWorking.dto.workout.UserWorkoutRequest;
-import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutDto;
+import FitMate.FitMateBackend.workout.dto.WorkoutResponseDto;
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutForm;
 import FitMate.FitMateBackend.cjjsWorking.repository.MachineRepository;
 import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutRepository;
-import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutSearch;
+import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutSearchCond;
+import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class WorkoutService {
+public class WorkoutServiceImpl implements WorkoutService {
 
     private final WorkoutRepository workoutRepository;
     private final MachineRepository machineRepository;
@@ -111,12 +111,11 @@ public class WorkoutService {
         return ResponseEntity.ok("[" + findWorkout.getKoreanName() + ":" + findWorkout.getEnglishName() + "] 수정 완료");
     }
 
-    public Workout findOne(Long workoutId) {
-        Workout findWorkout = workoutRepository.findById(workoutId).orElse(null);
-        if(findWorkout == null)
-            throw new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION);
-
-        return findWorkout;
+    @Override
+    public WorkoutResponseDto findById(Long id) {
+        Workout workout = workoutRepository.findById(id)
+            .orElseThrow(() -> new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION));
+        return new WorkoutResponseDto(workout);
     }
 
     public boolean checkWorkoutNameDuplicate(String koreanName, String englishName) {
@@ -132,7 +131,7 @@ public class WorkoutService {
 
         return ResponseEntity.ok(
                 findWorkouts.stream()
-                .map(WorkoutDto::new)
+                .map(WorkoutResponseDto::new)
                 .collect(Collectors.toList()));
     }
 
@@ -159,9 +158,10 @@ public class WorkoutService {
         return ResponseEntity.ok("[" + findWorkout.getKoreanName() + ":" + findWorkout.getEnglishName() + "] 삭제 완료");
     }
 
-    public List<Workout> searchAll(int page, UserWorkoutRequest request) {
-        WorkoutSearch search = new WorkoutSearch(request.getSearchKeyword(), request.getBodyPartKoreanName());
-        return workoutRepository.searchAll(page, search);
+    @Override
+    public List<WorkoutResponseDto> searchAll(int page, WorkoutSearchCond cond) {
+        return workoutRepository.searchAll(page, cond)
+            .stream().map(WorkoutResponseDto::new).toList();
     }
 
     public String getAllWorkoutToString(List<BodyPart> bodyParts, List<Machine> machines) {

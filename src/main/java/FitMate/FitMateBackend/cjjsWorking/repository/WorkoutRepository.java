@@ -1,6 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.repository;
 
-import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutSearch;
+import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutSearchCond;
 import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
@@ -80,7 +80,7 @@ public class WorkoutRepository {
         em.remove(workout);
     }
 
-    public List<Workout> searchAll(int page, WorkoutSearch search) {
+    public List<Workout> searchAll(int page, WorkoutSearchCond search) {
         int offset = (page-1)*ServiceConst.PAGE_BATCH_SIZE;
         int limit = ServiceConst.PAGE_BATCH_SIZE;
 
