@@ -1,6 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.dto.myfit.mySupplement;
 
-import FitMate.FitMateBackend.domain.supplement.Supplement;
+import FitMate.FitMateBackend.supplement.entity.Supplement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

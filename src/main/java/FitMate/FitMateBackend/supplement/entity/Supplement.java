@@ -1,6 +1,7 @@
-package FitMate.FitMateBackend.domain.supplement;
+package FitMate.FitMateBackend.supplement.entity;
 
 import FitMate.FitMateBackend.chanhaleWorking.form.supplement.SupplementForm;
+import FitMate.FitMateBackend.domain.supplement.SupplementType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

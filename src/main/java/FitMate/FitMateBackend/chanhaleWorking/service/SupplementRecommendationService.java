@@ -1,6 +1,5 @@
 package FitMate.FitMateBackend.chanhaleWorking.service;
 
-import FitMate.FitMateBackend.chanhaleWorking.config.ChatGptConfig;
 import FitMate.FitMateBackend.chanhaleWorking.dto.RecommendedSupplementDto;
 import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementFlavorDto;
 import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementRecommendationDto;
@@ -16,13 +15,12 @@ import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.User;
 import FitMate.FitMateBackend.domain.recommendation.RecommendedSupplement;
 import FitMate.FitMateBackend.domain.recommendation.SupplementRecommendation;
-import FitMate.FitMateBackend.domain.supplement.Supplement;
+import FitMate.FitMateBackend.supplement.entity.Supplement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
