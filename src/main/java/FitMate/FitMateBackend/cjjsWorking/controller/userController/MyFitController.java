@@ -12,9 +12,10 @@ import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutSearchRes
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutUpdateRequest;
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
+import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutRepository;
 import FitMate.FitMateBackend.cjjsWorking.service.MyFitService;
 import FitMate.FitMateBackend.cjjsWorking.service.RoutineService;
-import FitMate.FitMateBackend.cjjsWorking.service.WorkoutService;
+import FitMate.FitMateBackend.workout.service.WorkoutServiceImpl;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.myfit.MySupplement;
@@ -37,7 +38,8 @@ import java.util.stream.Collectors;
 public class MyFitController {
 
     private final MyFitService myFitService;
-    private final WorkoutService workoutService;
+    private final WorkoutServiceImpl workoutServiceImpl;
+    private final WorkoutRepository workoutRepository;
     private final RoutineService routineService;
     private final SupplementService supplementService;
 
@@ -57,8 +59,10 @@ public class MyFitController {
         Routine routine = routineService.findRoutineById(routineId);
         int curIdx = myWorkouts.size() + 1;
         for (Long workoutId : request.getWorkoutIds()) {
-            Workout workout = workoutService.findOne(workoutId);
-                MyFit myWorkout;
+            Workout workout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION));
+
+            MyFit myWorkout;
             if(request.getWeight() != null && request.getRep() != null && request.getSetCount() != null) {
                 myWorkout = new MyWorkout(routine, workout, request, curIdx++);
             } else {
