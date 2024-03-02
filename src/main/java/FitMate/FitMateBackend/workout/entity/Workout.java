@@ -1,7 +1,10 @@
-package FitMate.FitMateBackend.domain;
+package FitMate.FitMateBackend.workout.entity;
 
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutForm;
+import FitMate.FitMateBackend.domain.BodyPart;
+import FitMate.FitMateBackend.domain.Machine;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Workout {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "workout_id")
     private Long id;
 

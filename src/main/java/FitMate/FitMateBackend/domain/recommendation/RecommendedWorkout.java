@@ -1,6 +1,6 @@
 package FitMate.FitMateBackend.domain.recommendation;
 
-import FitMate.FitMateBackend.domain.Workout;
+import FitMate.FitMateBackend.workout.entity.Workout;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

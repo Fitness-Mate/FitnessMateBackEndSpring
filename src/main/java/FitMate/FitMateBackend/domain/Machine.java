@@ -1,5 +1,6 @@
 package FitMate.FitMateBackend.domain;
 
+import FitMate.FitMateBackend.workout.entity.Workout;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
