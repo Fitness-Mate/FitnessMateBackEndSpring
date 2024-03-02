@@ -4,6 +4,7 @@ import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.myfit.MySupplement;
 import FitMate.FitMateBackend.domain.supplement.*;
+import FitMate.FitMateBackend.supplement.entity.Supplement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -22,13 +22,12 @@ import FitMate.FitMateBackend.domain.routine.Routine;
 import FitMate.FitMateBackend.domain.Workout;
 import FitMate.FitMateBackend.domain.myfit.MyFit;
 import FitMate.FitMateBackend.domain.myfit.MyWorkout;
-import FitMate.FitMateBackend.domain.supplement.Supplement;
+import FitMate.FitMateBackend.supplement.entity.Supplement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

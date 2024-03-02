@@ -8,6 +8,7 @@ import FitMate.FitMateBackend.chanhaleWorking.repository.SupplementRepository;
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.supplement.*;
+import FitMate.FitMateBackend.supplement.entity.Supplement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -105,25 +106,6 @@ public class SupplementService {
             }
         }
     }
-//
-//    @Transactional
-//    public void updateSupplementImage(Long id, MultipartFile multipartFile) throws IOException {
-//        Supplement supplement = supplementRepository.findById(id);
-//        if (supplement == null)
-//            return;
-//        String oldImage = supplement.getImagePath();
-//        if (!oldImage.equals(ServiceConst.DEFAULT_IMAGE_NAME)) {
-//            File file = new File(ServiceConst.DEFAULT_IMAGE_NAME + oldImage);
-//            if (file.exists()) {
-//
-//                if (file.delete()) {
-//                    log.info("{} 파일이 삭제되었습니다.", ServiceConst.DEFAULT_IMAGE_NAME+oldImage);
-//                }
-//            }
-//        }
-//        String newImage = FileStoreService.storeFile(multipartFile);
-//        supplement.setImagePath(newImage);
-//    }
 
     @Transactional
     public void deleteSupplement(Long id) {

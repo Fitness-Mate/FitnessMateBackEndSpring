@@ -2,9 +2,8 @@ package FitMate.FitMateBackend.chanhaleWorking.repository;
 
 import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementFlavorDto;
 import FitMate.FitMateBackend.chanhaleWorking.dto.SupplementFlavorServingDto;
-import FitMate.FitMateBackend.chanhaleWorking.form.supplement.SupplementSearchForm;
 import FitMate.FitMateBackend.consts.ServiceConst;
-import FitMate.FitMateBackend.domain.supplement.Supplement;
+import FitMate.FitMateBackend.supplement.entity.Supplement;
 import FitMate.FitMateBackend.domain.supplement.SupplementType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

@@ -1,10 +1,9 @@
 package FitMate.FitMateBackend.domain.recommendation;
 
-import FitMate.FitMateBackend.domain.supplement.Supplement;
+import FitMate.FitMateBackend.supplement.entity.Supplement;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 
 @Data
 @Entity
