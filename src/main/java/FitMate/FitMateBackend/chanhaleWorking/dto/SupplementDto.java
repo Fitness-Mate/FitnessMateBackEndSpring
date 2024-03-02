@@ -17,6 +17,8 @@ import java.util.List;
 public class SupplementDto {
 
     private Long id;
+    private String koreanCompanyName;
+    private String englishCompanyName;
     private String englishName;
     private String koreanName;
     private Integer price;
@@ -54,15 +56,16 @@ public class SupplementDto {
 
     public SupplementDto(Supplement supplement, List<SupplementFlavorDto> otherFlavors){
         this.id = supplement.getId();
-        this.englishName = supplement.getEnglishName();
-        this.koreanName = supplement.getKoreanName();
+        this.koreanName = getSupplementName(supplement.getKoreanName());
+        this.koreanCompanyName = getCompanyName(supplement.getKoreanName());
+        this.englishName = getSupplementName(supplement.getEnglishName());
+        this.englishCompanyName = getCompanyName(supplement.getEnglishName());
         this.price = supplement.getPrice();
         this.servings = supplement.getServings();
         this.description = supplement.getDescription();
         this.marketURL = supplement.getMarketURL();
         this.flavor = supplement.getFlavor();
         this.imageURL = S3FileService.getAccessURL(ServiceConst.S3_DIR_SUPPLEMENT, supplement.getImageName());
-//        this.image = new UrlResource("file:" + FileStoreService.getFullPath(supplement.getImagePath()));
         this.isCaptain = supplement.getIsCaptain();
         this.otherFlavors = otherFlavors;
         if (supplement instanceof Gainer) {
@@ -99,7 +102,17 @@ public class SupplementDto {
             Other sup = (Other) supplement;
             this.contains = sup.getContains();
         }
+    }
 
+    /**
+     * 2024.03.02 (디자인파트 요구사항)
+     * 기존 (SYNTHA-6) Protein Isolate와 같은 보조제 이름을 회사명, 제품명을 분리해서 제공하기 위한 메서드
+     */
+    private String getSupplementName(String name) {
+        return name.substring(name.indexOf(")")+2);
+    }
+    private String getCompanyName(String name) {
+        return name.substring(1, name.indexOf(")"));
     }
 
 }
