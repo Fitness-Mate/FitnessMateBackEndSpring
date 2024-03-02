@@ -9,7 +9,10 @@
 
 <br/>
 
-## 코드 리팩터링 타임라인
+## Fitnessmate Backend Infra Architecture
+<img src="./images/infra_architecture.png" height="500">
+
+## Code Refactoring Timeline
 
 - `2024.03.02` `Jisung Jung` Directory architecture DDD로 변경 시작
 
