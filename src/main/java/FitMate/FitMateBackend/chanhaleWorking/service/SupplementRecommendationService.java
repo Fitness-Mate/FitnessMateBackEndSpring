@@ -26,7 +26,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
+@Slf4j(topic = "SupplementRecommendationService")
 public class SupplementRecommendationService {
     private final SupplementRecommendationRepository supplementRecommendationRepository;
     private final UserRepository userRepository;
@@ -95,15 +95,20 @@ public class SupplementRecommendationService {
             int reasonStart;
             StringBuilder sb = new StringBuilder();
            response = response.replace("   ", "");
-           while (true) {
+           log.info(response);
+           while (prevReasonEnd > -1) {
+               //EN_REASON_PREFIX("Reason:") 시작 index 탐색
                reasonStart = response.indexOf(ServiceConst.EN_REASON_PREFIX, prevReasonEnd + 1);
-               if (reasonStart == -1) {
-                   break;
-               }
                sb.append(ServiceConst.KOR_REASON_PREFIX);
+
+               //EN_REASON_SUFFIX("\n\n") 끝 index 탐색
                prevReasonEnd = response.indexOf(ServiceConst.EN_REASON_SUFFIX, reasonStart + 1);
                log.info("len=[{}] resS=[{}] resE[{}]",response.length(), reasonStart, prevReasonEnd);
-               sb.append(response.substring(reasonStart+1 + ServiceConst.EN_REASON_PREFIX.length(), prevReasonEnd));
+
+               //ChatGPT 보조제 상세 답변 데이터 [reasonStart-prevReason] substring
+               if (prevReasonEnd == -1) sb.append(response.substring(reasonStart + 1 + ServiceConst.EN_REASON_PREFIX.length()));
+               else sb.append(response.substring(reasonStart + 1 + ServiceConst.EN_REASON_PREFIX.length(), prevReasonEnd));
+
                sb.append(ServiceConst.KOR_REASON_SUFFIX);
            }
             String responseKor = deepLTranslateService.sendRequest(sb.toString());
