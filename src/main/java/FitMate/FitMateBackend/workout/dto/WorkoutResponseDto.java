@@ -2,8 +2,7 @@ package FitMate.FitMateBackend.workout.dto;
 
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
-import FitMate.FitMateBackend.domain.Workout;
-import lombok.Data;
+import FitMate.FitMateBackend.workout.entity.Workout;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

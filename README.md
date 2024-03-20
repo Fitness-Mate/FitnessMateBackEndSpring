@@ -1,17 +1,20 @@
 # FitnessMateBackEnd
 
-***
-
 ## Contributors
 
-| 이름  | Github | 블로그|
-|-----|-----|---|
-| 이찬하 | <a href="https://github.com/zzzzseong">![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)</a>|https://zzzzseong.tistory.com/
-| 정지성 | <a href="https://github.com/zzzzseong">![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)</a>|https://zzzzseong.tistory.com/
+| 이름  | Github                       | 기술블로그 및 페이지                    |
+|-----|------------------------------|--------------------------------|
+| 이찬하 | https://github.com/chanhalee | https://sincerity.page/        |
+| 정지성 | https://github.com/zzzzseong | https://zzzzseong.tistory.com/ |
 
+<br/><br/>
 
-## 코드 리팩터링 타임라인
+## Fitnessmate Backend Infra Architecture
+<img src="./images/infra_architecture.png" height="500">
 
+<br/><br/>
+
+## Code Refactoring Timeline
 - `2024.03.02` `Jisung Jung` Directory architecture DDD로 변경 시작
 
 

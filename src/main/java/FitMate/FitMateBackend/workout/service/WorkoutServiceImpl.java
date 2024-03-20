@@ -5,14 +5,14 @@ import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutForm;
 import FitMate.FitMateBackend.cjjsWorking.repository.MachineRepository;
-import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutRepository;
+import FitMate.FitMateBackend.workout.repository.WorkoutRepository;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutSearchCond;
 import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.S3FileService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
-import FitMate.FitMateBackend.domain.Workout;
+import FitMate.FitMateBackend.workout.entity.Workout;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,8 +31,9 @@ public class WorkoutServiceImpl implements WorkoutService {
     private final BodyPartService bodyPartService;
     private final S3FileService s3FileService;
 
+    @Override
     @Transactional
-    public ResponseEntity<String> saveWorkout(WorkoutForm form) {
+    public WorkoutResponseDto save(WorkoutForm form) {
         if(!this.checkWorkoutNameDuplicate(form.getKoreanName(), form.getEnglishName()))
             throw new CustomException(CustomErrorCode.WORKOUT_ALREADY_EXIST_EXCEPTION);
 
@@ -60,15 +61,17 @@ public class WorkoutServiceImpl implements WorkoutService {
         }
 
         workoutRepository.save(workout);
-        return ResponseEntity.ok("[" + workout.getKoreanName() + ":" + workout.getEnglishName() + "] 등록 완료");
+
+        return new WorkoutResponseDto(workout);
     }
 
+    @Override
     @Transactional
-    public ResponseEntity<String> updateWorkout(Long workoutId, WorkoutForm form) {
+    public WorkoutResponseDto update(WorkoutForm form, Long id) {
         if(!this.checkWorkoutNameDuplicate(form.getKoreanName(), form.getEnglishName()))
             throw new CustomException(CustomErrorCode.WORKOUT_ALREADY_EXIST_EXCEPTION);
 
-        Workout findWorkout = workoutRepository.findById(workoutId)
+        Workout findWorkout = workoutRepository.findById(id)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION));
 
         if(!findWorkout.getImgFileName().equals(ServiceConst.DEFAULT_WORKOUT_IMAGE_NAME)) //기존 이미지 삭제
@@ -108,7 +111,7 @@ public class WorkoutServiceImpl implements WorkoutService {
             findMachine.addWorkout(findWorkout);
         }
 
-        return ResponseEntity.ok("[" + findWorkout.getKoreanName() + ":" + findWorkout.getEnglishName() + "] 수정 완료");
+        return new WorkoutResponseDto(findWorkout);
     }
 
     @Override
@@ -135,9 +138,10 @@ public class WorkoutServiceImpl implements WorkoutService {
                 .collect(Collectors.toList()));
     }
 
+    @Override
     @Transactional
-    public ResponseEntity<String> removeWorkout(Long workoutId) {
-        Workout findWorkout = workoutRepository.findById(workoutId)
+    public WorkoutResponseDto remove(Long id) {
+        Workout findWorkout = workoutRepository.findById(id)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.WORKOUT_NOT_FOUND_EXCEPTION));
 
         //workout과 연관된 bodyPart제거
@@ -155,7 +159,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         }
 
         workoutRepository.remove(findWorkout);
-        return ResponseEntity.ok("[" + findWorkout.getKoreanName() + ":" + findWorkout.getEnglishName() + "] 삭제 완료");
+        return new WorkoutResponseDto(findWorkout);
     }
 
     @Override

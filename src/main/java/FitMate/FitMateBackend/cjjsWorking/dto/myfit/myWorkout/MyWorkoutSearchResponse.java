@@ -1,6 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout;
 
-import FitMate.FitMateBackend.domain.Workout;
+import FitMate.FitMateBackend.workout.entity.Workout;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

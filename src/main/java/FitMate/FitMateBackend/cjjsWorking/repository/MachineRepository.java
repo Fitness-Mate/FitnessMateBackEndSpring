@@ -5,8 +5,6 @@ import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
 import FitMate.FitMateBackend.domain.QMachine;
-import FitMate.FitMateBackend.domain.QWorkout;
-import FitMate.FitMateBackend.domain.recommendation.QWorkoutRecommendation;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

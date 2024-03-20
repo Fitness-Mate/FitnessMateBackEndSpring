@@ -4,22 +4,27 @@ import FitMate.FitMateBackend.chanhaleWorking.service.ChatGptService;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.RecommendedWorkoutResponse;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutRecommendPageDto;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutRecommendationRequest;
+import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
 import FitMate.FitMateBackend.cjjsWorking.service.recommendService.RecommendedWorkoutService;
 import FitMate.FitMateBackend.cjjsWorking.service.recommendService.WorkoutRecommendationService;
-import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
 import FitMate.FitMateBackend.domain.recommendation.RecommendedWorkout;
 import FitMate.FitMateBackend.domain.recommendation.WorkoutRecommendation;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.hibernate.query.sqm.tree.SqmNode.log;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j(topic = "WorkoutRecommendationController")
 public class WorkoutRecommendationController {
 
     private final WorkoutRecommendationService workoutRecommendationService;

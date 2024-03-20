@@ -12,7 +12,7 @@ import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutSearchRes
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutUpdateRequest;
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
-import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutRepository;
+import FitMate.FitMateBackend.workout.repository.WorkoutRepository;
 import FitMate.FitMateBackend.cjjsWorking.service.MyFitService;
 import FitMate.FitMateBackend.cjjsWorking.service.RoutineService;
 import FitMate.FitMateBackend.workout.service.WorkoutServiceImpl;
@@ -20,7 +20,7 @@ import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.myfit.MySupplement;
 import FitMate.FitMateBackend.domain.routine.Routine;
-import FitMate.FitMateBackend.domain.Workout;
+import FitMate.FitMateBackend.workout.entity.Workout;
 import FitMate.FitMateBackend.domain.myfit.MyFit;
 import FitMate.FitMateBackend.domain.myfit.MyWorkout;
 import FitMate.FitMateBackend.supplement.entity.Supplement;
