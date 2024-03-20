@@ -1,14 +1,11 @@
 package FitMate.FitMateBackend.cjjsWorking.repository.recommend;
 
-import FitMate.FitMateBackend.domain.Workout;
 import FitMate.FitMateBackend.domain.recommendation.RecommendedWorkout;
-import FitMate.FitMateBackend.domain.recommendation.WorkoutRecommendation;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor

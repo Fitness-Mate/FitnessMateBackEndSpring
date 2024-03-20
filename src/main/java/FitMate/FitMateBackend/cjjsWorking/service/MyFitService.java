@@ -3,13 +3,13 @@ package FitMate.FitMateBackend.cjjsWorking.service;
 import FitMate.FitMateBackend.chanhaleWorking.repository.SupplementRepository;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.mySupplement.MySupplementUpdateRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutUpdateRequest;
-import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutSearch;
+import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutSearchCond;
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.repository.MyFitRepository;
 import FitMate.FitMateBackend.cjjsWorking.repository.RoutineRepository;
-import FitMate.FitMateBackend.cjjsWorking.repository.WorkoutRepository;
-import FitMate.FitMateBackend.domain.Workout;
+import FitMate.FitMateBackend.workout.repository.WorkoutRepository;
+import FitMate.FitMateBackend.workout.entity.Workout;
 import FitMate.FitMateBackend.domain.myfit.MyFit;
 import FitMate.FitMateBackend.domain.myfit.MySupplement;
 import FitMate.FitMateBackend.domain.myfit.MyWorkout;
@@ -138,7 +138,7 @@ public class MyFitService {
     }
 
     public List<Workout> searchWorkoutWithRoutineId(String searchKeyword, Long routineId) {
-        List<Workout> workouts = workoutRepository.searchAll(-1, new WorkoutSearch(searchKeyword, null));
+        List<Workout> workouts = workoutRepository.searchAll(-1, new WorkoutSearchCond(searchKeyword, null));
         List<MyWorkout> myWorkouts = this.findAllMyWorkoutWithRoutineId(routineId);
 
         //routine에 속해있는 운동은 검색 결과에서 제외

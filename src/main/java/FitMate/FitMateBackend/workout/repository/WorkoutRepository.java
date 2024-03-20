@@ -1,12 +1,12 @@
-package FitMate.FitMateBackend.cjjsWorking.repository;
+package FitMate.FitMateBackend.workout.repository;
 
-import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutSearch;
+import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutSearchCond;
 import FitMate.FitMateBackend.cjjsWorking.service.BodyPartService;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
-import FitMate.FitMateBackend.domain.QWorkout;
-import FitMate.FitMateBackend.domain.Workout;
+import FitMate.FitMateBackend.workout.entity.QWorkout;
+import FitMate.FitMateBackend.workout.entity.Workout;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -80,7 +80,7 @@ public class WorkoutRepository {
         em.remove(workout);
     }
 
-    public List<Workout> searchAll(int page, WorkoutSearch search) {
+    public List<Workout> searchAll(int page, WorkoutSearchCond search) {
         int offset = (page-1)*ServiceConst.PAGE_BATCH_SIZE;
         int limit = ServiceConst.PAGE_BATCH_SIZE;
 

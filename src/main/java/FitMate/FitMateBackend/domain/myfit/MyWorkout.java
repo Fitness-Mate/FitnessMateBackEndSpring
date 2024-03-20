@@ -3,7 +3,7 @@ package FitMate.FitMateBackend.domain.myfit;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutCreateRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.myWorkout.MyWorkoutUpdateRequest;
 import FitMate.FitMateBackend.domain.routine.Routine;
-import FitMate.FitMateBackend.domain.Workout;
+import FitMate.FitMateBackend.workout.entity.Workout;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

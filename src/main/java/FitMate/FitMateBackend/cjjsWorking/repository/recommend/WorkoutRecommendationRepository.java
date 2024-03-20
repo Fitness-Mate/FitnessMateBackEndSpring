@@ -1,18 +1,12 @@
 package FitMate.FitMateBackend.cjjsWorking.repository.recommend;
 
 import FitMate.FitMateBackend.consts.ServiceConst;
-import FitMate.FitMateBackend.domain.QWorkout;
-import FitMate.FitMateBackend.domain.Workout;
 import FitMate.FitMateBackend.domain.recommendation.QWorkoutRecommendation;
-import FitMate.FitMateBackend.domain.recommendation.RecommendedWorkout;
 import FitMate.FitMateBackend.domain.recommendation.WorkoutRecommendation;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
