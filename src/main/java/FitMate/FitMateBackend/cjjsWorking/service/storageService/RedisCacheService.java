@@ -1,15 +1,12 @@
 package FitMate.FitMateBackend.cjjsWorking.service.storageService;
 
-import FitMate.FitMateBackend.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service

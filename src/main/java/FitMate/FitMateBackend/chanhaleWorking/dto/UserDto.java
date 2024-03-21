@@ -1,7 +1,6 @@
 package FitMate.FitMateBackend.chanhaleWorking.dto;
 
-import FitMate.FitMateBackend.domain.User;
-import lombok.AllArgsConstructor;
+import FitMate.FitMateBackend.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

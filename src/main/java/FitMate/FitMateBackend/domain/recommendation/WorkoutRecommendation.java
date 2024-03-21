@@ -1,11 +1,11 @@
 package FitMate.FitMateBackend.domain.recommendation;
 
 import FitMate.FitMateBackend.domain.*;
+import FitMate.FitMateBackend.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import nonapi.io.github.classgraph.json.JSONUtils;
 
 import java.util.ArrayList;
 import java.util.List;

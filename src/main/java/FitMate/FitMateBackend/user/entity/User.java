@@ -1,28 +1,26 @@
-package FitMate.FitMateBackend.domain;
+package FitMate.FitMateBackend.user.entity;
 
 import FitMate.FitMateBackend.chanhaleWorking.form.user.RegisterForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.UpdateUserForm;
+import FitMate.FitMateBackend.domain.BodyData;
 import FitMate.FitMateBackend.domain.recommendation.Recommendation;
 import FitMate.FitMateBackend.domain.routine.Routine;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
 @Getter
-@NoArgsConstructor
-public class User implements UserDetails {
-    @Id
-    @GeneratedValue
+@Table(name = "users")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class User {
+
+    @Id @GeneratedValue
     @Column(name = "user_id")
     private Long id;
 
@@ -33,11 +31,6 @@ public class User implements UserDetails {
     private String type; // Admin 여부 표기용 "Admin", "Customer"
     private LocalDate birthDate;    // 생년월일 (추가: 2023.08.02)
     private LocalDate joinDate = LocalDate.now();     // 가입년월일 (추가: 2023.08.02)
-//    private Float height; // 체성분으로 이동
-//    private Float weight; // 체성분으로 이동
-//
-//    @Enumerated(EnumType.STRING)
-//    private BodyShape bodyShape; // 더이상 보관하지 않음.
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<BodyData> bodyDataHistory = new ArrayList<>();
@@ -111,41 +104,5 @@ public class User implements UserDetails {
                 return age;
             }
         }
-    }
-
-    //🔽🔽🔽 For Spring Security 🔽🔽🔽
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(type));
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return loginEmail;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }

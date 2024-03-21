@@ -3,7 +3,7 @@ package FitMate.FitMateBackend.domain.recommendation;
 import FitMate.FitMateBackend.domain.BodyData;
 import FitMate.FitMateBackend.domain.EnglishPurpose;
 import FitMate.FitMateBackend.domain.Purpose;
-import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

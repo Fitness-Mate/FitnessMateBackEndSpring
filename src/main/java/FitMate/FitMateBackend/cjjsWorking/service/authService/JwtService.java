@@ -1,12 +1,12 @@
 package FitMate.FitMateBackend.cjjsWorking.service.authService;
 
-import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
-import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
+import FitMate.FitMateBackend.user.repository.UserRepositoryOld;
+import FitMate.FitMateBackend.common.exception.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.JwtFilterErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
+import FitMate.FitMateBackend.common.exception.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.JwtFilterException;
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.RedisCacheService;
-import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.user.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -34,7 +34,7 @@ public class JwtService {
     private static String issuer;
 
     private final RedisCacheService redisCacheService;
-    private final UserRepository userRepository;
+    private final UserRepositoryOld userRepositoryOld;
 
     @Value("${jwt-access-expiration}")
     public void setAccessExp(Long ep) {
@@ -75,12 +75,13 @@ public class JwtService {
             throw new JwtFilterException(JwtFilterErrorCode.EXPIRED_REFRESH_TOKEN_EXCEPTION);
         }
 
-        User user = userRepository.findByLoginEmail(getLoginEmail(refreshToken)).orElse(null);
+        User user = userRepositoryOld.findByLoginEmail(getLoginEmail(refreshToken)).orElse(null);
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND_EXCEPTION);
         }
 
-        return generateAccessToken(user, new ExtraClaims(user));
+        return null;
+//        return generateAccessToken(user, new ExtraClaims(user));
     }
 
     public String generateRefreshToken(UserDetails userDetails, boolean rememberMe) {

@@ -1,7 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.service.recommendService;
 
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.RecommendErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.RecommendException;
 import FitMate.FitMateBackend.cjjsWorking.repository.recommend.RecommendedWorkoutRepository;
 import FitMate.FitMateBackend.domain.recommendation.RecommendedWorkout;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)

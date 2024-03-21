@@ -1,8 +1,7 @@
 package FitMate.FitMateBackend.domain.recommendation;
 
 import FitMate.FitMateBackend.domain.BodyData;
-import FitMate.FitMateBackend.domain.BodyPart;
-import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package FitMate.FitMateBackend.domain.routine;
 
-import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.user.entity.User;
 import FitMate.FitMateBackend.domain.myfit.MyFit;
 import jakarta.persistence.*;
 import lombok.Getter;

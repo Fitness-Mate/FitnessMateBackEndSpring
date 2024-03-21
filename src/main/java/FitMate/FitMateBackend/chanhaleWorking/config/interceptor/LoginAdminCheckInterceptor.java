@@ -1,7 +1,7 @@
 //package FitMate.FitMateBackend.chanhaleWorking.config.interceptor;
 //
 //import FitMate.FitMateBackend.consts.SessionConst;
-//import FitMate.FitMateBackend.domain.User;
+//import FitMate.FitMateBackend.user.entity.User;
 //import jakarta.servlet.http.HttpServletRequest;
 //import jakarta.servlet.http.HttpServletResponse;
 //import jakarta.servlet.http.HttpSession;

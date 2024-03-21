@@ -7,12 +7,12 @@ import FitMate.FitMateBackend.chanhaleWorking.form.recommendation.SupplementReco
 import FitMate.FitMateBackend.chanhaleWorking.repository.RecommendedSupplementRepository;
 import FitMate.FitMateBackend.chanhaleWorking.repository.SupplementRecommendationRepository;
 import FitMate.FitMateBackend.chanhaleWorking.repository.SupplementRepository;
-import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
+import FitMate.FitMateBackend.user.repository.UserRepositoryOld;
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.RecommendErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.RecommendException;
 import FitMate.FitMateBackend.cjjsWorking.service.apiService.DeepLTranslateService;
 import FitMate.FitMateBackend.consts.ServiceConst;
-import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.user.entity.User;
 import FitMate.FitMateBackend.domain.recommendation.RecommendedSupplement;
 import FitMate.FitMateBackend.domain.recommendation.SupplementRecommendation;
 import FitMate.FitMateBackend.supplement.entity.Supplement;
@@ -29,14 +29,14 @@ import java.util.List;
 @Slf4j(topic = "SupplementRecommendationService")
 public class SupplementRecommendationService {
     private final SupplementRecommendationRepository supplementRecommendationRepository;
-    private final UserRepository userRepository;
+    private final UserRepositoryOld userRepositoryOld;
     private final SupplementRepository supplementRepository;
     private final RecommendedSupplementRepository recommendedSupplementRepository;
     private final DeepLTranslateService deepLTranslateService;
 
     @Transactional
     public Long createSupplementRecommendation(Long userId, SupplementRecommendationForm supplementRecommendationForm) {
-        User user = userRepository.findOne(userId);
+        User user = userRepositoryOld.findOne(userId);
         if (user == null) {
             return null;
         }

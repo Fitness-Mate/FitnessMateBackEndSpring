@@ -1,7 +1,7 @@
 package FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine;
 
 import FitMate.FitMateBackend.domain.BodyData;
-import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.user.entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

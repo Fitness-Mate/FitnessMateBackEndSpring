@@ -1,6 +1,6 @@
 package FitMate.FitMateBackend.cjjsWorking.service.authService;
 
-import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

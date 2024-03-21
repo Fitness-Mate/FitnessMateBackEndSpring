@@ -1,6 +1,5 @@
 package FitMate.FitMateBackend.chanhaleWorking.test;
 
-import FitMate.FitMateBackend.domain.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;

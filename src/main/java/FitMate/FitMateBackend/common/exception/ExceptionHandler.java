@@ -1,11 +1,9 @@
-package FitMate.FitMateBackend.cjjsWorking.exception;
+package FitMate.FitMateBackend.common.exception;
 
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.AuthException;
-import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.JwtFilterException;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.RecommendException;
 import FitMate.FitMateBackend.cjjsWorking.exception.response.AuthErrorResponse;
-import FitMate.FitMateBackend.cjjsWorking.exception.response.CustomErrorResponse;
 import FitMate.FitMateBackend.cjjsWorking.exception.response.JwtFilterErrorResponse;
 import FitMate.FitMateBackend.cjjsWorking.exception.response.RecommendErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;

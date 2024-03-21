@@ -1,6 +1,6 @@
-package FitMate.FitMateBackend.chanhaleWorking.repository;
+package FitMate.FitMateBackend.user.repository;
 
-import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.user.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class UserRepository {
+public class UserRepositoryOld {
 
     @PersistenceContext
     private final EntityManager em;

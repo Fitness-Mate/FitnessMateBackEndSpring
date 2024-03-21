@@ -2,10 +2,10 @@ package FitMate.FitMateBackend.chanhaleWorking.service;
 
 import FitMate.FitMateBackend.chanhaleWorking.form.bodyData.BodyDataForm;
 import FitMate.FitMateBackend.chanhaleWorking.repository.BodyDataRepository;
-import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
+import FitMate.FitMateBackend.user.repository.UserRepositoryOld;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.BodyData;
-import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,12 +21,12 @@ import java.util.List;
 @Slf4j
 public class BodyDataService {
     private final BodyDataRepository bodyDataRepository;
-    private final UserRepository userRepository;
+    private final UserRepositoryOld userRepositoryOld;
     private final BodyDataDateComparator bodyDataDateComparator = new BodyDataDateComparator();
 
     @Transactional
     public String createBodyData(Long userId, BodyDataForm bodyDataForm) {
-        User user = userRepository.findOne(userId);
+        User user = userRepositoryOld.findOne(userId);
         List<BodyData> bodyDataList = user.getBodyDataHistory();
         // 날짜 중복시 수정되도록 로직 변경
         for (BodyData bodyData : bodyDataList) {
@@ -51,7 +51,7 @@ public class BodyDataService {
 
     @Transactional(readOnly = true)
     public List<BodyData> getBodyDataBatch(Long userId, Long pageNum) {
-        User user = userRepository.findOne(userId);
+        User user = userRepositoryOld.findOne(userId);
         List<BodyData> result = new ArrayList<>();
         List<BodyData> list = user.getBodyDataHistory();
         list.sort(bodyDataDateComparator);
@@ -67,7 +67,7 @@ public class BodyDataService {
 
     @Transactional(readOnly = true)
     public BodyData getRecentBodyData(Long userId) {
-        User user = userRepository.findOne(userId);
+        User user = userRepositoryOld.findOne(userId);
         if (user == null) {
             return null;
         }

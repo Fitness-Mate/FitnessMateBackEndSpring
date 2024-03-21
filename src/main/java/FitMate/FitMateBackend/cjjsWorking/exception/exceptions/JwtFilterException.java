@@ -1,6 +1,5 @@
 package FitMate.FitMateBackend.cjjsWorking.exception.exceptions;
 
-import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.JwtFilterErrorCode;
 import lombok.Getter;
 

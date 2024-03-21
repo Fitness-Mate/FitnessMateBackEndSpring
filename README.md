@@ -1,4 +1,4 @@
-# FitnessMateBackEnd
+# ChatGPT 기반 맞춤형 운동 추천 서비스 FitnessMate Backend
 
 ## Contributors
 
@@ -9,12 +9,16 @@
 
 <br/><br/>
 
+## Document Index
+- [Fitnessmate Backend Infra Architecture](#fitnessmate-backend-infra-architecture)
+- [Authorization / Authentication Architecture](#authorization--authentication-architecture)
+
+<br/><br/>
+
 ## Fitnessmate Backend Infra Architecture
 <img src="./images/infra_architecture.png" height="500">
 
 <br/><br/>
 
-## Code Refactoring Timeline
-- `2024.03.02` `Jisung Jung` Directory architecture DDD로 변경 시작
-
-
+## Authorization / Authentication Architecture
+Spring Security

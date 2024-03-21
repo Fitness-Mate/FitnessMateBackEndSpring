@@ -1,4 +1,4 @@
-package FitMate.FitMateBackend.cjjsWorking.exception.errorcodes;
+package FitMate.FitMateBackend.common.exception;
 
 import FitMate.FitMateBackend.consts.ServiceConst;
 import lombok.AllArgsConstructor;
@@ -32,7 +32,18 @@ public enum CustomErrorCode {
     MY_SUPPLEMENT_NOT_FOUND_EXCEPTION("존재하지 않는 내 보조제입니다."),
     ALREADY_EXIST_MY_SUPPLEMENT_EXCEPTION("루틴에 이미 존재하는 내 보조제입니다."),
 
-    PAGE_NOT_FOUND_EXCEPTION("존재하지 않는 페이지입니다.");
+    PAGE_NOT_FOUND_EXCEPTION("존재하지 않는 페이지입니다."),
+
+    // JWT
+    MALFORMED_JWT_EXCEPTION("[손상된 토큰] 잘못된 요청입니다."),
+    UNSUPPORTED_JWT_EXCEPTION("[지원하지 않는 토큰] 잘못된 요청입니다."),
+    SIGNATURE_EXCEPTION("[지원하지 않는 토큰] 잘못된 요청입니다."),
+    ILLEGAL_ARGUMENT_EXCEPTION("[지원하지 않는 토큰] 잘못된 요청입니다."),
+
+    EXPIRED_ACCESS_TOKEN_EXCEPTION("[만료된 접근 토큰] 토큰을 다시 발급받아주세요."),
+    EXPIRED_REFRESH_TOKEN_EXCEPTION("[만료된 토큰] 잘못된 요청입니다. 다시 로그인해주세요.")
+
+    ;
 
     private final String statusMessage;
 }

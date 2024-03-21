@@ -1,6 +1,6 @@
-package FitMate.FitMateBackend.cjjsWorking.exception.response;
+package FitMate.FitMateBackend.common.exception;
 
-import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
+import FitMate.FitMateBackend.common.exception.CustomErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -2,7 +2,7 @@ package FitMate.FitMateBackend.domain;
 
 import FitMate.FitMateBackend.chanhaleWorking.form.bodyData.BodyDataForm;
 import FitMate.FitMateBackend.consts.ServiceConst;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import FitMate.FitMateBackend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

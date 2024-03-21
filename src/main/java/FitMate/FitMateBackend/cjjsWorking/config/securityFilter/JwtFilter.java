@@ -1,6 +1,5 @@
 package FitMate.FitMateBackend.cjjsWorking.config.securityFilter;
 
-import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.JwtFilterErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.JwtFilterException;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;

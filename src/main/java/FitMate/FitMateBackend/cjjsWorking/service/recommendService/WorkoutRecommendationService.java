@@ -1,9 +1,9 @@
 package FitMate.FitMateBackend.cjjsWorking.service.recommendService;
 
-import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
+import FitMate.FitMateBackend.user.repository.UserRepositoryOld;
 import FitMate.FitMateBackend.cjjsWorking.dto.workout.WorkoutRecommendationRequest;
-import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
+import FitMate.FitMateBackend.common.exception.CustomErrorCode;
+import FitMate.FitMateBackend.common.exception.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.repository.*;
 import FitMate.FitMateBackend.cjjsWorking.repository.recommend.RecommendedWorkoutRepository;
 import FitMate.FitMateBackend.cjjsWorking.repository.recommend.WorkoutRecommendationRepository;
@@ -11,7 +11,7 @@ import FitMate.FitMateBackend.workout.repository.WorkoutRepository;
 import FitMate.FitMateBackend.workout.service.WorkoutServiceImpl;
 import FitMate.FitMateBackend.domain.BodyPart;
 import FitMate.FitMateBackend.domain.Machine;
-import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.user.entity.User;
 import FitMate.FitMateBackend.workout.entity.Workout;
 import FitMate.FitMateBackend.domain.recommendation.RecommendedWorkout;
 import FitMate.FitMateBackend.domain.recommendation.WorkoutRecommendation;
@@ -26,7 +26,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class WorkoutRecommendationService {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryOld userRepositoryOld;
     private final WorkoutRecommendationRepository workoutRecommendationRepository;
     private final BodyPartRepository bodyPartRepository;
     private final MachineRepository machineRepository;
@@ -36,7 +36,7 @@ public class WorkoutRecommendationService {
 
     @Transactional
     public Long createWorkoutRecommendation(Long userId, WorkoutRecommendationRequest request) {
-        User user = userRepository.findOne(userId);
+        User user = userRepositoryOld.findOne(userId);
 
         List<BodyPart> bodyParts = bodyPartRepository.findByBodyPartKoreanName(request.getBodyPartKoreanName());
         List<Machine> machines = machineRepository.findByMachineKoreanName(request.getMachineKoreanName());

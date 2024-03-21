@@ -1,14 +1,13 @@
 package FitMate.FitMateBackend.cjjsWorking.service;
 
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineSetData;
-import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineSetRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.SupplementRoutineUpdateRequest;
-import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
+import FitMate.FitMateBackend.common.exception.CustomErrorCode;
+import FitMate.FitMateBackend.common.exception.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.repository.RoutineRepository;
 import FitMate.FitMateBackend.consts.ServiceConst;
 import FitMate.FitMateBackend.domain.routine.Routine;
-import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.user.entity.User;
 import FitMate.FitMateBackend.domain.routine.SupplementRoutine;
 import FitMate.FitMateBackend.domain.routine.WorkoutRoutine;
 import lombok.RequiredArgsConstructor;

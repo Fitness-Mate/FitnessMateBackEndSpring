@@ -1,16 +1,14 @@
 package FitMate.FitMateBackend.chanhaleWorking.service;
 
 import FitMate.FitMateBackend.chanhaleWorking.form.login.LoginForm;
-import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
+import FitMate.FitMateBackend.user.repository.UserRepositoryOld;
 import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.AuthErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
 import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.AuthException;
-import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.AuthResponse;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.ExtraClaims;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.RedisCacheService;
-import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,17 +22,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @RequiredArgsConstructor
 public class LoginService {
-    private final UserRepository userRepository;
+    private final UserRepositoryOld userRepositoryOld;
 
     @Transactional(readOnly = true)
     public User login(String loginEmail, String password) {
-        return userRepository.findByLoginEmail(loginEmail)
+        return userRepositoryOld.findByLoginEmail(loginEmail)
                 .filter(u -> u.getPassword().equals(password))
                 .orElse(null);
     }
     @Transactional(readOnly = true)
     public User adminLogin(String loginEmail, String password){
-        return userRepository.findByLoginEmail(loginEmail)
+        return userRepositoryOld.findByLoginEmail(loginEmail)
                 .filter(u -> u.getPassword().equals(password))
                 .filter(u -> u.getType().equals("Admin"))
                 .orElse(null);
@@ -57,7 +55,7 @@ public class LoginService {
             throw new AuthException(AuthErrorCode.AUTHENTICATION_EXCEPTION);
         }
 
-        User user = userRepository.findByLoginEmail(form.getLoginEmail()).orElse(null);
+        User user = userRepositoryOld.findByLoginEmail(form.getLoginEmail()).orElse(null);
         if(user == null)
             throw new AuthException(AuthErrorCode.AUTHENTICATION_EXCEPTION);
 

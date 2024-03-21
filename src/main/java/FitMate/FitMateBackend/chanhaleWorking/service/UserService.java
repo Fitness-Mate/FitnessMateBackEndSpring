@@ -1,23 +1,20 @@
 package FitMate.FitMateBackend.chanhaleWorking.service;
 
 import FitMate.FitMateBackend.chanhaleWorking.dto.GeneralResponseDto;
-import FitMate.FitMateBackend.chanhaleWorking.dto.UserArgResolverDto;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.RegisterForm;
 import FitMate.FitMateBackend.chanhaleWorking.form.user.UpdateUserForm;
-import FitMate.FitMateBackend.chanhaleWorking.repository.UserRepository;
+import FitMate.FitMateBackend.user.repository.UserRepositoryOld;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineSetData;
-import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineSetRequest;
 import FitMate.FitMateBackend.cjjsWorking.service.RoutineService;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.AuthResponse;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.ExtraClaims;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
 import FitMate.FitMateBackend.cjjsWorking.service.storageService.RedisCacheService;
 import FitMate.FitMateBackend.domain.BodyData;
-import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,47 +26,47 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
-    private final UserRepository userRepository;
+    private final UserRepositoryOld userRepositoryOld;
 
     @Transactional
     public void register(RegisterForm registerForm){
         User newUser = User.createUser(registerForm, "Customer");
         newUser.addBodyDataHistory(BodyData.createBodyData(registerForm.getBodyDataForm()));
-        userRepository.save(newUser);
+        userRepositoryOld.save(newUser);
     }
     @Transactional
     public void registerAdmin(RegisterForm registerForm){
         User newUser = User.createUser(registerForm, "Admin");
         newUser.addBodyDataHistory(BodyData.createBodyData(registerForm.getBodyDataForm()));
-        userRepository.save(newUser);
+        userRepositoryOld.save(newUser);
     }
 
     @Transactional(readOnly = true)
     public Boolean checkDuplicatedLoginEmail(String loginEmail){
-        return userRepository.CheckDuplicatedLoginEmail(loginEmail);
+        return userRepositoryOld.CheckDuplicatedLoginEmail(loginEmail);
     }
 
     @Transactional
     public void updateUser(Long userId, UpdateUserForm updateUserForm) {
-        User user = userRepository.findOne(userId);
+        User user = userRepositoryOld.findOne(userId);
         user.updateUser(updateUserForm);
 
     }
 
     public boolean checkPassword(Long userId, String password) {
-        User user = userRepository.findOne(userId);
+        User user = userRepositoryOld.findOne(userId);
         return passwordEncoder.matches(password, user.getPassword());
     }
 
     @Transactional
     public void updateUserPassword(Long userId, String newPassword) {
-        userRepository.findOne(userId).updatePassword(passwordEncoder.encode(newPassword));
+        userRepositoryOld.findOne(userId).updatePassword(passwordEncoder.encode(newPassword));
     }
 
     @Transactional
     public GeneralResponseDto updateUserPassword(String loginEmail) {
         GeneralResponseDto result = new GeneralResponseDto();
-        User user = userRepository.findByLoginEmail(loginEmail).orElse(null);
+        User user = userRepositoryOld.findByLoginEmail(loginEmail).orElse(null);
         if (user == null) {
             result.setStatus("fail");
             return result;
@@ -83,15 +80,15 @@ public class UserService {
 
     @Transactional
     public void deleteUser(Long userId) {
-        userRepository.deleteUser(userId);
+        userRepositoryOld.deleteUser(userId);
     }
 
     public User getUserWithId(Long userId) {
-        return userRepository.findOne(userId);
+        return userRepositoryOld.findOne(userId);
     }
 
     public String getUserPassword(String loginEmail) {
-        User user = userRepository.findByLoginEmail(loginEmail)
+        User user = userRepositoryOld.findByLoginEmail(loginEmail)
                 .filter(u -> u.getLoginEmail().equals(loginEmail))
                 .orElse(null);
         if (user == null) {
@@ -112,7 +109,7 @@ public class UserService {
         User newUser = User.createUserTest(registerForm, passwordEncoder.encode(registerForm.getPassword()), type);
 
         newUser.addBodyDataHistory(BodyData.createBodyData(registerForm.getBodyDataForm()));
-        userRepository.save(newUser);
+        userRepositoryOld.save(newUser);
 
         /**     2023.08.20 chanhale 수정
          *      newUser.addBodyDataHistory(BodyData.createBodyData(registerForm.getBodyDataForm()));

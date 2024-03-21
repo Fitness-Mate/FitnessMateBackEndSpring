@@ -5,11 +5,11 @@ import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.ReadUserInfoResponse
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineReadAllResponse;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.RoutineSetRequest;
 import FitMate.FitMateBackend.cjjsWorking.dto.myfit.routine.SupplementRoutineUpdateRequest;
-import FitMate.FitMateBackend.cjjsWorking.exception.errorcodes.CustomErrorCode;
-import FitMate.FitMateBackend.cjjsWorking.exception.exceptions.CustomException;
+import FitMate.FitMateBackend.common.exception.CustomErrorCode;
+import FitMate.FitMateBackend.common.exception.CustomException;
 import FitMate.FitMateBackend.cjjsWorking.service.RoutineService;
 import FitMate.FitMateBackend.cjjsWorking.service.authService.JwtService;
-import FitMate.FitMateBackend.domain.User;
+import FitMate.FitMateBackend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
